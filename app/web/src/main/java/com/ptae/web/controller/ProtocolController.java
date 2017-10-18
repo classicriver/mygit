@@ -1,0 +1,15 @@
+package com.ptae.web.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class ProtocolController {
+	
+	@RequestMapping("/protocol")
+	public String getProtocol() {
+		
+		return "login";
+	}
+	
+}
