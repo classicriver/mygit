@@ -5,6 +5,8 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources/templates"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources/static"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <dependent-module archiveName="auth-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/auth/auth">
             <dependency-type>uses</dependency-type>
         </dependent-module>

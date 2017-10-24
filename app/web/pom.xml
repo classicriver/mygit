@@ -6,7 +6,6 @@
 	<parent>
 		<groupId>com.ptae</groupId>
 		<artifactId>app</artifactId>
-<<<<<<< HEAD
 		<version>0.0.1</version>
 	</parent>
 	<artifactId>web</artifactId>
@@ -44,45 +43,4 @@
 			</plugin>
 		</plugins>
 	</build> -->
-=======
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-	<artifactId>web</artifactId>
-	<name>web</name>
-	<url>http://maven.apache.org</url>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.18</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ptae</groupId>
-			<artifactId>auth</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.ptae</groupId>
-			<artifactId>core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
-	<build>
-		<!-- 为jar包取名 -->
-		<finalName>ptae</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
->>>>>>> branch 'master' of https://github.com/classicriver/mygit
 </project>

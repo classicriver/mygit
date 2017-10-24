@@ -45,7 +45,6 @@ public class AuthInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
 		// TODO Auto-generated method stub
-<<<<<<< HEAD
 		@SuppressWarnings("unchecked")
 		Map<String,String> map =  (Map<String, String>) arg0.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 		String token = arg0.getParameter("token");
@@ -59,21 +58,6 @@ public class AuthInterceptor implements HandlerInterceptor{
 		arg1.setCharacterEncoding("UTF-8");
 		arg1.getWriter().write("{\"code\":400,\"data\":null,\"message\":\"令牌验证失败\"}");
 		return false;
-=======
-	/*	@SuppressWarnings("unchecked")
-		Map<String,String> map =  (Map<String, String>) arg0.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-		String token = arg0.getParameter("token");
-		String phoneNum = map.get("phoneNum");
-		//从redis中验证用户签名
-		String value = jedisClient.get(phoneNum);
-		if(!CommonUtils.isNullOrEmpty(value) && value.equals(token)){
-			return true;
-		}
-		//签名过期或者验证不通过
-		arg1.setCharacterEncoding("UTF-8");
-		arg1.getWriter().write("{\"code\":400,\"data\":null,\"message\":\"令牌验证失败\"}");*/
-		return true;
->>>>>>> branch 'master' of https://github.com/classicriver/mygit
 	}
 
 }

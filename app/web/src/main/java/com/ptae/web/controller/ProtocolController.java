@@ -2,7 +2,6 @@ package com.ptae.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ptae.core.controller.BaseController;
@@ -21,16 +20,6 @@ public class ProtocolController extends BaseController{
 	@RequestMapping(value = "/protocol" ,method = RequestMethod.GET)
 	public String getProtocol() {
 		return "agreement";
-=======
-
-@Controller
-public class ProtocolController {
-	
-	@RequestMapping("/protocol")
-	public String getProtocol() {
-		
-		return "login";
->>>>>>> branch 'master' of https://github.com/classicriver/mygit
 	}
 	
 }
