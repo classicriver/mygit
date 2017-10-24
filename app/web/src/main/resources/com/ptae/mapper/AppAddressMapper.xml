@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ptae.auth.mapper.AppAddressMapper">
+  <resultMap id="BaseResultMap" type="com.ptae.auth.model.AppAddress">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="home_address" jdbcType="VARCHAR" property="homeAddress" />
+    <result column="compnay_address" jdbcType="VARCHAR" property="compnayAddress" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="home_longitude" jdbcType="VARCHAR" property="homeLongitude" />
+    <result column="home_latitude" jdbcType="VARCHAR" property="homeLatitude" />
+    <result column="company_longitude" jdbcType="VARCHAR" property="companyLongitude" />
+    <result column="company_latitude" jdbcType="VARCHAR" property="companyLatitude" />
+    <result column="attribute5" jdbcType="VARCHAR" property="attribute5" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, user_account, home_address, compnay_address, add_time, update_time, home_longitude, 
+    home_latitude, company_longitude, company_latitude, attribute5
+  </sql>
+  <select id="selectByExample" parameterType="com.ptae.auth.model.AppAddressExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from app_address
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from app_address
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from app_address
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ptae.auth.model.AppAddressExample">
+    delete from app_address
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ptae.auth.model.AppAddress">
+    insert into app_address (id, user_account, home_address, 
+      compnay_address, add_time, update_time, 
+      home_longitude, home_latitude, company_longitude, 
+      company_latitude, attribute5)
+    values (#{id,jdbcType=BIGINT}, #{userAccount,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
+      #{compnayAddress,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{homeLongitude,jdbcType=VARCHAR}, #{homeLatitude,jdbcType=VARCHAR}, #{companyLongitude,jdbcType=VARCHAR}, 
+      #{companyLatitude,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ptae.auth.model.AppAddress">
+    insert into app_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userAccount != null">
+        user_account,
+      </if>
+      <if test="homeAddress != null">
+        home_address,
+      </if>
+      <if test="compnayAddress != null">
+        compnay_address,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="homeLongitude != null">
+        home_longitude,
+      </if>
+      <if test="homeLatitude != null">
+        home_latitude,
+      </if>
+      <if test="companyLongitude != null">
+        company_longitude,
+      </if>
+      <if test="companyLatitude != null">
+        company_latitude,
+      </if>
+      <if test="attribute5 != null">
+        attribute5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userAccount != null">
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null">
+        #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="compnayAddress != null">
+        #{compnayAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="homeLongitude != null">
+        #{homeLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="homeLatitude != null">
+        #{homeLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="companyLongitude != null">
+        #{companyLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="companyLatitude != null">
+        #{companyLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute5 != null">
+        #{attribute5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ptae.auth.model.AppAddressExample" resultType="java.lang.Long">
+    select count(*) from app_address
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update app_address
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.userAccount != null">
+        user_account = #{record.userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.homeAddress != null">
+        home_address = #{record.homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compnayAddress != null">
+        compnay_address = #{record.compnayAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.homeLongitude != null">
+        home_longitude = #{record.homeLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.homeLatitude != null">
+        home_latitude = #{record.homeLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyLongitude != null">
+        company_longitude = #{record.companyLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyLatitude != null">
+        company_latitude = #{record.companyLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attribute5 != null">
+        attribute5 = #{record.attribute5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update app_address
+    set id = #{record.id,jdbcType=BIGINT},
+      user_account = #{record.userAccount,jdbcType=VARCHAR},
+      home_address = #{record.homeAddress,jdbcType=VARCHAR},
+      compnay_address = #{record.compnayAddress,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      home_longitude = #{record.homeLongitude,jdbcType=VARCHAR},
+      home_latitude = #{record.homeLatitude,jdbcType=VARCHAR},
+      company_longitude = #{record.companyLongitude,jdbcType=VARCHAR},
+      company_latitude = #{record.companyLatitude,jdbcType=VARCHAR},
+      attribute5 = #{record.attribute5,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ptae.auth.model.AppAddress">
+    update app_address
+    <set>
+      <if test="userAccount != null">
+        user_account = #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null">
+        home_address = #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="compnayAddress != null">
+        compnay_address = #{compnayAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="homeLongitude != null">
+        home_longitude = #{homeLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="homeLatitude != null">
+        home_latitude = #{homeLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="companyLongitude != null">
+        company_longitude = #{companyLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="companyLatitude != null">
+        company_latitude = #{companyLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute5 != null">
+        attribute5 = #{attribute5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ptae.auth.model.AppAddress">
+    update app_address
+    set user_account = #{userAccount,jdbcType=VARCHAR},
+      home_address = #{homeAddress,jdbcType=VARCHAR},
+      compnay_address = #{compnayAddress,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      home_longitude = #{homeLongitude,jdbcType=VARCHAR},
+      home_latitude = #{homeLatitude,jdbcType=VARCHAR},
+      company_longitude = #{companyLongitude,jdbcType=VARCHAR},
+      company_latitude = #{companyLatitude,jdbcType=VARCHAR},
+      attribute5 = #{attribute5,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

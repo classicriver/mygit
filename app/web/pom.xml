@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.ptae</groupId>
+		<artifactId>app</artifactId>
+		<version>0.0.1</version>
+	</parent>
+	<artifactId>web</artifactId>
+	<name>web</name>
+	<packaging>war</packaging>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<!--要打成war包执行，需要该依赖 -->
+		<dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-legacy</artifactId> 
+			<version>1.0.2.RELEASE</version> </dependency>
+		<dependency>
+			<groupId>com.ptae</groupId>
+			<artifactId>auth</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- springboot thymeleaf模板-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+	</dependencies>
+	<!-- <build>
+		<plugins>
+			此插件只能使用在有main函数的工程，只有打jar包的时候需要
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build> -->
+</project>
