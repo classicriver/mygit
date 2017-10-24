@@ -7,7 +7,11 @@ import com.ptae.core.dao.BaseMapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
+<<<<<<< HEAD
 public interface AppAddressMapper extends BaseMapper<AppAddress>{
+=======
+public interface AppAddressMapper extends BaseMapper<AppAddress> {
+>>>>>>> branch 'master' of https://github.com/classicriver/mygit
     long countByExample(AppAddressExample example);
 
     int deleteByExample(AppAddressExample example);

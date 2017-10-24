@@ -6,7 +6,15 @@ import java.util.Random;
 
 import org.springframework.util.StringUtils;
 
+<<<<<<< HEAD
 
+=======
+/**
+ * 
+ * @author xiesc
+ *
+ */
+>>>>>>> branch 'master' of https://github.com/classicriver/mygit
 public class CommonUtils {
 	/**
 	 * 

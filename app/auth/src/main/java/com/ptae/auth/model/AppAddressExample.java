@@ -497,6 +497,7 @@ public class AppAddressExample extends EntityExample{
             return (Criteria) this;
         }
 
+<<<<<<< HEAD
         public Criteria andHomeLongitudeIsNull() {
             addCriterion("home_longitude is null");
             return (Criteria) this;
@@ -774,6 +775,285 @@ public class AppAddressExample extends EntityExample{
 
         public Criteria andCompanyLatitudeNotBetween(String value1, String value2) {
             addCriterion("company_latitude not between", value1, value2, "companyLatitude");
+=======
+        public Criteria andAttribute1IsNull() {
+            addCriterion("attribute1 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1IsNotNull() {
+            addCriterion("attribute1 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1EqualTo(String value) {
+            addCriterion("attribute1 =", value, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1NotEqualTo(String value) {
+            addCriterion("attribute1 <>", value, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1GreaterThan(String value) {
+            addCriterion("attribute1 >", value, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1GreaterThanOrEqualTo(String value) {
+            addCriterion("attribute1 >=", value, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1LessThan(String value) {
+            addCriterion("attribute1 <", value, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1LessThanOrEqualTo(String value) {
+            addCriterion("attribute1 <=", value, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1Like(String value) {
+            addCriterion("attribute1 like", value, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1NotLike(String value) {
+            addCriterion("attribute1 not like", value, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1In(List<String> values) {
+            addCriterion("attribute1 in", values, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1NotIn(List<String> values) {
+            addCriterion("attribute1 not in", values, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1Between(String value1, String value2) {
+            addCriterion("attribute1 between", value1, value2, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute1NotBetween(String value1, String value2) {
+            addCriterion("attribute1 not between", value1, value2, "attribute1");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2IsNull() {
+            addCriterion("attribute2 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2IsNotNull() {
+            addCriterion("attribute2 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2EqualTo(String value) {
+            addCriterion("attribute2 =", value, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2NotEqualTo(String value) {
+            addCriterion("attribute2 <>", value, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2GreaterThan(String value) {
+            addCriterion("attribute2 >", value, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2GreaterThanOrEqualTo(String value) {
+            addCriterion("attribute2 >=", value, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2LessThan(String value) {
+            addCriterion("attribute2 <", value, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2LessThanOrEqualTo(String value) {
+            addCriterion("attribute2 <=", value, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2Like(String value) {
+            addCriterion("attribute2 like", value, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2NotLike(String value) {
+            addCriterion("attribute2 not like", value, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2In(List<String> values) {
+            addCriterion("attribute2 in", values, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2NotIn(List<String> values) {
+            addCriterion("attribute2 not in", values, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2Between(String value1, String value2) {
+            addCriterion("attribute2 between", value1, value2, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute2NotBetween(String value1, String value2) {
+            addCriterion("attribute2 not between", value1, value2, "attribute2");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3IsNull() {
+            addCriterion("attribute3 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3IsNotNull() {
+            addCriterion("attribute3 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3EqualTo(String value) {
+            addCriterion("attribute3 =", value, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3NotEqualTo(String value) {
+            addCriterion("attribute3 <>", value, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3GreaterThan(String value) {
+            addCriterion("attribute3 >", value, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3GreaterThanOrEqualTo(String value) {
+            addCriterion("attribute3 >=", value, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3LessThan(String value) {
+            addCriterion("attribute3 <", value, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3LessThanOrEqualTo(String value) {
+            addCriterion("attribute3 <=", value, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3Like(String value) {
+            addCriterion("attribute3 like", value, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3NotLike(String value) {
+            addCriterion("attribute3 not like", value, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3In(List<String> values) {
+            addCriterion("attribute3 in", values, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3NotIn(List<String> values) {
+            addCriterion("attribute3 not in", values, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3Between(String value1, String value2) {
+            addCriterion("attribute3 between", value1, value2, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute3NotBetween(String value1, String value2) {
+            addCriterion("attribute3 not between", value1, value2, "attribute3");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4IsNull() {
+            addCriterion("attribute4 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4IsNotNull() {
+            addCriterion("attribute4 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4EqualTo(String value) {
+            addCriterion("attribute4 =", value, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4NotEqualTo(String value) {
+            addCriterion("attribute4 <>", value, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4GreaterThan(String value) {
+            addCriterion("attribute4 >", value, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4GreaterThanOrEqualTo(String value) {
+            addCriterion("attribute4 >=", value, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4LessThan(String value) {
+            addCriterion("attribute4 <", value, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4LessThanOrEqualTo(String value) {
+            addCriterion("attribute4 <=", value, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4Like(String value) {
+            addCriterion("attribute4 like", value, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4NotLike(String value) {
+            addCriterion("attribute4 not like", value, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4In(List<String> values) {
+            addCriterion("attribute4 in", values, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4NotIn(List<String> values) {
+            addCriterion("attribute4 not in", values, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4Between(String value1, String value2) {
+            addCriterion("attribute4 between", value1, value2, "attribute4");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttribute4NotBetween(String value1, String value2) {
+            addCriterion("attribute4 not between", value1, value2, "attribute4");
+>>>>>>> branch 'master' of https://github.com/classicriver/mygit
             return (Criteria) this;
         }
 
