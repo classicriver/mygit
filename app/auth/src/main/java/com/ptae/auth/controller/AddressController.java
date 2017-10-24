@@ -9,17 +9,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ptae.api.AddressControllerRemoteApi;
 import com.ptae.auth.common.CommonUtils;
-import com.ptae.auth.model.AppAddress;
-import com.ptae.auth.model.AppAddressExample;
+import com.ptae.api.model.AppAddress;
+import com.ptae.api.model.AppAddressExample;
 import com.ptae.auth.service.AppAddressService;
-import com.ptae.core.controller.BaseController;
+import com.ptae.base.controller.BaseController;
 
 /**
  * @Description: TODO()
@@ -28,8 +26,7 @@ import com.ptae.core.controller.BaseController;
  * @version V1.0  
  */
 @RestController
-@RequestMapping("/adas-app")
-public class AddressController extends BaseController {
+public class AddressController extends BaseController implements AddressControllerRemoteApi{
 
 	@Autowired
 	private AppAddressService service;
@@ -43,8 +40,7 @@ public class AddressController extends BaseController {
 	 * @return
 	 * @Description: TODO 查询用户地址信息
 	 */
-	@RequestMapping(value = "/address/{phoneNum}", method = RequestMethod.GET)
-	@ResponseBody
+    @Override
 	public Map<String, Object> queryAddress(@PathVariable String phoneNum, @RequestParam("token") String token) {
 		try {
 			AppAddressExample example = new AppAddressExample();
@@ -130,8 +126,7 @@ public class AddressController extends BaseController {
 	 * @return
 	 * @Description: TODO 更新地址
 	 */
-	@RequestMapping(value = "/address/{phoneNum}", method = RequestMethod.POST)
-	@ResponseBody
+    @Override
 	public Map<String, Object> updateAddress(@PathVariable String phoneNum, @RequestParam("token") String token,
 			@RequestBody AppAddress home) {
 		try {

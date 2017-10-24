@@ -5,9 +5,9 @@ package com.ptae.auth.service.impl;
 import org.springframework.stereotype.Service;
 
 import com.ptae.auth.mapper.AppAddressMapper;
-import com.ptae.auth.model.AppAddress;
+import com.ptae.api.model.AppAddress;
 import com.ptae.auth.service.AppAddressService;
-import com.ptae.core.service.impl.BaseServiceImpl;
+import com.ptae.base.service.impl.BaseServiceImpl;
 
 /**
  * @Description: TODO()

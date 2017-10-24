@@ -6,8 +6,8 @@
 */ 
 package com.ptae.auth.service;
 
-import com.ptae.auth.model.AppSms;
-import com.ptae.core.service.BaseService;
+import com.ptae.api.model.AppSms;
+import com.ptae.base.service.BaseService;
 
 /**
  * @Description: TODO()

@@ -16,14 +16,17 @@
 	</properties>
 	<dependencies>
 		<!--如果要把springboot工程打包成war执行，需要该jar -->
-		 <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-legacy</artifactId> 
-			<version>1.0.2.RELEASE</version> </dependency> 
+		<!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-legacy</artifactId>
+			<version>1.0.2.RELEASE</version>
+		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
+		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -34,14 +37,10 @@
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
+		<!-- <dependency> <groupId>org.apache.tomcat.embed</groupId> <artifactId>tomcat-embed-jasper</artifactId> 
+			</dependency> -->
+		<!-- <dependency> <groupId>javax.servlet</groupId> <artifactId>jstl</artifactId> 
+			</dependency> -->
 		<!-- 添加mysql驱动包 -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -107,31 +106,26 @@
 			<version>3.6.0</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
 			<version>5.0.4</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.7.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.18</version>
-		</dependency>
-		<dependency>
 			<groupId>com.ptae</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-	<dependency>
+		<dependency>
 			<groupId>aliyun-java-sdk</groupId>
 			<artifactId>core</artifactId>
 			<version>3.3.1</version>
@@ -142,25 +136,11 @@
 			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
-	
-	<!-- <build>
-		用到了第三方jar包，必须手工指定包路劲
-		<resources>
-			<resource>
-				<directory>lib</directory>
-				用到了第三方jar包，必须手工指定包路劲 springboot jar包路径
-				<targetPath>BOOT-INF/lib/</targetPath>
-				<includes>
-					<include>**/*.jar</include>
-				</includes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build> -->
+
+	<!-- <build> 用到了第三方jar包，必须手工指定包路劲 <resources> <resource> <directory>lib</directory> 
+		用到了第三方jar包，必须手工指定包路劲 springboot jar包路径 <targetPath>BOOT-INF/lib/</targetPath> 
+		<includes> <include>**/*.jar</include> </includes> </resource> </resources> 
+		<plugins> <plugin> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-maven-plugin</artifactId> 
+		</plugin> </plugins> </build> -->
 
 </project>

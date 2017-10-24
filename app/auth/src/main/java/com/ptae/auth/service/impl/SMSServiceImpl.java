@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.ptae.auth.common.TimeUtils;
 import com.ptae.auth.mapper.AppSmsMapper;
-import com.ptae.auth.model.AppSms;
-import com.ptae.auth.model.AppSmsExample;
+import com.ptae.api.model.AppSms;
+import com.ptae.api.model.AppSmsExample;
 import com.ptae.auth.service.SMSService;
-import com.ptae.core.service.impl.BaseServiceImpl;
+import com.ptae.base.service.impl.BaseServiceImpl;
 
 /**
  * @Description: TODO()

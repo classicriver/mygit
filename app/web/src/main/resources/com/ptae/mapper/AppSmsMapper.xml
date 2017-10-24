@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ptae.auth.mapper.AppSmsMapper">
-  <resultMap id="BaseResultMap" type="com.ptae.auth.model.AppSms">
+  <resultMap id="BaseResultMap" type="com.ptae.api.model.AppSms">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
     <result column="messages" jdbcType="VARCHAR" property="messages" />
@@ -75,7 +75,7 @@
     id, user_account, messages, sent_time, type, attribute1, attribute2, attribute3, 
     attribute4, attribute5
   </sql>
-  <select id="selectByExample" parameterType="com.ptae.auth.model.AppSmsExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ptae.api.model.AppSmsExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -99,13 +99,13 @@
     delete from app_sms
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ptae.auth.model.AppSmsExample">
+  <delete id="deleteByExample" parameterType="com.ptae.api.model.AppSmsExample">
     delete from app_sms
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ptae.auth.model.AppSms">
+  <insert id="insert" parameterType="com.ptae.api.model.AppSms">
     insert into app_sms (id, user_account, messages, 
       sent_time, type, attribute1, 
       attribute2, attribute3, attribute4, 
@@ -115,7 +115,7 @@
       #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR}, 
       #{attribute5,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ptae.auth.model.AppSms">
+  <insert id="insertSelective" parameterType="com.ptae.api.model.AppSms">
     insert into app_sms
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -182,7 +182,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ptae.auth.model.AppSmsExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ptae.api.model.AppSmsExample" resultType="java.lang.Long">
     select count(*) from app_sms
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -242,7 +242,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ptae.auth.model.AppSms">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ptae.api.model.AppSms">
     update app_sms
     <set>
       <if test="userAccount != null">
@@ -275,7 +275,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ptae.auth.model.AppSms">
+  <update id="updateByPrimaryKey" parameterType="com.ptae.api.model.AppSms">
     update app_sms
     set user_account = #{userAccount,jdbcType=VARCHAR},
       messages = #{messages,jdbcType=VARCHAR},

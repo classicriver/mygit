@@ -1,8 +1,8 @@
 package com.ptae.auth.mapper;
 
-import com.ptae.auth.model.AppAddress;
-import com.ptae.auth.model.AppAddressExample;
-import com.ptae.core.dao.BaseMapper;
+import com.ptae.api.model.AppAddress;
+import com.ptae.api.model.AppAddressExample;
+import com.ptae.base.dao.BaseMapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;

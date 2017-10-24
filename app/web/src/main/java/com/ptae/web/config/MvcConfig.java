@@ -1,8 +1,5 @@
 package com.ptae.web.config;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -10,9 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerAdapter;
 import org.springframework.web.servlet.HandlerMapping;
@@ -26,7 +20,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+//import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.ptae.auth.interceptor.AuthInterceptor;
 
 @Configuration
@@ -256,7 +250,7 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	 * @param converters
 	 */
 
-	@Override
+	/*@Override
 	protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 
 		StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
@@ -275,6 +269,6 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 
 		converters.add(2, stringHttpMessageConverter);// 添加的自定义的stringHttpMessageConverter
 		converters.add(jsonConverter);
-	}
+	}*/
 
 }

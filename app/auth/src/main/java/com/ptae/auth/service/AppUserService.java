@@ -2,8 +2,8 @@
 */ 
 package com.ptae.auth.service;
 
-import com.ptae.auth.model.AppUser;
-import com.ptae.core.service.BaseService;
+import com.ptae.api.model.AppUser;
+import com.ptae.base.service.BaseService;
 
 /**
  * @Description: TODO()

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ptae.auth.mapper.AppAddressMapper">
-  <resultMap id="BaseResultMap" type="com.ptae.auth.model.AppAddress">
+  <resultMap id="BaseResultMap" type="com.ptae.api.model.AppAddress">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
     <result column="home_address" jdbcType="VARCHAR" property="homeAddress" />
@@ -76,7 +76,7 @@
     id, user_account, home_address, compnay_address, add_time, update_time, home_longitude, 
     home_latitude, company_longitude, company_latitude, attribute5
   </sql>
-  <select id="selectByExample" parameterType="com.ptae.auth.model.AppAddressExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ptae.api.model.AppAddressExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -100,13 +100,13 @@
     delete from app_address
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ptae.auth.model.AppAddressExample">
+  <delete id="deleteByExample" parameterType="com.ptae.api.model.AppAddressExample">
     delete from app_address
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ptae.auth.model.AppAddress">
+  <insert id="insert" parameterType="com.ptae.api.model.AppAddress">
     insert into app_address (id, user_account, home_address, 
       compnay_address, add_time, update_time, 
       home_longitude, home_latitude, company_longitude, 
@@ -116,7 +116,7 @@
       #{homeLongitude,jdbcType=VARCHAR}, #{homeLatitude,jdbcType=VARCHAR}, #{companyLongitude,jdbcType=VARCHAR}, 
       #{companyLatitude,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ptae.auth.model.AppAddress">
+  <insert id="insertSelective" parameterType="com.ptae.api.model.AppAddress">
     insert into app_address
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -189,7 +189,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ptae.auth.model.AppAddressExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ptae.api.model.AppAddressExample" resultType="java.lang.Long">
     select count(*) from app_address
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -253,7 +253,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ptae.auth.model.AppAddress">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ptae.api.model.AppAddress">
     update app_address
     <set>
       <if test="userAccount != null">
@@ -289,7 +289,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ptae.auth.model.AppAddress">
+  <update id="updateByPrimaryKey" parameterType="com.ptae.api.model.AppAddress">
     update app_address
     set user_account = #{userAccount,jdbcType=VARCHAR},
       home_address = #{homeAddress,jdbcType=VARCHAR},

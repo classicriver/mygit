@@ -40,7 +40,7 @@ public class Application extends SpringBootServletInitializer{
 	public void onStartup(ServletContext servletContext)
 			throws ServletException {
 		// TODO Auto-generated method stub
-		servletContext.setInitParameter("webAppRootKey", "webframe.root");
+		servletContext.setInitParameter("webAppRootKey", "webframe.server");
 		/*servletContext.setInitParameter("log4jConfigLocation",
 				"classpath:log4j.properties");
 		servletContext.addListener(Log4jConfigListener.class);*/

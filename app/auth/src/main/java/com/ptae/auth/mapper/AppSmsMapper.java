@@ -1,8 +1,8 @@
 package com.ptae.auth.mapper;
 
-import com.ptae.auth.model.AppSms;
-import com.ptae.auth.model.AppSmsExample;
-import com.ptae.core.dao.BaseMapper;
+import com.ptae.api.model.AppSms;
+import com.ptae.api.model.AppSmsExample;
+import com.ptae.base.dao.BaseMapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
