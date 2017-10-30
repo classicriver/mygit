@@ -1,31 +1,23 @@
-/**   
-*/ 
-package com.ptae.consumer.controller;
+
+package com.ptae.auth.api;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.ptae.consumer.service.LoginService;
 
 /**
+ * 
  * @Description: TODO
 * @author  xiesc
 * @date 2017年10月24日 
-* @version V1.0   
+* @version V1.0  
  */
-@RestController
-public class LoginController {
-	
-	@Autowired
-	private LoginService service;
-	
+@RequestMapping("/provider-auth")
+public interface LoginControllerRemoteApi {
 	/**
 	 * 
 	 * @param phoneNum
@@ -37,9 +29,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/sentAuthCode/{phoneNum}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> sentMessage(@PathVariable("phoneNum")String phoneNum,@RequestParam("ciphertext")String ciphertext){
-		 return service.sentMessage(phoneNum, ciphertext);
-	}
+	public Map<String, Object> sentMessage(@PathVariable("phoneNum")String phoneNum,@RequestParam("ciphertext")String ciphertext);
 	
 	/**
 	 * 
@@ -52,9 +42,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/login/{phoneNum}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> login(@PathVariable("phoneNum")String phoneNum, @RequestParam("authcode")String authcode){
-		return service.login(phoneNum, authcode);
-	}
+	public Map<String, Object> login(@PathVariable("phoneNum")String phoneNum, @RequestParam("authcode")String authcode);
 	
 	/**
 	 * 
@@ -66,9 +54,7 @@ public class LoginController {
 	// token:.+ 解决token中有.符号会被截断的问题
 	@RequestMapping(value = "/logout/{phoneNum}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> logout(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token){
-		return service.logout(phoneNum, token);
-	}
+	public Map<String, Object> logout(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token);
 	
 	/**
 	 * 
@@ -79,9 +65,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/time/{phoneNum}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> getTime(@PathVariable("phoneNum") String phoneNum,@RequestParam("token")String token){
-		return service.getTime(phoneNum, token);
-	}
+	public Map<String, Object> getTime(@PathVariable("phoneNum") String phoneNum,@RequestParam("token")String token);
 	
 	/**
 	 * 
@@ -92,7 +76,5 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/isLogined/{phoneNum}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> isRegister(@PathVariable("phoneNum")String phoneNum,@RequestParam("token")String token){
-		return service.isRegister(phoneNum, token);
-	}
+	public Map<String, Object> isRegister(@PathVariable("phoneNum")String phoneNum,@RequestParam("token")String token);
 }

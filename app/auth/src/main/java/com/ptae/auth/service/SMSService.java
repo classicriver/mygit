@@ -6,7 +6,7 @@
 */ 
 package com.ptae.auth.service;
 
-import com.ptae.api.model.AppSms;
+import com.ptae.auth.api.model.AppSms;
 import com.ptae.base.service.BaseService;
 
 /**

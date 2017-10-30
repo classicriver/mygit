@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.ptae.auth.api.model.AppSms;
+import com.ptae.auth.api.model.AppSmsExample;
 import com.ptae.auth.common.TimeUtils;
 import com.ptae.auth.mapper.AppSmsMapper;
-import com.ptae.api.model.AppSms;
-import com.ptae.api.model.AppSmsExample;
 import com.ptae.auth.service.SMSService;
 import com.ptae.base.service.impl.BaseServiceImpl;
 

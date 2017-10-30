@@ -2,7 +2,7 @@
 */
 package com.ptae.auth.service;
 
-import com.ptae.api.model.AppAddress;
+import com.ptae.auth.api.model.AppAddress;
 import com.ptae.base.service.BaseService;
 
 /**

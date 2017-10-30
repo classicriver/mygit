@@ -4,7 +4,7 @@ package com.ptae.consumer.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 
-import com.ptae.api.AddressControllerRemoteApi;
+import com.ptae.auth.api.AddressControllerRemoteApi;
 
 /**
  * @Description: TODO
@@ -12,7 +12,7 @@ import com.ptae.api.AddressControllerRemoteApi;
 * @date 2017年10月24日 
 * @version V1.0   
  */
-@FeignClient(value = "service-provider")
+@FeignClient(value = "provider-auth")
 public interface AddressService extends AddressControllerRemoteApi{
 
 }

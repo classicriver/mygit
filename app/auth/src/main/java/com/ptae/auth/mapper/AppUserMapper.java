@@ -1,7 +1,7 @@
 package com.ptae.auth.mapper;
 
-import com.ptae.api.model.AppUser;
-import com.ptae.api.model.AppUserExample;
+import com.ptae.auth.api.model.AppUser;
+import com.ptae.auth.api.model.AppUserExample;
 import com.ptae.base.dao.BaseMapper;
 
 import java.util.List;

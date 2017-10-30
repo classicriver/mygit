@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aliyuncs.exceptions.ClientException;
-import com.ptae.api.LoginControllerRemoteApi;
+import com.ptae.auth.api.LoginControllerRemoteApi;
 import com.ptae.auth.common.CommonUtils;
 import com.ptae.auth.common.DESUtil;
 import com.ptae.auth.common.JJWTUtils;

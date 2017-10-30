@@ -1,7 +1,7 @@
 package com.ptae.auth.mapper;
 
-import com.ptae.api.model.AppSms;
-import com.ptae.api.model.AppSmsExample;
+import com.ptae.auth.api.model.AppSms;
+import com.ptae.auth.api.model.AppSmsExample;
 import com.ptae.base.dao.BaseMapper;
 
 import java.util.List;
