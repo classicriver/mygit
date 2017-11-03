@@ -21,5 +21,5 @@ public interface SMSService extends BaseService<AppSms>{
 	 * @return
 	 * @Description: TODO 短信发送前验证
 	 */
-	public boolean canSent(); 
+	public String canSent(String phoneNumber); 
 }

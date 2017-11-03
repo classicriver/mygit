@@ -32,22 +32,30 @@ public class LoginController extends BaseController implements LoginControllerRe
 	public Map<String, Object> sentMessage(@PathVariable String phoneNum,
 			@RequestParam("ciphertext") String ciphertext) {
 		// 验证md5码
-		if (DESUtil.verify(ciphertext)) {
-			// 1.生成验证码
-			String code = CommonUtils.getRandomCode(6);
-			try {
-				// 2.发送短信
-				if (aliSMS.sent(phoneNum, code)) {
-					// 3。把验证码存入redis,key = 手机号
-					jedisClient.set(phoneNum + "_code", code);
-					jedisClient.expire(phoneNum + "_code", 5 * 60);// 5分钟后过期
-					return super.successJson("发送成功。", null);
+				if (DESUtil.verify(ciphertext)) {
+					// 1.生成验证码
+					String code = CommonUtils.getRandomCode(6);
+					try {
+						// 2.发送短信
+						String sentMessages = "";
+								//aliSMS.sent(phoneNum, code);
+						if("".equals(sentMessages)){
+							// 3。把验证码存入redis,key = 手机号
+							jedisClient.set(phoneNum+"_code", code);
+							jedisClient.expire(phoneNum+"_code", 5 * 60);// 5分钟后过期
+							return super.successJson("发送成功。", null);
+						}else{
+							Map<String, Object> map = new HashMap<>();
+							map.put("sentResult", sentMessages);
+							List<Map<String, Object>> list = new ArrayList<>();
+							list.add(map);
+							return super.successJson("短信发送失败。", list);
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-			} catch (ClientException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		return super.failureJson("验证不通过。", null);
 	}
 

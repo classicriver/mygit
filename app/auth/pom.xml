@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.ptae</groupId>
 		<artifactId>app</artifactId>
-		<version>0.0.1</version>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>auth</artifactId>
 	<name>auth</name>

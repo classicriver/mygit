@@ -30,9 +30,10 @@ public class AliSMS {
     static final String accessKeyId = "LTAIa01ZTnQX5Ykz";
     static final String accessKeySecret = "eplGve4iC4jsGwFRfCV4tL2iq6tBto";
 
-    public boolean sent(String phoneNumber,String message) throws ClientException {
+    public String sent(String phoneNumber,String message) throws ClientException {
     	SendSmsResponse sendSmsResponse = null;
-    	if(service.canSent()){
+    	String messages = service.canSent(phoneNumber);
+    	if("".equals(messages)){
     		 //可自助调整超时时间
             System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
             System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -68,10 +69,10 @@ public class AliSMS {
                 record.setType("0");
                 record.setUserAccount(phoneNumber);
                 service.insert(record);
-                return true;
-            };
+            }else{
+            	messages = "短信发送失败，错误码： "+sendSmsResponse.getCode();
+            }
     	}
-       
-        return false;
+        return messages;
     }
 }

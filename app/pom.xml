@@ -5,7 +5,7 @@
 
 	<groupId>com.ptae</groupId>
 	<artifactId>app</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>app</name>
@@ -51,7 +51,7 @@
 			<dependency>
 				<groupId>com.ptae</groupId>
 				<artifactId>auth</artifactId>
-				<version>0.0.1</version>
+				<version>1.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.ptae</groupId>
@@ -60,14 +60,14 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<build>
+	<!-- <build>
 		<plugins>
-			<!--打成jar包需要的插件 -->
+			打成jar包需要的插件
 			<plugin>
-				<!--The plugin rewrites your manifest -->
+				The plugin rewrites your manifest
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<!--指定该Main Class为全局的唯一入口 -->
+				指定该Main Class为全局的唯一入口
 				<configuration>
 					<mainClass>com.ptae.Application</mainClass>
 					<layout>ZIP</layout>
@@ -75,9 +75,9 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中 -->
+							<goal>repackage</goal>可以把依赖的包都打包到生成的Jar包中
 						</goals>
-						<!--生成不含依赖包的可执行Jar包 -->
+						生成不含依赖包的可执行Jar包
 						<configuration>
 							<classifier>exec</classifier>
 						</configuration>
@@ -85,5 +85,5 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>
+	</build> -->
 </project>
