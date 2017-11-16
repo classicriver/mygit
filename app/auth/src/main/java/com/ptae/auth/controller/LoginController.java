@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aliyuncs.exceptions.ClientException;
 import com.ptae.auth.api.LoginControllerRemoteApi;
 import com.ptae.auth.common.CommonUtils;
 import com.ptae.auth.common.DESUtil;
 import com.ptae.auth.common.JJWTUtils;
 import com.ptae.auth.config.JedisClient;
+import com.ptae.auth.service.AppUserService;
 import com.ptae.auth.sms.AliSMS;
 import com.ptae.base.controller.BaseController;
 
@@ -27,35 +27,36 @@ public class LoginController extends BaseController implements LoginControllerRe
 	private JedisClient jedisClient;
 	@Autowired
 	private AliSMS aliSMS;
+	@Autowired
+	private AppUserService userService;
 
 	@Override
 	public Map<String, Object> sentMessage(@PathVariable String phoneNum,
 			@RequestParam("ciphertext") String ciphertext) {
 		// 验证md5码
-				if (DESUtil.verify(ciphertext)) {
-					// 1.生成验证码
-					String code = CommonUtils.getRandomCode(6);
-					try {
-						// 2.发送短信
-						String sentMessages = "";
-								//aliSMS.sent(phoneNum, code);
-						if("".equals(sentMessages)){
-							// 3。把验证码存入redis,key = 手机号
-							jedisClient.set(phoneNum+"_code", code);
-							jedisClient.expire(phoneNum+"_code", 5 * 60);// 5分钟后过期
-							return super.successJson("发送成功。", null);
-						}else{
-							Map<String, Object> map = new HashMap<>();
-							map.put("sentResult", sentMessages);
-							List<Map<String, Object>> list = new ArrayList<>();
-							list.add(map);
-							return super.successJson("短信发送失败。", list);
-						}
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		if (DESUtil.verify(ciphertext)) {
+			// 1.生成验证码
+			String code = CommonUtils.getRandomCode(6);
+			try {
+				// 2.发送短信
+				String sentMessages = aliSMS.sent(phoneNum, code);
+				if ("".equals(sentMessages)) {
+					// 3。把验证码存入redis,key = 手机号
+					jedisClient.set(phoneNum + "_code", code);
+					jedisClient.expire(phoneNum + "_code", 5 * 60);// 5分钟后过期
+					return super.successJson("发送成功。", null);
+				} else {
+					Map<String, Object> map = new HashMap<>();
+					map.put("sentResult", sentMessages);
+					List<Map<String, Object>> list = new ArrayList<>();
+					list.add(map);
+					return super.successJson("短信发送失败。", list);
 				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return super.failureJson("验证不通过。", null);
 	}
 
@@ -83,6 +84,8 @@ public class LoginController extends BaseController implements LoginControllerRe
 			// 在缓存中记录下登录状态,缓存默认过期时间30天
 			jedisClient.set(phoneNum, token);
 			jedisClient.expire(phoneNum, 24 * 3600 * 30);
+			// 记录登录信息
+			userService.saveOrUpdateUser(phoneNum);
 			return super.successJson("登录成功", list);
 		}
 		return super.failureJson("验证码输入错误或已过期。", null);
@@ -106,7 +109,6 @@ public class LoginController extends BaseController implements LoginControllerRe
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-
 		return super.failureJson("退出失败", null);
 	}
 
@@ -118,7 +120,6 @@ public class LoginController extends BaseController implements LoginControllerRe
 	 * @Description: TODO获取系统时间
 	 */
 	@Override
-
 	public Map<String, Object> getTime(@PathVariable String phoneNum, @RequestParam("token") String token) {
 		try {
 			List<Map<String, Object>> list = new ArrayList<>();
@@ -143,13 +144,14 @@ public class LoginController extends BaseController implements LoginControllerRe
 	@Override
 	public Map<String, Object> isRegister(@PathVariable String phoneNum, @RequestParam("token") String token) {
 		try {
-			List<Map<String, Object>> list = new ArrayList<>();
-			Map<String, Object> map = new HashMap<>();
-			if (jedisClient.get(phoneNum).equals(token)) {
+			List<Map<String,Object>> list = new ArrayList<>();
+			Map<String,Object> map = new HashMap<>();
+			if(!CommonUtils.isNullOrEmpty(token) && token.equals(jedisClient.get(phoneNum))){
 				map.put("isLogined", true);
-			} else {
+			}else{
 				map.put("isLogined", false);
 			}
+			
 			list.add(map);
 			return super.successJson("调用成功", list);
 		} catch (Exception e) {

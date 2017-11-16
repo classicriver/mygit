@@ -1,9 +1,3 @@
-/**   
-* @Description: TODO(用一句话描述该文件做什么) 
-* @author  
-* @date 2017年10月16日 
-* @version V1.0   
-*/ 
 package com.ptae.auth.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;

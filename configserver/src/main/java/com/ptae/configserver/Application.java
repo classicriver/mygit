@@ -2,6 +2,7 @@ package com.ptae.configserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.config.server.EnableConfigServer;
 
 
@@ -16,6 +17,7 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 /*@SpringBootApplication等同于以下三个注解同时使用
 * {@link @ComponentScan,@Configuration,@SpringApplicationConfiguration}*/
 @SpringBootApplication(scanBasePackages = {"com.ptae.**"})
+@EnableDiscoveryClient
 @EnableConfigServer
 public class Application{
 

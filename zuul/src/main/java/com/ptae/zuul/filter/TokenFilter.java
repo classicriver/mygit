@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerMapping;
@@ -26,6 +27,7 @@ import com.ptae.zuul.config.JedisClient;
  * @version V1.0  
  */
 @Component
+@RefreshScope
 public class TokenFilter extends ZuulFilter {
 
 	@Value("${ptae.zuul.excludePathPatterns}")

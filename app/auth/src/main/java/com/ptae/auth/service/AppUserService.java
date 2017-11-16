@@ -12,5 +12,5 @@ import com.ptae.base.service.BaseService;
  * @version V1.0  
  */
 public interface AppUserService extends BaseService<AppUser> {
-	
+	public int saveOrUpdateUser(String phoneNum);
 }

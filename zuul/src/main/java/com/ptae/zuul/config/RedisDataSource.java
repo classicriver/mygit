@@ -3,6 +3,7 @@ package com.ptae.zuul.config;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -15,7 +16,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @date 2017年10月12日 
  * @version V1.0  
  */
-@Configuration
+@RefreshScope
 public class RedisDataSource {
 	
 	@Value("${redis.host}")

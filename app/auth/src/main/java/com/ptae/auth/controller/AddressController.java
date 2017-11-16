@@ -42,7 +42,7 @@ public class AddressController extends BaseController implements AddressControll
 	 */
     @Override
 	public Map<String, Object> queryAddress(@PathVariable String phoneNum, @RequestParam("token") String token) {
-		try {
+    	try {
 			AppAddressExample example = new AppAddressExample();
 			example.createCriteria().andUserAccountEqualTo(phoneNum);
 			List<AppAddress> address = service.selectByExample(example);
@@ -129,7 +129,7 @@ public class AddressController extends BaseController implements AddressControll
     @Override
 	public Map<String, Object> updateAddress(@PathVariable String phoneNum, @RequestParam("token") String token,
 			@RequestBody AppAddress home) {
-		try {
+    	try {
 			//有id代表更新
 			if(!CommonUtils.isNullOrEmpty(home.getId())){
 				AppAddressExample example = new AppAddressExample();
