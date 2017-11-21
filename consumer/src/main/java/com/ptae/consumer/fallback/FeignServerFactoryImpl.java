@@ -2,6 +2,7 @@
 */ 
 package com.ptae.consumer.fallback;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -31,33 +32,41 @@ public class FeignServerFactoryImpl implements FallbackFactory<LoginService>{
 			@Override
 			public Map<String, Object> sentMessage(String phoneNum, String ciphertext) {
 				// TODO Auto-generated method stub
-				System.out.println("sentMessage");
-				System.out.println(arg0.getMessage());
-				return null;
+				Map<String, Object> map = new HashMap<>();
+				map.put("error", arg0.getMessage());
+				return map;
 			}
 
 			@Override
 			public Map<String, Object> login(String phoneNum, String authcode) {
 				// TODO Auto-generated method stub
-				return null;
+				Map<String, Object> map = new HashMap<>();
+				map.put("error", arg0.getMessage());
+				return map;
 			}
 
 			@Override
 			public Map<String, Object> logout(String phoneNum, String token) {
 				// TODO Auto-generated method stub
-				return null;
+				Map<String, Object> map = new HashMap<>();
+				map.put("error", arg0.getMessage());
+				return map;
 			}
 
 			@Override
 			public Map<String, Object> getTime(String phoneNum, String token) {
 				// TODO Auto-generated method stub
-				return null;
+				Map<String, Object> map = new HashMap<>();
+				map.put("error", arg0.getMessage());
+				return map;
 			}
 
 			@Override
 			public Map<String, Object> isRegister(String phoneNum, String token) {
 				// TODO Auto-generated method stub
-				return null;
+				Map<String, Object> map = new HashMap<>();
+				map.put("error", arg0.getMessage());
+				return map;
 			}
 			
 		};

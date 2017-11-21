@@ -62,6 +62,10 @@ public class TokenFilter extends ZuulFilter {
 		Map<String, String> map = (Map<String, String>) request
 				.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 		String token = request.getParameter("token");
+		if(CommonUtils.isNullOrEmpty(token) || CommonUtils.isNullOrEmpty(map)) {
+			writeFailedMessages(ctx,"{\"code\":400,\"data\":null,\"message\":\"无效请求\"}");
+			return null;
+		}
 		String phoneNum = map.get("phoneNum");
 		// 从redis中验证用户签名
 		String value = jedisClient.get(phoneNum);
@@ -71,19 +75,9 @@ public class TokenFilter extends ZuulFilter {
 			ctx.set("isSuccess", true);// 设值，让下一个Filter看到上一个Filter的状态
 			return null;
 		} else {
-			ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
-			ctx.set("isSuccess", false);
-			HttpServletResponse response = ctx.getResponse();
-			// 签名过期或者验证不通过
-			response.setCharacterEncoding("UTF-8");
-			try {
-				response.getWriter().write("{\"code\":400,\"data\":null,\"message\":\"令牌验证失败\"}");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			writeFailedMessages(ctx,"{\"code\":400,\"data\":null,\"message\":\"令牌验证失败\"}");
+			return null;
 		}
-		return null;
 	}
 
 	/*
@@ -126,4 +120,16 @@ public class TokenFilter extends ZuulFilter {
 		return "pre";
 	}
 
+	private void writeFailedMessages(RequestContext ctx,String messages) {
+		ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
+		ctx.set("isSuccess", false);
+		HttpServletResponse response = ctx.getResponse();
+		response.setCharacterEncoding("UTF-8");
+		try {
+			response.getWriter().write(messages);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
