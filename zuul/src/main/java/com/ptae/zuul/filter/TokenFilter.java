@@ -3,21 +3,19 @@
 package com.ptae.zuul.filter;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.servlet.HandlerMapping;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.ptae.zuul.common.CommonUtils;
+import com.ptae.zuul.common.JJWTUtils;
 import com.ptae.zuul.config.JedisClient;
 
 /**
@@ -27,7 +25,6 @@ import com.ptae.zuul.config.JedisClient;
  * @version V1.0  
  */
 @Component
-@RefreshScope
 public class TokenFilter extends ZuulFilter {
 
 	@Value("${ptae.zuul.excludePathPatterns}")
@@ -49,32 +46,23 @@ public class TokenFilter extends ZuulFilter {
 		HttpServletRequest request = ctx.getRequest();
 		String url = request.getRequestURI();
 		String[] patterns = excludePathPatterns.split(",");
-		// 检查当前url，如果不要验证令牌，直接放行
+		// 检查当前url，如果不需要验证令牌，直接放行
 		for (int i = 0; i < patterns.length; i++) {
-			String pattern = patterns[i];
-			boolean matched = matcher.match(pattern, url);
-			if (matched) {
-				ctx.setSendZuulResponse(true);// 对该请求进行路由
-				ctx.setResponseStatusCode(200);
-				ctx.set("isSuccess", true);// 设值，让下一个Filter看到上一个Filter的状态
+			if (matcher.match(patterns[i], url)) {
+				success(ctx);
 				return null;
 			}
 		}
-		@SuppressWarnings("unchecked")
-		Map<String, String> map = (Map<String, String>) request
-				.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 		String token = request.getParameter("token");
-		if(CommonUtils.isNullOrEmpty(token) || CommonUtils.isNullOrEmpty(map)) {
+		if(CommonUtils.isNullOrEmpty(token)) {
 			writeFailedMessages(ctx,"{\"code\":400,\"data\":null,\"message\":\"无效请求\"}");
 			return null;
 		}
-		String phoneNum = map.get("phoneNum");
 		// 从redis中验证用户签名
-		String value = jedisClient.get(phoneNum);
+		String userAccount = JJWTUtils.getSubject(token);
+		String value = jedisClient.get(userAccount);
 		if (!CommonUtils.isNullOrEmpty(value) && value.equals(token)) {
-			ctx.setSendZuulResponse(true);// 对该请求进行路由
-			ctx.setResponseStatusCode(200);
-			ctx.set("isSuccess", true);// 设值，让下一个Filter看到上一个Filter的状态
+			success(ctx);
 			return null;
 		} else {
 			writeFailedMessages(ctx,"{\"code\":400,\"data\":null,\"message\":\"令牌验证失败\"}");
@@ -122,6 +110,10 @@ public class TokenFilter extends ZuulFilter {
 		return "pre";
 	}
 
+	/**
+	 * 验证失败
+	 *@Description: TODO
+	 */
 	private void writeFailedMessages(RequestContext ctx,String messages) {
 		ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
 		ctx.set("isSuccess", false);
@@ -133,5 +125,14 @@ public class TokenFilter extends ZuulFilter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * 验证成功
+	 *@Description: TODO
+	 */
+	private void success(RequestContext ctx) {
+		ctx.setSendZuulResponse(true);// 对该请求进行路由
+		ctx.setResponseStatusCode(200);
+		ctx.set("isSuccess", true);// 设值，让下一个Filter看到上一个Filter的状态
 	}
 }
