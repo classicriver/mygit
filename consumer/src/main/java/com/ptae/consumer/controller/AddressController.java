@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ptae.auth.api.model.AppAddress;
 import com.ptae.base.controller.BaseController;
@@ -22,6 +23,7 @@ import com.ptae.consumer.service.AddressService;
 * @date 2017年10月27日 
 * @version V1.0   
  */
+@RestController
 public class AddressController extends BaseController{
 	@Autowired
 	private AddressService service;
@@ -36,7 +38,7 @@ public class AddressController extends BaseController{
 	 */
 	@RequestMapping(value = "/address/{phoneNum}", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> queryAddress(@PathVariable String phoneNum, @RequestParam("token") String token){
+	public Map<String, Object> queryAddress(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token){
 		return service.queryAddress(phoneNum, token);
 	}
 	
@@ -55,7 +57,7 @@ public class AddressController extends BaseController{
 	 */
 	@RequestMapping(value = "/address/{phoneNum}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> updateAddress(@PathVariable String phoneNum, @RequestParam("token") String token,
+	public Map<String, Object> updateAddress(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token,
 			@RequestBody AppAddress home){
 		return service.updateAddress(phoneNum, token, home);
 	}

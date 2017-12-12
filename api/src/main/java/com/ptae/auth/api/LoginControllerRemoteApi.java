@@ -4,10 +4,14 @@ package com.ptae.auth.api;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.ptae.auth.api.model.AppAddress;
+import com.ptae.auth.api.model.AppUser;
 
 /**
  * 
@@ -33,10 +37,8 @@ public interface LoginControllerRemoteApi {
 	
 	/**
 	 * 
-	 * @param phoneNum
-	 *            用户名
-	 * @param authcode
-	 *            验证码
+	 * @param phoneNum 用户名
+	 * @param authcode 验证码
 	 * @return
 	 * @Description: TODO 登录
 	 */
@@ -46,8 +48,7 @@ public interface LoginControllerRemoteApi {
 	
 	/**
 	 * 
-	 * @param token
-	 *            令牌
+	 * @param token 令牌
 	 * @return
 	 * @Description: TODO 退出登录
 	 */
@@ -77,4 +78,16 @@ public interface LoginControllerRemoteApi {
 	@RequestMapping(value = "/isLogined/{phoneNum}", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> isRegister(@PathVariable("phoneNum")String phoneNum,@RequestParam("token")String token);
+	
+	/**
+	 * 
+	 * @param phoneNum
+	 * @param token
+	 * @return
+	 * @Description: TODO 第三方登录接口
+	 */
+	/*@RequestMapping(value = "/thirdpartyLogin/{phoneNum}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> thirdpartyLogin(@PathVariable("account")String account,@RequestBody AppUser user);*/
+	
 }

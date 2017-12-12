@@ -32,7 +32,7 @@ public interface AddressControllerRemoteApi {
 	 */
 	@RequestMapping(value = "/address/{phoneNum}", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> queryAddress(@PathVariable String phoneNum, @RequestParam("token") String token);
+	public Map<String, Object> queryAddress(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token);
 	
 	/**
 	 * 
@@ -49,6 +49,6 @@ public interface AddressControllerRemoteApi {
 	 */
 	@RequestMapping(value = "/address/{phoneNum}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> updateAddress(@PathVariable String phoneNum, @RequestParam("token") String token,
+	public Map<String, Object> updateAddress(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token,
 			@RequestBody AppAddress home);
 }
