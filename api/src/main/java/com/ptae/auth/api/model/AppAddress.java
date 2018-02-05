@@ -11,7 +11,7 @@ public class AppAddress extends Entity{
 
     private String homeAddress;
 
-    private String compnayAddress;
+    private String companyAddress;
 
     private Date addTime;
 
@@ -51,12 +51,12 @@ public class AppAddress extends Entity{
         this.homeAddress = homeAddress == null ? null : homeAddress.trim();
     }
 
-    public String getCompnayAddress() {
-        return compnayAddress;
+    public String getCompanyAddress() {
+        return companyAddress;
     }
 
-    public void setCompnayAddress(String compnayAddress) {
-        this.compnayAddress = compnayAddress == null ? null : compnayAddress.trim();
+    public void setCompanyAddress(String companyAddress) {
+        this.companyAddress = companyAddress == null ? null : companyAddress.trim();
     }
 
     public Date getAddTime() {

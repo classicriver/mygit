@@ -21,8 +21,8 @@
 		</javaTypeResolver>
 
 		<!-- targetProject:生成PO类的位置 -->
-		<javaModelGenerator targetPackage="com.ptae.auth.model"
-			targetProject="auth/src/main/java">
+		<javaModelGenerator targetPackage="com.ptae.auth.api.model"
+			targetProject="api/src/main/java">
 			<!-- enableSubPackages:是否让schema作为包的后缀 -->
 			<property name="enableSubPackages" value="false" />
 			<!-- 从数据库返回的值被清理前后的空格 -->
@@ -30,7 +30,7 @@
 		</javaModelGenerator>
         <!-- targetProject:mapper映射文件生成的位置 -->
 		<sqlMapGenerator targetPackage="com.ptae.mapper" 
-			targetProject="web/src/main/resources">
+			targetProject="auth/src/main/resources">
 			<!-- enableSubPackages:是否让schema作为包的后缀 -->
 			<property name="enableSubPackages" value="false" />
 		</sqlMapGenerator>

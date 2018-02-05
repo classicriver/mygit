@@ -7,7 +7,7 @@ import com.ptae.base.dao.BaseMapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface AppUserMapper extends BaseMapper<AppUser>{
+public interface AppUserMapper extends BaseMapper<AppUser> {
     long countByExample(AppUserExample example);
 
     int deleteByExample(AppUserExample example);

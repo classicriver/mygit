@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ptae.auth.api.model.AppAddress;
 import com.ptae.auth.api.model.AppUser;
+import com.ptae.auth.api.model.Parameter;
 
 /**
  * 
@@ -86,8 +87,8 @@ public interface LoginControllerRemoteApi {
 	 * @return
 	 * @Description: TODO 第三方登录接口
 	 */
-	/*@RequestMapping(value = "/thirdpartyLogin/{phoneNum}", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/thirdpartyLogin", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> thirdpartyLogin(@PathVariable("account")String account,@RequestBody AppUser user);*/
-	
+	public Map<String, Object> thirdpartyLogin(@RequestBody Parameter para);
+	*/
 }

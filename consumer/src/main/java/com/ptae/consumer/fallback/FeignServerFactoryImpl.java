@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.ptae.auth.api.model.Parameter;
 import com.ptae.consumer.service.LoginService;
 
 import feign.hystrix.FallbackFactory;
@@ -68,6 +69,14 @@ public class FeignServerFactoryImpl implements FallbackFactory<LoginService>{
 				map.put("error", arg0.getMessage());
 				return map;
 			}
+
+			/*@Override
+			public Map<String, Object> thirdpartyLogin(Parameter para) {
+				// TODO Auto-generated method stub
+				Map<String, Object> map = new HashMap<>();
+				map.put("error", arg0.getMessage());
+				return map;
+			}*/
 			
 		};
 	}

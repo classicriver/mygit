@@ -15,12 +15,14 @@ public class CommonUtils {
 	 *@Description: 获取随机验证码
 	 */
 	public static String getRandomCode(int length) {
-		String code ="";
+		
+		char[] code = new char[length] ;
 		Random random=new Random();
 		for(int i = 0; i<length; i++) {
-			code = code + String.valueOf(random.nextInt(10));
+			code[i] = (char) (random.nextInt(10)+48);
 		}
-		return code;
+		
+		return new String (code);
 	}
 	/**
 	 * 

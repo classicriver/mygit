@@ -22,19 +22,17 @@ import com.ptae.base.service.impl.BaseServiceImpl;
 @Service
 public class AppUserServiceImpl extends BaseServiceImpl<AppUserMapper, AppUser> implements AppUserService{
 	@Override
-	public int saveOrUpdateUser(String phoneNum){
+	public int saveOrUpdateUser(AppUser user){
 		AppUserExample example = new AppUserExample();
-		example.createCriteria().andUserAccountEqualTo(phoneNum);
+		example.createCriteria().andAccountEqualTo(user.getAccount()).andTypeEqualTo(user.getType());
 		List<AppUser> userList = baseMapper.selectByExample(example);
 		
 		if(userList.size() > 0){
-			AppUser user = userList.get(0);
-			user.setLogintime(new Date());
-			return baseMapper.updateByExample(user, example);
+			AppUser appUser = userList.get(0);
+			appUser.setLogintime(new Date());
+			return baseMapper.updateByExample(appUser, example);
 		}else{
-			AppUser user = new AppUser();
 			user.setLogintime(new Date());
-			user.setUserAccount(phoneNum);
 			return baseMapper.insert(user);
 		}
 	}

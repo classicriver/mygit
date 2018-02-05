@@ -6,12 +6,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ptae.auth.api.LoginControllerRemoteApi;
+import com.ptae.auth.api.model.Parameter;
+import com.ptae.base.controller.BaseController;
 import com.ptae.consumer.service.LoginService;
 
 /**
@@ -21,7 +25,7 @@ import com.ptae.consumer.service.LoginService;
 * @version V1.0   
  */
 @RestController
-public class LoginController {
+public class LoginController extends BaseController{
 	
 	@Autowired
 	private LoginService service;
@@ -95,4 +99,15 @@ public class LoginController {
 	public Map<String, Object> isRegister(@PathVariable("phoneNum")String phoneNum,@RequestParam("token")String token){
 		return service.isRegister(phoneNum, token);
 	}
+
+	/**
+	 * 第三方登录
+	 *@Description: TODO
+	 */
+/*	@RequestMapping(value = "/thirdpartyLogin", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> thirdpartyLogin(@RequestBody Parameter para) {
+		// TODO Auto-generated method stub
+		return service.thirdpartyLogin(para);
+	}*/
 }

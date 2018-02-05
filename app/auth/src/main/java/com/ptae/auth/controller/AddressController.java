@@ -41,7 +41,7 @@ public class AddressController extends BaseController implements AddressControll
 	 * @Description: TODO 查询用户地址信息
 	 */
     @Override
-	public Map<String, Object> queryAddress(@PathVariable String phoneNum, @RequestParam("token") String token) {
+	public Map<String, Object> queryAddress(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token) {
     	try {
 			AppAddressExample example = new AppAddressExample();
 			example.createCriteria().andUserAccountEqualTo(phoneNum);
@@ -127,7 +127,7 @@ public class AddressController extends BaseController implements AddressControll
 	 * @Description: TODO 更新地址
 	 */
     @Override
-	public Map<String, Object> updateAddress(@PathVariable String phoneNum, @RequestParam("token") String token,
+	public Map<String, Object> updateAddress(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token,
 			@RequestBody AppAddress home) {
     	try {
 			//有id代表更新
@@ -141,7 +141,7 @@ public class AddressController extends BaseController implements AddressControll
 					home.setHomeLatitude("");
 				}
 				//如果公司地址为空，设置公司的经度纬度为空
-				if(CommonUtils.isNullOrEmpty(home.getCompnayAddress())){
+				if(CommonUtils.isNullOrEmpty(home.getCompanyAddress())){
 					home.setCompanyLongitude("");
 					home.setCompanyLatitude("");
 				}

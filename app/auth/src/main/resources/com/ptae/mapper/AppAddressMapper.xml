@@ -5,7 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
     <result column="home_address" jdbcType="VARCHAR" property="homeAddress" />
-    <result column="compnay_address" jdbcType="VARCHAR" property="compnayAddress" />
+    <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="home_longitude" jdbcType="VARCHAR" property="homeLongitude" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_account, home_address, compnay_address, add_time, update_time, home_longitude, 
+    id, user_account, home_address, company_address, add_time, update_time, home_longitude, 
     home_latitude, company_longitude, company_latitude, attribute5
   </sql>
   <select id="selectByExample" parameterType="com.ptae.auth.api.model.AppAddressExample" resultMap="BaseResultMap">
@@ -108,11 +108,11 @@
   </delete>
   <insert id="insert" parameterType="com.ptae.auth.api.model.AppAddress">
     insert into app_address (id, user_account, home_address, 
-      compnay_address, add_time, update_time, 
+      company_address, add_time, update_time, 
       home_longitude, home_latitude, company_longitude, 
       company_latitude, attribute5)
     values (#{id,jdbcType=BIGINT}, #{userAccount,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
-      #{compnayAddress,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{companyAddress,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{homeLongitude,jdbcType=VARCHAR}, #{homeLatitude,jdbcType=VARCHAR}, #{companyLongitude,jdbcType=VARCHAR}, 
       #{companyLatitude,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR})
   </insert>
@@ -128,8 +128,8 @@
       <if test="homeAddress != null">
         home_address,
       </if>
-      <if test="compnayAddress != null">
-        compnay_address,
+      <if test="companyAddress != null">
+        company_address,
       </if>
       <if test="addTime != null">
         add_time,
@@ -163,8 +163,8 @@
       <if test="homeAddress != null">
         #{homeAddress,jdbcType=VARCHAR},
       </if>
-      <if test="compnayAddress != null">
-        #{compnayAddress,jdbcType=VARCHAR},
+      <if test="companyAddress != null">
+        #{companyAddress,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         #{addTime,jdbcType=TIMESTAMP},
@@ -207,8 +207,8 @@
       <if test="record.homeAddress != null">
         home_address = #{record.homeAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.compnayAddress != null">
-        compnay_address = #{record.compnayAddress,jdbcType=VARCHAR},
+      <if test="record.companyAddress != null">
+        company_address = #{record.companyAddress,jdbcType=VARCHAR},
       </if>
       <if test="record.addTime != null">
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -241,7 +241,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       user_account = #{record.userAccount,jdbcType=VARCHAR},
       home_address = #{record.homeAddress,jdbcType=VARCHAR},
-      compnay_address = #{record.compnayAddress,jdbcType=VARCHAR},
+      company_address = #{record.companyAddress,jdbcType=VARCHAR},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       home_longitude = #{record.homeLongitude,jdbcType=VARCHAR},
@@ -262,8 +262,8 @@
       <if test="homeAddress != null">
         home_address = #{homeAddress,jdbcType=VARCHAR},
       </if>
-      <if test="compnayAddress != null">
-        compnay_address = #{compnayAddress,jdbcType=VARCHAR},
+      <if test="companyAddress != null">
+        company_address = #{companyAddress,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -293,7 +293,7 @@
     update app_address
     set user_account = #{userAccount,jdbcType=VARCHAR},
       home_address = #{homeAddress,jdbcType=VARCHAR},
-      compnay_address = #{compnayAddress,jdbcType=VARCHAR},
+      company_address = #{companyAddress,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       home_longitude = #{homeLongitude,jdbcType=VARCHAR},

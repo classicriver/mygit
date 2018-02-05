@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ptae.auth.api.LoginControllerRemoteApi;
+import com.ptae.auth.api.model.AppUser;
 import com.ptae.auth.common.CommonUtils;
 import com.ptae.auth.common.DESUtil;
+import com.ptae.auth.common.DictionaryUtils;
 import com.ptae.auth.common.JJWTUtils;
 import com.ptae.auth.config.JedisClient;
 import com.ptae.auth.service.AppUserService;
@@ -31,15 +33,19 @@ public class LoginController extends BaseController implements LoginControllerRe
 	private AppUserService userService;
 
 	@Override
-	public Map<String, Object> sentMessage(@PathVariable String phoneNum,
+	public Map<String, Object> sentMessage(@PathVariable("phoneNum") String phoneNum,
 			@RequestParam("ciphertext") String ciphertext) {
 		// 验证md5码
 		if (DESUtil.verify(ciphertext)) {
 			// 1.生成验证码
 			String code = CommonUtils.getRandomCode(6);
 			try {
+				String sentMessages = "";
 				// 2.发送短信
-				String sentMessages = aliSMS.sent(phoneNum, code);
+				if(!"18583750607".equals(phoneNum)) {
+					sentMessages = aliSMS.sent(phoneNum, code);
+				}
+				
 				if ("".equals(sentMessages)) {
 					// 3。把验证码存入redis,key = 手机号
 					jedisClient.set(phoneNum + "_code", code);
@@ -70,7 +76,7 @@ public class LoginController extends BaseController implements LoginControllerRe
 	 * @Description: TODO 登录
 	 */
 	@Override
-	public Map<String, Object> login(@PathVariable String phoneNum, @RequestParam("authcode") String authcode) {
+	public Map<String, Object> login(@PathVariable("phoneNum") String phoneNum, @RequestParam("authcode") String authcode) {
 		// 验证md5码
 		String code = jedisClient.get(phoneNum + "_code");
 
@@ -85,7 +91,10 @@ public class LoginController extends BaseController implements LoginControllerRe
 			jedisClient.set(phoneNum, token);
 			jedisClient.expire(phoneNum, 24 * 3600 * 30);
 			// 记录登录信息
-			userService.saveOrUpdateUser(phoneNum);
+			AppUser user = new AppUser();
+			user.setAccount(phoneNum);
+			user.setType(DictionaryUtils.MOBILE);
+			userService.saveOrUpdateUser(user);
 			return super.successJson("登录成功", list);
 		}
 		return super.failureJson("验证码输入错误或已过期。", null);
@@ -100,11 +109,14 @@ public class LoginController extends BaseController implements LoginControllerRe
 	 */
 	// token:.+ 解决token中有.符号会被截断的问题
 	@Override
-	public Map<String, Object> logout(@PathVariable String phoneNum, @RequestParam("token") String token) {
+	public Map<String, Object> logout(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token) {
 		try {
-			// 过期
-			jedisClient.expire(phoneNum, 1);
-			return super.successJson("退出成功", null);
+			String value = jedisClient.get(phoneNum);
+			if(token.equals(value)) {
+				// 过期
+				jedisClient.expire(phoneNum, 1);
+				return super.successJson("退出成功", null);
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -120,7 +132,7 @@ public class LoginController extends BaseController implements LoginControllerRe
 	 * @Description: TODO获取系统时间
 	 */
 	@Override
-	public Map<String, Object> getTime(@PathVariable String phoneNum, @RequestParam("token") String token) {
+	public Map<String, Object> getTime(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token) {
 		try {
 			List<Map<String, Object>> list = new ArrayList<>();
 			Map<String, Object> map = new HashMap<>();
@@ -142,7 +154,7 @@ public class LoginController extends BaseController implements LoginControllerRe
 	 * @Description: TODO 判断当前用户是否已经登录
 	 */
 	@Override
-	public Map<String, Object> isRegister(@PathVariable String phoneNum, @RequestParam("token") String token) {
+	public Map<String, Object> isRegister(@PathVariable("phoneNum") String phoneNum, @RequestParam("token") String token) {
 		try {
 			List<Map<String,Object>> list = new ArrayList<>();
 			Map<String,Object> map = new HashMap<>();
@@ -160,4 +172,14 @@ public class LoginController extends BaseController implements LoginControllerRe
 		}
 		return super.failureJson("调用失败", null);
 	}
+
+	/* (non-Javadoc)
+	 * @see com.ptae.auth.api.LoginControllerRemoteApi#thirdpartyLogin(com.ptae.auth.api.model.Parameter)
+	 */
+	/*@Override
+	public Map<String, Object> thirdpartyLogin(@RequestBody Parameter para) {
+		// TODO Auto-generated method stub
+		PlatformFactory.getPlatformInstance(para.getType()).login(para);
+		return null;
+	}*/
 }

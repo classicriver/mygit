@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ptae.auth.api.AddressControllerRemoteApi;
 import com.ptae.auth.api.model.AppAddress;
 import com.ptae.base.controller.BaseController;
 import com.ptae.consumer.service.AddressService;

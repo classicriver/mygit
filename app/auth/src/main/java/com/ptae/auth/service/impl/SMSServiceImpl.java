@@ -42,7 +42,7 @@ public class SMSServiceImpl extends BaseServiceImpl<AppSmsMapper, AppSms> implem
 	@Override
 	public String canSent(String phoneNumber) {
 		// TODO Auto-generated method stub
-		String messages = "";
+		StringBuffer messages = new StringBuffer();
 		try {
 			AppSmsExample e = new AppSmsExample();
 			Criteria criteria = e.createCriteria();
@@ -56,21 +56,22 @@ public class SMSServiceImpl extends BaseServiceImpl<AppSmsMapper, AppSms> implem
 			long todayCount = baseMapper.countByExample(e);
 			//用户当日可发短信数
 			if(todayCount >= userMaxCount){
-				messages = userMaxCountMsg;
+				messages.append(userMaxCountMsg);
+				return messages.toString();
 			}
 			AppUserExample userExmaole = new AppUserExample(); 
-			userExmaole.createCriteria().andUserAccountIsNotNull();
+			userExmaole.createCriteria().andAccountIsNotNull();
 			long userCount = userMapper.countByExample(userExmaole);
 			//最大用户数
 			if(userCount >= maxUser){
-				messages = maxUserMsg;
+				messages.append(maxUserMsg);
 			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		return messages;
+		return messages.toString();
 	}
 	
 }

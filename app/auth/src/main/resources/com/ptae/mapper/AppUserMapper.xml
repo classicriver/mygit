@@ -3,8 +3,12 @@
 <mapper namespace="com.ptae.auth.mapper.AppUserMapper">
   <resultMap id="BaseResultMap" type="com.ptae.auth.api.model.AppUser">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="logintime" jdbcType="TIMESTAMP" property="logintime" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="attribute1" jdbcType="VARCHAR" property="attribute1" />
     <result column="attribute2" jdbcType="VARCHAR" property="attribute2" />
     <result column="attribute3" jdbcType="VARCHAR" property="attribute3" />
@@ -70,7 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_account, logintime, attribute1, attribute2, attribute3, attribute4, attribute5
+    id, account, logintime, icon, sex, type, city, attribute1, attribute2, attribute3, 
+    attribute4, attribute5
   </sql>
   <select id="selectByExample" parameterType="com.ptae.auth.api.model.AppUserExample" resultMap="BaseResultMap">
     select
@@ -103,10 +108,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.ptae.auth.api.model.AppUser">
-    insert into app_user (id, user_account, logintime, 
+    insert into app_user (id, account, logintime, 
+      icon, sex, type, city, 
       attribute1, attribute2, attribute3, 
       attribute4, attribute5)
-    values (#{id,jdbcType=BIGINT}, #{userAccount,jdbcType=VARCHAR}, #{logintime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=BIGINT}, #{account,jdbcType=VARCHAR}, #{logintime,jdbcType=TIMESTAMP}, 
+      #{icon,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{type,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR}, 
       #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR})
   </insert>
@@ -116,11 +123,23 @@
       <if test="id != null">
         id,
       </if>
-      <if test="userAccount != null">
-        user_account,
+      <if test="account != null">
+        account,
       </if>
       <if test="logintime != null">
         logintime,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="city != null">
+        city,
       </if>
       <if test="attribute1 != null">
         attribute1,
@@ -142,11 +161,23 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="userAccount != null">
-        #{userAccount,jdbcType=VARCHAR},
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
       </if>
       <if test="logintime != null">
         #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
       </if>
       <if test="attribute1 != null">
         #{attribute1,jdbcType=VARCHAR},
@@ -177,11 +208,23 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.userAccount != null">
-        user_account = #{record.userAccount,jdbcType=VARCHAR},
+      <if test="record.account != null">
+        account = #{record.account,jdbcType=VARCHAR},
       </if>
       <if test="record.logintime != null">
         logintime = #{record.logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.icon != null">
+        icon = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=CHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
       </if>
       <if test="record.attribute1 != null">
         attribute1 = #{record.attribute1,jdbcType=VARCHAR},
@@ -206,8 +249,12 @@
   <update id="updateByExample" parameterType="map">
     update app_user
     set id = #{record.id,jdbcType=BIGINT},
-      user_account = #{record.userAccount,jdbcType=VARCHAR},
+      account = #{record.account,jdbcType=VARCHAR},
       logintime = #{record.logintime,jdbcType=TIMESTAMP},
+      icon = #{record.icon,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=CHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
       attribute1 = #{record.attribute1,jdbcType=VARCHAR},
       attribute2 = #{record.attribute2,jdbcType=VARCHAR},
       attribute3 = #{record.attribute3,jdbcType=VARCHAR},
@@ -220,11 +267,23 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.ptae.auth.api.model.AppUser">
     update app_user
     <set>
-      <if test="userAccount != null">
-        user_account = #{userAccount,jdbcType=VARCHAR},
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
       </if>
       <if test="logintime != null">
         logintime = #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
       </if>
       <if test="attribute1 != null">
         attribute1 = #{attribute1,jdbcType=VARCHAR},
@@ -246,8 +305,12 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ptae.auth.api.model.AppUser">
     update app_user
-    set user_account = #{userAccount,jdbcType=VARCHAR},
+    set account = #{account,jdbcType=VARCHAR},
       logintime = #{logintime,jdbcType=TIMESTAMP},
+      icon = #{icon,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      type = #{type,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
       attribute1 = #{attribute1,jdbcType=VARCHAR},
       attribute2 = #{attribute2,jdbcType=VARCHAR},
       attribute3 = #{attribute3,jdbcType=VARCHAR},
