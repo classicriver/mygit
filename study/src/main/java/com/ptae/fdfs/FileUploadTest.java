@@ -9,11 +9,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 import com.ptae.auth.api.model.FileMeta;
@@ -38,10 +37,10 @@ public class FileUploadTest {
 
 		HttpPost httpPost = new HttpPost("http://10.19.0.24:8762/provider-auth/file/upload");
 		File file = new File("F:\\\\MVI_2818.mp4");
-
+		
 		CloseableHttpResponse rep = null;
 		try (InputStream ins = new FileInputStream(file)) {
-			byte[] bytes = new byte[1 * 1024 * 1024];
+			byte[] bytes = new byte[256 * 1024];
 			while (ins.read(bytes) != -1) {
 				/*
 				 * MultipartEntityBuilder mEntityBuilder = MultipartEntityBuilder.create();
@@ -60,7 +59,9 @@ public class FileUploadTest {
 				httpPost.setEntity(reqEntity);
 				rep = httpclient.execute(httpPost);
 				HttpEntity entity = rep.getEntity();
-				System.out.println(entity);
+				String string = EntityUtils.toString(entity);
+				meta = JsonUtil.json2Object(string, FileMeta.class);
+				System.out.println(string);
 			}
 		}finally {
 			rep.close();
