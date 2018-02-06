@@ -3,6 +3,7 @@
 package com.ptae.fdfs.cilent;
 
 import java.io.IOException;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.csource.common.MyException;
 import org.csource.common.NameValuePair;
@@ -20,10 +21,28 @@ import org.springframework.stereotype.Component;
  * @version V1.0  
  */
 @Component
-public class FDFSCilent {
+public class FDFSClient {
 
+	private ReentrantLock lock = new ReentrantLock();
+	
 	private static StorageClient storageClient;
 	
+	/*private static class ClientConfig{
+		private static void initClient() {
+			if(storageClient == null) {
+				try {
+					ClientGlobal.initByProperties("fastdfs-client.properties");
+					TrackerClient trackerClient = new TrackerClient();
+					TrackerServer trackerServer = trackerClient.getConnection();
+					StorageServer storageServer = trackerClient.getStoreStorage(trackerServer);
+					storageClient = new StorageClient(trackerServer, storageServer);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}*/
 	static {
 		try {
 			ClientGlobal.initByProperties("fastdfs-client.properties");
@@ -44,9 +63,10 @@ public class FDFSCilent {
 	 *@return
 	 *@Description: TODO 本地文件上传
 	 */
-	public String[] uploadFile(String localFileName, String fileExtName, NameValuePair[] metaList) {
+/*	public String[] uploadFile(String localFileName, String fileExtName) {
 		try {
-			return storageClient.upload_file(localFileName, fileExtName, metaList);
+			//ClientConfig.initClient();
+			return storageClient.upload_appender_file(localFileName, fileExtName, null);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,7 +75,7 @@ public class FDFSCilent {
 			e.printStackTrace();
 		}
 		return null;
-	}
+	}*/
 	/**
 	 * 
 	 *@param file_buff
@@ -64,10 +84,13 @@ public class FDFSCilent {
 	 *@return
 	 *@Description: TODO 文件流
 	 */
-	public String[] uploadFile(byte[] file_buff, String file_ext_name,
-            NameValuePair[] meta_list) {
+	public String[] uploadFile(byte[] file_buff, String file_ext_name) {
+		//ClientConfig.initClient();
 		try {
-			return storageClient.upload_file(file_buff, file_ext_name, meta_list);
+			lock.lock();
+			String[] upload_appender_file = storageClient.upload_appender_file(file_buff, file_ext_name, null);
+			lock.unlock();
+			return upload_appender_file;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,11 +109,11 @@ public class FDFSCilent {
 	 *@param meta_list
 	 *@return  服务器存储成功后的路径
 	 *@Description: TODO 断点续传
-	 */
-	public String[] uploadFile(byte[] file_buff, int offset, int length, String file_ext_name,
-            NameValuePair[] meta_list) {
+	 *//*
+	public String[] uploadFile(byte[] file_buff, int offset, int length, String file_ext_name) {
+		//ClientConfig.initClient();
 		try {
-			return storageClient.upload_file(file_buff, offset, length, file_ext_name, meta_list);
+			return storageClient.upload_appender_file(file_buff, offset, length, file_ext_name, null);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,11 +122,11 @@ public class FDFSCilent {
 			e.printStackTrace();
 		}
 		return null;
-	}
+	}*/
 	
-	public int appendFile(String group_name, String appender_filename,
+	/*public int appendFile(String group_name, String appender_filename,
             byte[] file_buff, int offset, int length) {
-		
+		//ClientConfig.initClient();
 		try {
 			return storageClient.append_file(group_name, appender_filename, file_buff, offset, length);
 		} catch (IOException e) {
@@ -113,7 +136,37 @@ public class FDFSCilent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return length;
-	}
+		return -1;
+	}*/
+/*	
+	public int appendFile(String groupName, String appenderFileName, String localFileName) {
+		//ClientConfig.initClient();
+		try {
+			return storageClient.append_file(groupName, appenderFileName, localFileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
+	}*/
 	
+	public int appendFile(String groupName, String appenderFileName, byte[] fileBuff) {
+		//ClientConfig.initClient();
+		try {
+			lock.lock();
+			int append_file= storageClient.append_file(groupName, appenderFileName, fileBuff);
+			lock.unlock();
+			return append_file;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }

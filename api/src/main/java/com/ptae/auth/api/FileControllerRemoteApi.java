@@ -23,5 +23,5 @@ import com.ptae.auth.api.model.FileMeta;
 public interface FileControllerRemoteApi {
 	@RequestMapping(value = "/file/upload", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> upload(@RequestParam("fileMeta") String fileMeta,@RequestParam("file") MultipartFile file);
+	public FileMeta upload(@RequestParam("fileMeta") String fileMeta,@RequestParam("file") MultipartFile file);
 }
