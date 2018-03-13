@@ -31,7 +31,7 @@ public class FileController extends BaseController{
 	
 	@RequestMapping(value = "/file/upload", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> upload(@RequestParam("fileMeta") String meta, @RequestParam("file") MultipartFile file){
+	public FileMeta upload(@RequestParam("fileMeta") String meta, @RequestParam("file") MultipartFile file){
 		return service.upload(meta, file);
 	}
 }
