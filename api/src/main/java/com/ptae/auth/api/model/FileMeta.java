@@ -48,11 +48,11 @@ public class FileMeta extends Entity{
 	  */
 	 private String currentMD5;
 	 /**
-	  * 文件保存路径 
+	  * 上传服务器后的文件保存路径 
 	  */
 	 private String path;
 	 /**
-	  * 文件保存的分组id
+	  * 上传服务器后的文件groupid
 	  */
 	 private String groupId;
 	 /**
