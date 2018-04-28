@@ -4,7 +4,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
-
+/**
+ * 
+ * @author pc
+ *
+ */
 public class ServerInitializer extends ChannelInitializer<Channel>{
 
 	private ConcurrentLinkedQueue<Object> queue;
