@@ -7,7 +7,7 @@ import io.netty.channel.ChannelInitializer;
 /**
  * 
  * @author pc
- *  1231321
+ * 
  */
 public class ServerInitializer extends ChannelInitializer<Channel>{
 

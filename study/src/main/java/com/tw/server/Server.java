@@ -43,7 +43,6 @@ public class Server {
 			System.out.println("press enter to shutdown.");
 			System.in.read();
 			System.exit(0);
-			
 			channel.channel().closeFuture().sync();
 		} catch (InterruptedException | IOException e) {
 			// TODO Auto-generated catch block

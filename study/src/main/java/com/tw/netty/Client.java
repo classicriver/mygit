@@ -36,7 +36,7 @@ public class Client implements Runnable{
 				}
 				
 			});
-			ChannelFuture f = client.connect("127.0.0.1", 10001).sync();
+			ChannelFuture f = client.connect("127.0.0.1", 10000).sync();
 			f.channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -48,10 +48,10 @@ public class Client implements Runnable{
 	public static void main(String[] args) {
 		ExecutorService pool = Executors.newCachedThreadPool();
 		
-		for(int i = 0 ; i < 1000;i++) {
+		//for(int i = 0 ; i < 1000;i++) {
 			Client c = new Client();
 			pool.execute(c);
-		}
+		//}
 		
 	}
 }
