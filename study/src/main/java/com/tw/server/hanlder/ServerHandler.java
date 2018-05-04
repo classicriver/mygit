@@ -1,6 +1,6 @@
 package com.tw.server.hanlder;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -10,9 +10,9 @@ import io.netty.util.ReferenceCountUtil;
 
 public class ServerHandler extends ChannelHandlerAdapter {
 
-	private ConcurrentLinkedQueue<Object> queue;
+	private BlockingQueue<String> queue;
 
-	public ServerHandler(ConcurrentLinkedQueue<Object> queue) {
+	public ServerHandler(BlockingQueue<String> queue) {
 		// TODO Auto-generated constructor stub
 		this.queue = queue;
 	}
@@ -28,25 +28,24 @@ public class ServerHandler extends ChannelHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
 		// TODO Auto-generated method stub
-		//do something msg
-		ByteBuf buf = (ByteBuf)msg;
+		// do something msg
+		ByteBuf buf = (ByteBuf) msg;
 		byte[] data = new byte[buf.readableBytes()];
 		buf.readBytes(data);
 		String request = new String(data, "utf-8");
 		System.out.println("Server: " + request);
-		//写给客户端
+		// 写给客户端
 		String response = "我是反馈的信息";
 		ctx.writeAndFlush(Unpooled.copiedBuffer(response.getBytes()));
-		queue.add(msg);
-		//.addListener(ChannelFutureListener.CLOSE);
+		queue.put(request);
+		// .addListener(ChannelFutureListener.CLOSE);
 		ReferenceCountUtil.release(msg);
-		//super.channelRead(ctx, msg);
+		// super.channelRead(ctx, msg);
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("ax");
 		super.channelActive(ctx);
 	}
 

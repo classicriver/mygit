@@ -20,7 +20,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 		// TODO Auto-generated method stub
 		byte[] data = new byte[msg.readableBytes()];
 		msg.readBytes(data);
-		System.out.println("Client：" + new String(data).trim());
+		// System.out.println("Client：" + new String(data).trim());
 		ctx.close();
 	}
 
