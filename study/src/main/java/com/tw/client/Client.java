@@ -1,5 +1,9 @@
 package com.tw.client;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.tw.client.handler.ClientHandler;
 
 import io.netty.bootstrap.Bootstrap;
@@ -13,8 +17,11 @@ public class Client implements Runnable {
 
 	private NioEventLoopGroup worker = new NioEventLoopGroup();
 	private static int i = 0;
+	private static CountDownLatch latch = new CountDownLatch(1000);
 
-	public void start(int i) {
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
 		Bootstrap client = new Bootstrap();
 		client.channel(NioSocketChannel.class).group(worker)
 				.handler(new ClientHandler());
@@ -25,24 +32,27 @@ public class Client implements Runnable {
 					.getBytes()));
 			channel.closeFuture().sync();
 			worker.shutdownGracefully();
+			latch.countDown();
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static void main(String[] args) {
-		for (; i < 200; i++) {
-			Thread t = new Thread(new Client());
-			t.start();
+		long startTime = System.currentTimeMillis();
+		ExecutorService ex = Executors.newCachedThreadPool();
+		for (; i < 1000; i++) {
+			ex.execute(new Client());
 		}
-
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		start(i);
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		long endTime = System.currentTimeMillis();
+		System.out.println((startTime - endTime)/1000 +" seconds");
 	}
 }

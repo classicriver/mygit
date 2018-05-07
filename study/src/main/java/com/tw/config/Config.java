@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Config {
-
-	private static Properties pro = new Properties();
+	
+	private final static String MAXTHREADS ="tw.analysizer.maxThreads";
+	
+	private final static Properties pro = new Properties();
+	
 	static {
 		try {
 			pro.load(Config.class.getClassLoader().getResourceAsStream(
@@ -15,8 +18,8 @@ public class Config {
 			e.printStackTrace();
 		}
 	}
-
-	public static String getPropertie(String key) {
-		return pro.getProperty(key);
+	
+	public static int getMaxThreads(){
+		return Integer.parseInt(pro.getProperty(MAXTHREADS));
 	}
 }

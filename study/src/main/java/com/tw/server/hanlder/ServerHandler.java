@@ -2,6 +2,9 @@ package com.tw.server.hanlder;
 
 import java.util.concurrent.BlockingQueue;
 
+import com.lmax.disruptor.RingBuffer;
+import com.tw.model.Protocol;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
@@ -10,11 +13,11 @@ import io.netty.util.ReferenceCountUtil;
 
 public class ServerHandler extends ChannelHandlerAdapter {
 
-	private BlockingQueue<String> queue;
+	private final RingBuffer<Protocol> ringBuffer;
 
-	public ServerHandler(BlockingQueue<String> queue) {
+	public ServerHandler(RingBuffer<Protocol> ringBuffer) {
 		// TODO Auto-generated constructor stub
-		this.queue = queue;
+		this.ringBuffer = ringBuffer;
 	}
 
 	@Override
@@ -33,11 +36,19 @@ public class ServerHandler extends ChannelHandlerAdapter {
 		byte[] data = new byte[buf.readableBytes()];
 		buf.readBytes(data);
 		String request = new String(data, "utf-8");
-		System.out.println("Server: " + request);
+		//System.out.println("Server: " + request);
 		// 写给客户端
 		String response = "我是反馈的信息";
 		ctx.writeAndFlush(Unpooled.copiedBuffer(response.getBytes()));
-		queue.put(request);
+		// queue.put(request);
+		long sequence = ringBuffer.next();
+		try {
+			 // Get the entry in the Disruptor for the sequence
+			Protocol event = ringBuffer.get(sequence);
+			event.setValue(request); // Fill with data
+		} finally {
+			ringBuffer.publish(sequence);
+		}
 		// .addListener(ChannelFutureListener.CLOSE);
 		ReferenceCountUtil.release(msg);
 		// super.channelRead(ctx, msg);

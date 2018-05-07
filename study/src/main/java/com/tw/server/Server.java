@@ -8,15 +8,12 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import sun.misc.Unsafe;
 
 import com.tw.analysizer.Analysizer;
 import com.tw.config.Config;
@@ -30,8 +27,7 @@ import com.tw.server.hanlder.ServerInitializer;
  */
 public class Server {
 
-	private int maxThreads = Integer.parseInt(Config
-			.getPropertie("tw.analysizer.maxThreads"));
+	private int maxThreads = Config.getMaxThreads();
 	private ExecutorService workers = Executors.newFixedThreadPool(maxThreads,
 			new ThreadFactory() {
 				AtomicInteger atomic = new AtomicInteger();
@@ -54,14 +50,14 @@ public class Server {
 					.childOption(ChannelOption.ALLOCATOR,
 							PooledByteBufAllocator.DEFAULT)
 					.channel(NioServerSocketChannel.class)
-					.group(parentGroup, childGroup)
-					.childHandler(new ServerInitializer(protocolsQueue));
+					.group(parentGroup, childGroup);
+					//.childHandler(new ServerInitializer(protocolsQueue));
 			ChannelFuture channel = server.bind(10000).sync();
 			LogFactory.getLogger(Server.class).info("server started..");
-			// 启动协议解析线程
+			/*// 启动协议解析线程
 			for (int i = 0; i < maxThreads; i++) {
 				workers.execute(new Analysizer(protocolsQueue, running));
-			}
+			}*/
 			// 注册关机hook,清理线程
 			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 				@Override
