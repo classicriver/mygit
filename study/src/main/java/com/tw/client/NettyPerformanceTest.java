@@ -33,7 +33,7 @@ public class NettyPerformanceTest {
 					Channel channel = future.channel();
 					channel.writeAndFlush(Unpooled.copiedBuffer(String.valueOf(i)
 							.getBytes()));
-					channel.closeFuture().sync();
+					//channel.closeFuture().sync();
 					latch.countDown();
 				}
 				worker.shutdownGracefully();
