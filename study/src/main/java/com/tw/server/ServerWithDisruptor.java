@@ -62,12 +62,13 @@ public class ServerWithDisruptor {
 	// private BlockingQueue<String> protocolsQueue = new
 	// LinkedBlockingQueue<String>();// 协议队列
 
-	private NioEventLoopGroup parentGroup = new NioEventLoopGroup();
-	private NioEventLoopGroup childGroup = new NioEventLoopGroup();
+	private NioEventLoopGroup parentGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors()*2);
+	private NioEventLoopGroup childGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors()*2);
 
 	public void start() {
 		try {
-		/*	// 启动协议解析线程   单线程
+		/*	// 启动协议解析线程  
+		 *  单线程
 			// RingBuffer 大小，必须是 2 的 N 次方     
 			int ringBufferSize = 1024 * 1024;
 			// Construct the Disruptor
@@ -107,8 +108,6 @@ public class ServerWithDisruptor {
 
 			ringBuffer.addGatingSequences(workerPool.getWorkerSequences());
 			workerPool.start(workers);
-			
-			
 			
 			ServerBootstrap server = new ServerBootstrap();
 			server.option(ChannelOption.ALLOCATOR,

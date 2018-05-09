@@ -26,7 +26,7 @@ public class Client implements Runnable {
 		client.channel(NioSocketChannel.class).group(worker)
 				.handler(new ClientHandler());
 		try {
-			ChannelFuture future = client.connect("127.0.0.1", 10000).sync();
+			ChannelFuture future = client.connect("172.20.90.55", 10000).sync();
 			Channel channel = future.channel();
 			channel.writeAndFlush(Unpooled.copiedBuffer(String.valueOf(i)
 					.getBytes()));
@@ -54,5 +54,6 @@ public class Client implements Runnable {
 		}
 		long endTime = System.currentTimeMillis();
 		System.out.println((startTime - endTime)/1000 +" seconds");
+		ex.shutdown();
 	}
 }
