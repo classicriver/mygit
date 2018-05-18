@@ -37,78 +37,74 @@ import com.tw.model.Protocol;
 import com.tw.server.hanlder.ServerInitializer;
 
 public class ServerWithDisruptor {
-	/*private ThreadFactory workers = new ThreadFactory() {
+	private ThreadFactory workers = new ThreadFactory() {
 		AtomicInteger atomic = new AtomicInteger();
 
 		public Thread newThread(Runnable r) {
 			return new Thread(r, "AnalysizerThread:"
 					+ this.atomic.getAndIncrement());
 		}
-	};*/
-	
-	private int maxThreads = Config.getMaxThreads();
-	private ExecutorService workers = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
-			new ThreadFactory() {
-				AtomicInteger atomic = new AtomicInteger();
-				public Thread newThread(Runnable r) {
-					return new Thread(r, "AnalysizerThread:"
-							+ this.atomic.getAndIncrement());
-				}
-			});
-	
-	// private Boolean running = new Boolean(true);// 业务线程开关
+	};
+
+	/*
+	 * private ExecutorService workers = Executors.newCachedThreadPool( new
+	 * ThreadFactory() { AtomicInteger atomic = new AtomicInteger(); public
+	 * Thread newThread(Runnable r) { return new Thread(r, "AnalysizerThread:" +
+	 * this.atomic.getAndIncrement()); } });
+	 */
 	private RingBuffer<Protocol> ringBuffer;
-	//private Disruptor<Protocol> disruptor;
-	// private BlockingQueue<String> protocolsQueue = new
-	// LinkedBlockingQueue<String>();// 协议队列
+	private Disruptor<Protocol> disruptor;
 
-	private NioEventLoopGroup parentGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors()*2);
-	private NioEventLoopGroup childGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors()*2);
+	private NioEventLoopGroup parentGroup = new NioEventLoopGroup(Runtime
+			.getRuntime().availableProcessors() * 2);
+	private NioEventLoopGroup childGroup = new NioEventLoopGroup(Runtime
+			.getRuntime().availableProcessors() * 2);
 
+	@SuppressWarnings("unchecked")
 	public void start() {
 		try {
-		/*	// 启动协议解析线程  
-		 *  单线程
-			// RingBuffer 大小，必须是 2 的 N 次方     
-			int ringBufferSize = 1024 * 1024;
-			// Construct the Disruptor
-			disruptor = new Disruptor<>(new ProtocolEventFactory(), ringBufferSize, workers);
-			disruptor.handleEventsWith(new ProtocolEventHandler()).then(
-					new ClearingEventHandler());// 连接handler
-			// 启动disruptor
-			disruptor.start();
-			// 从disruptor中获得ringBuffer用于发布
-			ringBuffer = disruptor.getRingBuffer();
-			*/
-			
+			// 创建工厂
+			EventFactory<Protocol> factory = new ProtocolEventFactory();
+			// 创建bufferSize ,也就是RingBuffer大小，必须是2的N次方
+			int ringBufferSize = 1024 * 1024; //
+			/*
+			 * // 启动协议解析线程 单线程 // Construct the Disruptor disruptor = new
+			 * Disruptor<>(new ProtocolEventFactory(), ringBufferSize, workers);
+			 * disruptor.handleEventsWith(new ProtocolEventHandler()).then( new
+			 * ClearingEventHandler());// 连接handler // 启动disruptor
+			 * disruptor.start(); // 从disruptor中获得ringBuffer用于发布 ringBuffer =
+			 * disruptor.getRingBuffer();
+			 */
 			/**
 			 * 多线程
 			 */
-			// 创建工厂
-			EventFactory<Protocol> factory = new EventFactory<Protocol>() {
-				@Override
-				public Protocol newInstance() {
-					return new Protocol();
-				}
-			};
-			// 创建bufferSize ,也就是RingBuffer大小，必须是2的N次方
-			int ringBufferSize = 1024 * 1024; //
-			WaitStrategy YIELDING_WAIT = new BlockingWaitStrategy();
-			// 创建ringBuffer
-			ringBuffer = RingBuffer.create(ProducerType.MULTI, factory, ringBufferSize, YIELDING_WAIT);
-			SequenceBarrier barriers = ringBuffer.newBarrier();
-			// 创建10个消费者来处理同一个生产者发的消息(这10个消费者不重复消费消息)
-			ProtocolWorkHandler[] handlers = new ProtocolWorkHandler[Runtime.getRuntime().availableProcessors()];
-			for (int i = 0; i < handlers.length; i++) {
-				handlers[i] = new ProtocolWorkHandler();
-			}
-			
-			WorkerPool<Protocol> workerPool = new WorkerPool<Protocol>(ringBuffer, barriers,
-					new IntEventExceptionHandler(), handlers);
+			/*
+			 * WaitStrategy YIELDING_WAIT = new BlockingWaitStrategy(); //
+			 * 创建ringBuffer ringBuffer = RingBuffer.create(ProducerType.MULTI,
+			 * factory, ringBufferSize, YIELDING_WAIT); SequenceBarrier barriers
+			 * = ringBuffer.newBarrier(); //
+			 * 创建10个消费者来处理同一个生产者发的消息(这10个消费者不重复消费消息) ProtocolWorkHandler[]
+			 * handlers = new
+			 * ProtocolWorkHandler[Runtime.getRuntime().availableProcessors()];
+			 * for (int i = 0; i < handlers.length; i++) { handlers[i] = new
+			 * ProtocolWorkHandler(); } WorkerPool<Protocol> workerPool = new
+			 * WorkerPool<Protocol>(ringBuffer, barriers, new
+			 * IntEventExceptionHandler(), handlers);
+			 * 
+			 * ringBuffer.addGatingSequences(workerPool.getWorkerSequences());
+			 * workerPool.start(workers);
+			 */
 
-			ringBuffer.addGatingSequences(workerPool.getWorkerSequences());
-			workerPool.start(workers);
-			
+			disruptor = new Disruptor<Protocol>(factory, ringBufferSize,
+					workers, ProducerType.MULTI, new BlockingWaitStrategy());
+			disruptor
+					.setDefaultExceptionHandler(new IntEventExceptionHandler());
+			disruptor.handleEventsWith(new ProtocolEventHandler())
+					.then(new ClearingEventHandler())
+					.handleEventsWith(new ProtocolEventHandler())
+					.then(new ClearingEventHandler());
+			disruptor.start();
+
 			ServerBootstrap server = new ServerBootstrap();
 			server.option(ChannelOption.ALLOCATOR,
 					PooledByteBufAllocator.DEFAULT)
@@ -118,7 +114,7 @@ public class ServerWithDisruptor {
 					.group(parentGroup, childGroup)
 					.childHandler(new ServerInitializer(ringBuffer));
 			ChannelFuture channel = server.bind(10000).sync();
-			LogFactory.getLogger(Server.class).info("server started..");
+			LogFactory.getLogger(ProtocolServer.class).info("server started..");
 
 			// 注册关机hook,清理线程
 			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -128,9 +124,9 @@ public class ServerWithDisruptor {
 					parentGroup.shutdownGracefully();
 					childGroup.shutdownGracefully();
 					// running = false;
-					//disruptor.shutdown();
-					workers.shutdown();
-					LogFactory.getLogger(Server.class).info("shutdown..");
+					disruptor.shutdown();
+					// workers.shutdown();
+					LogFactory.getLogger(ProtocolServer.class).info("shutdown..");
 				}
 			}));
 			System.out.println("press enter to shutdown.");
@@ -144,9 +140,9 @@ public class ServerWithDisruptor {
 			parentGroup.shutdownGracefully();
 			childGroup.shutdownGracefully();
 			// running = false;
-			//disruptor.shutdown();
-			//workers.shutdown();
-			LogFactory.getLogger(Server.class).info("shutdown..");
+			// disruptor.shutdown();
+			// workers.shutdown();
+			LogFactory.getLogger(ProtocolServer.class).info("shutdown..");
 		}
 	}
 

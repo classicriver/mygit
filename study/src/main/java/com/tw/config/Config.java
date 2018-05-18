@@ -7,6 +7,8 @@ public class Config {
 	
 	private final static String MAXTHREADS ="tw.analysizer.maxThreads";
 	
+	private final static String SERVERPORT ="tw.server.port";
+	
 	private final static Properties pro = new Properties();
 	
 	static {
@@ -20,6 +22,20 @@ public class Config {
 	}
 	
 	public static int getMaxThreads(){
-		return Integer.parseInt(pro.getProperty(MAXTHREADS));
+		String property = pro.getProperty(MAXTHREADS);
+		if(!"".equals(property) && property != "0"){
+			return Integer.parseInt(pro.getProperty(MAXTHREADS));
+		}else{
+			return Runtime.getRuntime().availableProcessors();
+		}
+	}
+
+	public static int getServerport() {
+		String property = pro.getProperty(SERVERPORT);
+		if(!"".equals(property)){
+			return Integer.parseInt(property);
+		}else{
+			return 10000;
+		}
 	}
 }

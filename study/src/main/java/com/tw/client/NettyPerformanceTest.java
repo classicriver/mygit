@@ -15,7 +15,7 @@ import com.tw.client.handler.ClientHandler;
 
 public class NettyPerformanceTest {
 	
-	private static int count = 60000;
+	private static int count = 200;
 	private static CountDownLatch latch = new CountDownLatch(count);
 	private static int i = 0;
 	
