@@ -11,6 +11,6 @@ import com.tw.model.Protocol;
  */
 public interface Analysizer {
 
-	public void analysize(Protocol protocol);
+	public String analysize(Protocol protocol);
 	
 }

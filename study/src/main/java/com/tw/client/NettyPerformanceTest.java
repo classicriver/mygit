@@ -15,7 +15,7 @@ import com.tw.client.handler.ClientHandler;
 
 public class NettyPerformanceTest {
 	
-	private static int count = 200;
+	private static int count = 1000;
 	private static CountDownLatch latch = new CountDownLatch(count);
 	private static int i = 0;
 	
@@ -61,7 +61,7 @@ public class NettyPerformanceTest {
 			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println((startTime - endTime) / 1000 + " seconds");
+		System.out.println((endTime - startTime) / 1000 + " seconds");
 		ex.shutdown();
 	}
 }

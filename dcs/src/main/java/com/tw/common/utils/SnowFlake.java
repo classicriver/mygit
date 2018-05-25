@@ -40,7 +40,7 @@ public class SnowFlake {
     private long lastStmp = -1L;//上一次时间戳
     
     //锁
-    private ReentrantLock lock = new ReentrantLock();
+    private static final ReentrantLock lock = new ReentrantLock();
     
     public SnowFlake(long machineId) {
        /* if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {

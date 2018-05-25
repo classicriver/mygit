@@ -2,7 +2,6 @@ package com.tw.analysizer;
 
 
 import com.tw.model.Protocol;
-import com.tw.mq.client.MQClient;
 /**
  * 
  * @author xiesc
@@ -12,16 +11,11 @@ import com.tw.mq.client.MQClient;
  */
 public class DefaultAnalysizerImpl extends AbstractAnalysizer{
 
-	private final MQClient client;
-	
 	@Override
-	public void analysize0(Protocol protocol) {
+	public String analysize0(Protocol protocol) {
 		// TODO Auto-generated method stub
-		client.send(protocol.getMessage());
+		return protocol.getMessage().toString();
 	}
-	
-	public DefaultAnalysizerImpl(MQClient client){
-		this.client = client;
-	}
+
 
 }

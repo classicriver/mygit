@@ -13,14 +13,34 @@ import java.util.Properties;
  * @version 1.0
  */
 public class Config {
-
-	private final static String MAXTHREADS = "tw.analysizer.maxThreads";
-	private final static String SERVERPORT = "tw.server.port";
-	private final static String NAMESERVER = "tw.rocketmq.nameServer";
-	private final static String PRODUCERNAME = "tw.rocketmq.producerName";
-	private final static String MACHINEID = "tw.snowflake.machineId";
 	
-	private final static Map<String,Object> valueCache = new HashMap<>();
+	private final static String MAXTHREADS = "tw.analysizer.maxThreads";
+	/**
+	 * 监听端口 
+	 */
+	private final static String SERVERPORT = "tw.server.port";
+	/**
+	 * rocketMQ nameserver
+	 */
+	private final static String NAMESERVER = "tw.rocketmq.nameServer";
+	/**
+	 * ocketMQ producerName 
+	 */
+	private final static String PRODUCERNAME = "tw.rocketmq.producerName";
+	/**
+	 * snowflake唯一id算法 机器标识，分布式部署的时候机器标识不能一样
+	 */
+	private final static String MACHINEID = "tw.snowflake.machineId";
+	/**
+	 * 序列化到本地磁盘的间隔时间，单位为秒
+	 */
+	private final static String REPEATINTERVAL = "tw.storage.repeatInterval";
+	/**
+	 * 序列化到本地磁盘的路径
+	 */
+	private final static String STORAGEPATH = "tw.storage.path";
+
+	private final static Map<String, Object> valueCache = new HashMap<>();
 	private final static Properties pro = new Properties();
 
 	static {
@@ -34,37 +54,46 @@ public class Config {
 	}
 
 	public static int getMaxThreads() {
-		return Integer.parseInt((String) getOrSetDefault(MAXTHREADS,Runtime.getRuntime().availableProcessors() * 2));
+		return Integer.parseInt((String) getOrSetDefault(MAXTHREADS, Runtime
+				.getRuntime().availableProcessors() * 2));
 	}
 
 	public static int getServerPort() {
-		return Integer.parseInt((String) getOrSetDefault(SERVERPORT,10000));
+		return Integer.parseInt((String) getOrSetDefault(SERVERPORT, 10000));
 	}
 
 	public static String getNameServer() {
-		return (String) getOrSetDefault(NAMESERVER,"");
+		return (String) getOrSetDefault(NAMESERVER, "");
 	}
 
 	public static String getProducerName() {
-		return (String) getOrSetDefault(PRODUCERNAME,"");
+		return (String) getOrSetDefault(PRODUCERNAME, "");
 	}
-	
+
 	public static int getMachineId() {
-		return Integer.parseInt((String) getOrSetDefault(MACHINEID,1));
+		return Integer.parseInt((String) getOrSetDefault(MACHINEID, 1));
+	}
+
+	public static int getRepeatInterval() {
+		return Integer.parseInt((String) getOrSetDefault(REPEATINTERVAL, 60));
+	}
+
+	public static String getStoragePath() {
+		return (String) getOrSetDefault(STORAGEPATH, "");
 	}
 	
-	private static Object getOrSetDefault(String key,Object defaultValue){
+	private static Object getOrSetDefault(String key, Object defaultValue) {
 		Object temp = valueCache.get(key);
-		if(null == temp){
+		if (null == temp) {
 			String property = pro.getProperty(key);
 			Object value = defaultValue;
 			if (!"".equals(property)) {
 				value = property;
 			}
-			valueCache.put(key,value);
+			valueCache.put(key, value);
 			return value;
-		}else{
-			return  temp;
+		} else {
+			return temp;
 		}
 	}
 
