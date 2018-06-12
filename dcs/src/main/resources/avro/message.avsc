@@ -1,0 +1,12 @@
+#not used.
+{
+  "namespace":"org.apache.rocketmq.common",
+  "type":"record",
+  "name":"Message",
+  "fields":[
+    {"name":"topic","type":"string"},
+    {"name":"flag","type":"int"},
+    {"name":"properties","type":{"type":"map","values":"string"}},
+    {"name":"body","type":"bytes"}
+  ]
+}

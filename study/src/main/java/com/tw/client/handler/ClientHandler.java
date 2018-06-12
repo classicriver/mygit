@@ -32,4 +32,11 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 		//lock.unlock();
 	}
 
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("aaaaaaa");
+		super.channelActive(ctx);
+	}
+
 }
