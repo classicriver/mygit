@@ -14,7 +14,7 @@ public class DefaultAnalysizerImpl extends AbstractAnalysizer{
 	@Override
 	public String analysize0(Protocol protocol) {
 		// TODO Auto-generated method stub
-		return protocol.getMessage().toString();
+		return protocol.getMessage();
 	}
 
 

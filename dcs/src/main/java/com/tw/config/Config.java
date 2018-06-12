@@ -82,16 +82,16 @@ public class Config {
 		return (String) getOrSetDefault(STORAGEPATH, "");
 	}
 	
-	private static Object getOrSetDefault(String key, Object defaultValue) {
+	private static Object getOrSetDefault(String key, Object def) {
 		Object temp = valueCache.get(key);
 		if (null == temp) {
 			String property = pro.getProperty(key);
-			Object value = defaultValue;
 			if (!"".equals(property)) {
-				value = property;
+				valueCache.put(key, property);
+				return property;
 			}
-			valueCache.put(key, value);
-			return value;
+			valueCache.put(key, def);
+			return def;
 		} else {
 			return temp;
 		}

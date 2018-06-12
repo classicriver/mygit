@@ -18,7 +18,7 @@ import com.tw.log.LogFactory;
  * @time 2018年5月14日
  * @version 1.0
  */
-public abstract class AbstractServer implements Server {
+public abstract class AbstractNettyServer implements Server {
 
 	private final NioEventLoopGroup parentGroup = new NioEventLoopGroup(Config.getMaxThreads());
 	private final NioEventLoopGroup childGroup = new NioEventLoopGroup(Config.getMaxThreads());
@@ -38,7 +38,7 @@ public abstract class AbstractServer implements Server {
 			init(server);
 			ChannelFuture channel = server.bind(Config.getServerPort()).sync();
 			registerShutDownHook();
-			LogFactory.getLogger(AbstractServer.class).info("server started..");
+			LogFactory.getLogger(AbstractNettyServer.class).info("server started..");
 			System.out.println("press enter to shutdown.");
 			try {
 				System.in.read();
@@ -68,7 +68,7 @@ public abstract class AbstractServer implements Server {
 			public void run() {
 				// TODO Auto-generated method stub
 				close();
-				LogFactory.getLogger(AbstractServer.class).info("shutdown..");
+				LogFactory.getLogger(AbstractNettyServer.class).info("shutdown..");
 			}
 		}));
 	}

@@ -52,7 +52,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 		} finally {
 			ringBuffer.publish(sequence);
 		}
-		// .addListener(ChannelFutureListener.CLOSE);
+		//.addListener(ChannelFutureListener.CLOSE);
 		ReferenceCountUtil.release(msg);
 	}
 
