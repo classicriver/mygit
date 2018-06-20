@@ -56,26 +56,20 @@ public class RocketMQProducerImpl extends AbstractRocketMQProducer {
 			}
 
 		} catch (MQClientException e) {
-			// TODO Auto-generated catch block
-			startListeningThread();
 			serializeQueue.add(msg);
-			// e.printStackTrace();
+			startListeningThread();
 		} catch (RemotingException | MQBrokerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			// help gc
 			message = null;
 		}
-		
 	}
 
 	@Override
 	protected void bathSend(List<Message> list) {
-		// TODO Auto-generated method stub
 		try {
 			ListSplitter splitter = new ListSplitter(list);
 			while (splitter.hasNext()) {
@@ -83,23 +77,19 @@ public class RocketMQProducerImpl extends AbstractRocketMQProducer {
 				producer.send(listItem);
 			}
 		} catch (MQClientException e) {
-			// TODO Auto-generated catch block
-			startListeningThread();
 			for (Message message : list) {
-					serializeQueue.add(message.getBody().toString());
+				serializeQueue.add(message.getBody().toString());
 			}
-			// e.printStackTrace();
+			startListeningThread();
 		} catch (RemotingException | MQBrokerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 检测到MQ下线后，启动2个定时任务线程 1.把数据序列化到本地 2.监听MQ是否上线
+	 * 断网或者检测到MQ下线后，启动2个定时任务线程 1.把数据序列化到本地 2.监听MQ是否上线
 	 */
 	private void startListeningThread() {
 		lock.lock();

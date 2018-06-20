@@ -50,7 +50,6 @@ public class ScheduleWriterJob implements Job {
 				try {
 					dataFileWriter.append(genericMessage);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

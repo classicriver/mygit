@@ -33,13 +33,12 @@ public abstract class AbstractNettyServer implements Server {
 					.childOption(ChannelOption.ALLOCATOR,
 							PooledByteBufAllocator.DEFAULT)//开启内存池
 					.channel(NioServerSocketChannel.class)
-					.option(ChannelOption.TCP_NODELAY, true) //禁用Nagle算法提高响应速度
+					.childOption(ChannelOption.TCP_NODELAY, true) //禁用Nagle算法提高响应速度
 					.group(parentGroup, childGroup);
 			init(server);
 			ChannelFuture channel = server.bind(Config.getServerPort()).sync();
+			LogFactory.getLogger().info("server started....");
 			registerShutDownHook();
-			LogFactory.getLogger(AbstractNettyServer.class).info("server started..");
-			System.out.println("press enter to shutdown.");
 			try {
 				System.in.read();
 			} catch (IOException e) {
@@ -68,7 +67,7 @@ public abstract class AbstractNettyServer implements Server {
 			public void run() {
 				// TODO Auto-generated method stub
 				close();
-				LogFactory.getLogger(AbstractNettyServer.class).info("shutdown..");
+				LogFactory.getLogger().info("shutdown..");
 			}
 		}));
 	}

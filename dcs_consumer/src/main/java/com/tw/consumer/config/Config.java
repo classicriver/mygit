@@ -1,4 +1,4 @@
-package com.tw.config;
+package com.tw.consumer.config;
 
 import java.io.IOException;
 import java.util.HashMap;

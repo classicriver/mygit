@@ -28,6 +28,7 @@ public abstract class AbstractRocketMQProducer implements MQProducer {
 		// producer.setInstanceName(UUID.randomUUID().toString());
 		producer.setVipChannelEnabled(false);
 		producer.setRetryTimesWhenSendFailed(3);
+		producer.setDefaultTopicQueueNums(8);
 		try {
 			producer.start();
 		} catch (MQClientException e) {
@@ -37,13 +38,11 @@ public abstract class AbstractRocketMQProducer implements MQProducer {
 	}
 
 	public void close() {
-		// TODO Auto-generated method stub
 		producer.shutdown();
 	}
 
 	@Override
 	public void send(String msg) {
-		// TODO Auto-generated method stub
 		send0(msg);
 		// LogFactory.getLog(AbstractMQClient.class).info(msg);
 	}
@@ -51,7 +50,6 @@ public abstract class AbstractRocketMQProducer implements MQProducer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void send(List<?> list) {
-		// TODO Auto-generated method stub
 		bathSend((List<Message>) list);
 	}
 	
@@ -76,7 +74,6 @@ public abstract class AbstractRocketMQProducer implements MQProducer {
 		} catch (RemotingTimeoutException | RemotingSendRequestException
 				| RemotingConnectException | InterruptedException
 				| MQBrokerException e) {
-			// TODO Auto-generated catch block
 			return false;
 		}
 		return false;

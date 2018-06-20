@@ -1,6 +1,7 @@
 package com.tw.main;
 
 import com.tw.server.DisruptorServerImpl;
+import com.tw.server.Server;
 
 /**
  * 
@@ -12,6 +13,7 @@ import com.tw.server.DisruptorServerImpl;
 public class BootStrap {
 	
 	public static void main(String[] args) {
-		new DisruptorServerImpl().start();
+		Server server = new DisruptorServerImpl();
+		server.start();
 	}
 }

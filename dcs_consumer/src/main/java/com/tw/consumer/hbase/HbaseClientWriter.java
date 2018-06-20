@@ -3,6 +3,7 @@ package com.tw.consumer.hbase;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.opentsdb.core.TSDB;
 
@@ -26,7 +27,7 @@ import org.apache.hadoop.hbase.filter.ValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 
-import com.tw.utils.RowKeyHelper;
+import com.tw.consumer.utils.RowKeyHelper;
 
 
 public class HbaseClientWriter {
@@ -36,7 +37,7 @@ public class HbaseClientWriter {
 	static {
 	    try {
 	        conf = HBaseConfiguration.create();
-	       // conf.set("hbase.zookeeper.property.clientPort", "2181");
+	        conf.set("hbase.zookeeper.property.clientPort", "2181");
 	        conf.set("hbase.zookeeper.quorum", "hbase");
 	        //conf.set("zookeeper.znode.parent","/hbase-unsecure");
 	        conn = ConnectionFactory.createConnection(conf);
@@ -88,14 +89,16 @@ public class HbaseClientWriter {
 			 }
 			 System.out.println(i);
 			 scanner.close();*/
-			TSDBClient client = new TSDBClient();
-			for(int i = 0;i<500;i++){
-				/*Put put = new Put(new RowKeyHelper().getRowKey());
-				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("cc"), Bytes.toBytes(String.valueOf(System.currentTimeMillis())));
+			//TSDBClient client = new TSDBClient();
+			Random r = new Random();
+			for(int i = 0;i<100000;i++){
+				Put put = new Put(new RowKeyHelper().getRowKey());
+				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("aa"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
+				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("bb"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
+				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("cc"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
 				table.put(put);
-				Thread.sleep(1);*/
-				client.write();
 				Thread.sleep(1);
+				//client.write();
 			}
 			table.close();
 		} catch (IOException | InterruptedException e) {

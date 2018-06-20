@@ -13,15 +13,15 @@ import com.tw.model.Protocol;
 public class IntEventExceptionHandler implements ExceptionHandler<Protocol> {
 
 	public void handleEventException(Throwable ex, long sequence, Protocol event) {
-		LogFactory.getLogger(this.getClass()).error("handleEventException", ex);
+		LogFactory.getLogger().error("handleEventException", ex);
 	}
 
 	public void handleOnStartException(Throwable ex) {
-		LogFactory.getLogger(this.getClass()).error("handleOnStartException", ex);
+		LogFactory.getLogger().error("handleOnStartException", ex);
 	}
 
 	public void handleOnShutdownException(Throwable ex) {
-		LogFactory.getLogger(this.getClass()).error("handleOnShutdownException", ex);
+		LogFactory.getLogger().error("handleOnShutdownException", ex);
 	}
 
 

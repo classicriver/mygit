@@ -1,46 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug" strict="true" name="XMLConfigTest"
-               packages="org.apache.logging.log4j.test">
-  <Properties>
-    <Property name="filename">target/test.log</Property>
-  </Properties>
-  <Filter type="ThresholdFilter" level="trace"/>
-
-  <Appenders>
-    <Appender type="Console" name="STDOUT">
-      <Layout type="PatternLayout" pattern="%m MDC%X%n"/>
-      <Filters>
-        <Filter type="MarkerFilter" marker="FLOW" onMatch="DENY" onMismatch="NEUTRAL"/>
-        <Filter type="MarkerFilter" marker="EXCEPTION" onMatch="DENY" onMismatch="ACCEPT"/>
-      </Filters>
-    </Appender>
-    <Appender type="Console" name="FLOW">
-      <Layout type="PatternLayout" pattern="%C{1}.%M %m %ex%n"/><!-- class and line number -->
-      <Filters>
-        <Filter type="MarkerFilter" marker="FLOW" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
-        <Filter type="MarkerFilter" marker="EXCEPTION" onMatch="ACCEPT" onMismatch="DENY"/>
-      </Filters>
-    </Appender>
-    <Appender type="File" name="File" fileName="${filename}">
-      <Layout type="PatternLayout">
-        <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
-      </Layout>
-    </Appender>
-  </Appenders>
-  <Loggers>
-    <Logger name="org.apache.logging.log4j.test1" level="debug" additivity="false">
-      <Filter type="ThreadContextMapFilter">
-        <KeyValuePair key="test" value="123"/>
-      </Filter>
-      <AppenderRef ref="STDOUT"/>
-    </Logger>
- 
-    <Logger name="org.apache.logging.log4j.test2" level="debug" additivity="false">
-      <AppenderRef ref="File"/>
-    </Logger>
- 
-    <Root level="trace">
-      <AppenderRef ref="STDOUT"/>
-    </Root>
-  </Loggers>
-</Configuration>
+<!-- status为不记录log4j本身的日志 -->
+<configuration status="OFF">
+	<properties>
+		<property name="LOG_HOME">D:/logs/</property>
+		<property name="FILE_NAME">dcslog</property>
+	</properties>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<!-- ThresholdFilter相当于拦截器.level以上的不会被拦截. -->
+			<ThresholdFilter level="debug" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n" />
+		</Console>
+		<File name="Error" fileName="${LOG_HOME}/dcs_error.log">
+			<ThresholdFilter level="warn" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<PatternLayout
+				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+		</File>
+		<RollingFile name="RollingFile" fileName="${LOG_HOME}/${FILE_NAME}.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{MM-dd-yyyy}-%i.log.gz">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<root level="debug">
+			<appender-ref ref="RollingFile" />
+			<appender-ref ref="Console" />
+			<appender-ref ref="Error" />
+		</root>
+	</loggers>
+</configuration>

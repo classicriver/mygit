@@ -71,18 +71,23 @@ public class HbaseClient {
 			//list.add(filter1);
 		//	list.add(filter2);
 			//list.add(filter3);
-
+			Filter filter2 = new RowFilter(CompareFilter.CompareOp.EQUAL, new SubstringComparator("-6-6-"));
+			List<Filter> list = new ArrayList<Filter>();
+			list.add(filter2);
 			Scan scan = new Scan();
 			// 通过将operator参数设置为Operator.MUST_PASS_ONE,达到list中各filter为"或"的关系
 			// 默认operator参数的值为Operator.MUST_PASS_ALL,即list中各filter为"并"的关系
 			//Filter filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL, list);
 			//scan.setFilter(filterList);
-			scan.setStartRow("98-1528708232402".getBytes());
-			scan.setStopRow("99-1528708347143".getBytes());
+			long currentTime = System.currentTimeMillis();
+			scan.setStartRow("8-1529463599189".getBytes());
+			scan.setStopRow(("8-"+String.valueOf(currentTime)).getBytes());
+			Filter filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL, list);
+			scan.setFilter(filterList);
 			ResultScanner scanner = table.getScanner(scan);
 			int i = 0;
 			 for (Result res : scanner) {
-                 System.out.println(res);
+                 System.out.println(new String(res.getValue("f1".getBytes(), "aa".getBytes())));
                  i++;
 			 }
 			 System.out.println(i);

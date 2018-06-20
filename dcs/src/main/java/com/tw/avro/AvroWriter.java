@@ -30,7 +30,7 @@ public class AvroWriter extends AbstractAvroConfig {
 	}
 	
 	public DataFileWriter<GenericRecord> getWriter() {
-		/*// 序列化
+		/*// 静态序列化
 		File diskFile = new File(Config.getStoragePath()+getFileName()+Constants.AVROSUFFIX);
 		DatumWriter<Protocol> userDatumWriter = new SpecificDatumWriter<Protocol>(
 				Protocol.class);
@@ -42,13 +42,13 @@ public class AvroWriter extends AbstractAvroConfig {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}*/
+		//动态序列化
 		File diskFile = new File(Config.getStoragePath()+getFileName()+Constants.AVROSUFFIX);
 		DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<GenericRecord>(schema);  
 		DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<GenericRecord>(datumWriter);  
 		try {
 			dataFileWriter.create(schema, diskFile);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}  
 		return dataFileWriter;

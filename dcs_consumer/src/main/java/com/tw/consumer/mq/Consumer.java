@@ -1,4 +1,4 @@
-package com.tw.dcs.mq.consumer;
+package com.tw.consumer.mq;
 
 import java.util.List;
 
@@ -10,11 +10,10 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
 
-import com.tw.config.Config;
+import com.tw.consumer.config.Config;
 
 public class Consumer {
 	 public static void main(String[] args) throws InterruptedException, MQClientException {
-
 	        //指定一个Consumer Group 来创建一个consumer
 	        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(Config.getProducerName());
 	        //指定NameServer 地址,consumer和NameServer建立长链接,并且获取topic信息以及broker的ip和地址

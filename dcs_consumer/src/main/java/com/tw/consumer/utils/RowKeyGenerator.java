@@ -1,4 +1,4 @@
-package com.tw.utils;
+package com.tw.consumer.utils;
 
 public interface RowKeyGenerator {
 	

@@ -14,6 +14,7 @@ import com.tw.config.Config;
 import com.tw.disruptor.IntEventExceptionHandler;
 import com.tw.disruptor.ProtocolEventFactory;
 import com.tw.disruptor.WorkHandlerBuilder;
+import com.tw.log.LogFactory;
 import com.tw.model.Protocol;
 import com.tw.mq.producer.MQProducer;
 import com.tw.mq.producer.RocketMQProducerImpl;
@@ -71,6 +72,7 @@ public class DisruptorServerImpl extends AbstractNettyServer {
 				Config.getMaxThreads(), cilent));
 		ringBuffer = disruptor.getRingBuffer();
 		disruptor.start();
+		LogFactory.getLogger().info("disruptor init.");
 	}
 
 	@Override

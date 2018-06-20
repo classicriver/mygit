@@ -55,7 +55,6 @@ public class MQListeningJob implements Job {
 			try {
 				context.getScheduler().shutdown();
 			} catch (SchedulerException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
