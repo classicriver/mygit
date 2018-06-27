@@ -1,7 +1,5 @@
 package com.tw.analysizer;
 
-import org.apache.commons.logging.LogFactory;
-
 import com.tw.model.Protocol;
 
 public abstract class AbstractAnalysizer implements Analysizer{

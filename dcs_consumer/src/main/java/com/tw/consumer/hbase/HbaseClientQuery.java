@@ -3,9 +3,6 @@ package com.tw.consumer.hbase;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import net.opentsdb.core.TSDB;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -13,7 +10,6 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -26,24 +22,20 @@ import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.filter.ValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.filter.CompareFilter;
+import org.hbase.async.HBaseClient;
 
-import com.tw.consumer.utils.RowKeyHelper;
 
-
-public class HbaseClientWriter {
+public class HbaseClientQuery {
 	static Configuration conf = null;
 	static Connection conn = null;
-	static HTable table;
-	
+
 	static {
 	    try {
 	        conf = HBaseConfiguration.create();
-	        conf.set("hbase.zookeeper.property.clientPort", "2181");
+	       // conf.set("hbase.zookeeper.property.clientPort", "2181");
 	        conf.set("hbase.zookeeper.quorum", "hbase");
 	        //conf.set("zookeeper.znode.parent","/hbase-unsecure");
 	        conn = ConnectionFactory.createConnection(conf);
-	        table = (HTable) conn.getTable(TableName.valueOf("t1"));
-			table.setAutoFlush(false,true);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
@@ -51,7 +43,8 @@ public class HbaseClientWriter {
 	
 	public void test(){
 		try {
-			/*
+			HTable table = (HTable) conn.getTable(TableName.valueOf("t1"));
+			/*table.setAutoFlush(false,true);
 			ResultScanner scanner = table.getScanner(Bytes.toBytes("f1"), Bytes.toBytes("cc"));
 			byte[] value = scanner.next().getValue(Bytes.toBytes("f1"), Bytes.toBytes("cc"));
 			System.out.println(new String(value));
@@ -67,60 +60,48 @@ public class HbaseClientWriter {
 			put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("cc"), Bytes.toBytes("value222222"));
 			table.put(put);
 			table.flushCommits();*/
-			/*// 扫描table，获取r2到r4区间中value已a或b结尾的cell
-			Filter filter1 = new RowFilter(CompareFilter.CompareOp.LESS, new SubstringComparator("1528429974887"));
-
+			// 扫描table，获取r2到r4区间中value已a或b结尾的cell
+			//Filter filter1 = new RowFilter(CompareFilter.CompareOp.LESS, new RegexStringComparator(".*-9223370508174980781"));
+																									   //9223370508174980255
+																									   //9223370508175254160
+			//Filter filter2 = new RowFilter(CompareFilter.CompareOp.GREATER, new RegexStringComparator(".*-9223370508174980255"));
 			//Filter filter2 = new RowFilter(CompareFilter.CompareOp.LESS, new SubstringComparator("1528429974887"));
 			//Filter filter3 = new RowFilter(CompareFilter.CompareOp.EQUAL, new SubstringComparator("2911"));
-			List<Filter> list = new ArrayList<Filter>();
-			list.add(filter1);
-			//list.add(filter2);
+			//List<Filter> list = new ArrayList<Filter>();
+			//list.add(filter1);
+		//	list.add(filter2);
 			//list.add(filter3);
-
+			Filter filter2 = new RowFilter(CompareFilter.CompareOp.EQUAL, new SubstringComparator("-6-6-"));
+			List<Filter> list = new ArrayList<Filter>();
+			list.add(filter2);
 			Scan scan = new Scan();
 			// 通过将operator参数设置为Operator.MUST_PASS_ONE,达到list中各filter为"或"的关系
 			// 默认operator参数的值为Operator.MUST_PASS_ALL,即list中各filter为"并"的关系
+			//Filter filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL, list);
+			//scan.setFilter(filterList);
+			long currentTime = System.currentTimeMillis();
+			scan.setStartRow("8-1529463599189".getBytes());
+			scan.setStopRow(("8-"+String.valueOf(currentTime)).getBytes());
 			Filter filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL, list);
 			scan.setFilter(filterList);
 			ResultScanner scanner = table.getScanner(scan);
 			int i = 0;
 			 for (Result res : scanner) {
-                 System.out.println(res);
+                 System.out.println(new String(res.getValue("f1".getBytes(), "aa".getBytes())));
                  i++;
 			 }
 			 System.out.println(i);
-			 scanner.close();*/
-			//TSDBClient client = new TSDBClient();
-			Random r = new Random();
-			for(int i = 0;i<10000;i++){
-				Put put = new Put(new RowKeyHelper().getRowKey());
-				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("aa"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
-				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("bb"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
-				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("cc"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
-				table.put(put);
-				Thread.sleep(1);
-				//client.write();
-			}
-		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void shutdown(){
-		try {
+			 scanner.close();
 			table.close();
-			conn.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public static void main(String[] args) {
 		long startTime = System.currentTimeMillis();
-		new HbaseClientWriter().test();
+		new HbaseClientQuery().test();
 		try {
 			conn.close();
 		} catch (IOException e) {

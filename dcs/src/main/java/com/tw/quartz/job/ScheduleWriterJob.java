@@ -13,6 +13,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.tw.avro.AvroWriter;
+import com.tw.common.utils.Utils;
+import com.tw.log.LogFactory;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class ScheduleWriterJob implements Job {
 				.get("queue");
 		int size = serializeQueue.size();
 		if (size > 0) {
+			LogFactory.getLogger().warn(" ----> "+Utils.getDateString()+" starting serialize queue data.");
 			final AvroWriter writer = new AvroWriter();
 			DataFileWriter<GenericRecord> dataFileWriter = writer.getWriter();
 			for (int i = 0; i < size; i++) {
@@ -54,6 +57,7 @@ public class ScheduleWriterJob implements Job {
 				}
 			}
 			writer.syncAndClose(dataFileWriter);
+			LogFactory.getLogger().warn(" ----> "+Utils.getDateString()+" serialize queue data success.");
 		}
 	}
 }

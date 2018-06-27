@@ -37,7 +37,7 @@ public abstract class AbstractNettyServer implements Server {
 					.group(parentGroup, childGroup);
 			init(server);
 			ChannelFuture channel = server.bind(Config.getServerPort()).sync();
-			LogFactory.getLogger().info("server started....");
+			LogFactory.getLogger().info("----> server started....");
 			registerShutDownHook();
 			try {
 				System.in.read();

@@ -13,6 +13,7 @@ import com.tw.common.utils.Constants;
 import com.tw.common.utils.ListSplitter;
 import com.tw.common.utils.Utils;
 import com.tw.config.Config;
+import com.tw.log.LogFactory;
 import com.tw.quartz.QuartzScheduler;
 import com.tw.quartz.job.MQListeningJob;
 import com.tw.quartz.job.ScheduleWriterJob;
@@ -102,6 +103,7 @@ public class RocketMQProducerImpl extends AbstractRocketMQProducer {
 					ScheduleWriterJob.class);
 			scheduler.startSimpleScheduler("MQJob", "MQtrigger", 300,
 					MQListeningJob.class);
+			LogFactory.getLogger().warn("----> MQ is offline,start mq listening thread....");
 		}
 		lock.unlock();
 	}

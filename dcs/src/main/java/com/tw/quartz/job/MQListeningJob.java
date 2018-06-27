@@ -10,6 +10,8 @@ import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
 
 import com.tw.avro.AvroReader;
+import com.tw.common.utils.Utils;
+import com.tw.log.LogFactory;
 import com.tw.mq.producer.MQProducer;
 /**
  * 
@@ -33,6 +35,7 @@ public class MQListeningJob implements Job {
 		MQProducer producer = (MQProducer) jobDataMap.get("MQProducer");
 		//检查MQ服务器状态
 		if (producer.mqServerIsUp()) {
+			LogFactory.getLogger().warn("----> "+Utils.getDateString()+" MQ is online,starting deserialization local data.");
 			// 设置MQ状态为上线状态
 			producer.setIsDown(false);
 			/*（手动触发可能会在当前调度执行完之后执行，会导致queue的数据在AvroReader已经反序列化完成之后再被写入到磁盘上）
@@ -57,6 +60,7 @@ public class MQListeningJob implements Job {
 			} catch (SchedulerException e) {
 				e.printStackTrace();
 			}
+			LogFactory.getLogger().warn("----> "+Utils.getDateString()+" deserialization local data success,shutdown scheduler.");
 		}
 	}
 

@@ -1,6 +1,5 @@
 package com.tw.analysizer;
 
-
 import com.tw.model.Protocol;
 /**
  * 

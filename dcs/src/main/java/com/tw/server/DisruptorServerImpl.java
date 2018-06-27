@@ -70,9 +70,8 @@ public class DisruptorServerImpl extends AbstractNettyServer {
 		// disruptor.handleEventsWithWorkerPool(handlers);每个handler会单独建立一个线程，并发消费ringbuff的数据
 		disruptor.handleEventsWithWorkerPool(WorkHandlerBuilder.build(
 				Config.getMaxThreads(), cilent));
-		ringBuffer = disruptor.getRingBuffer();
-		disruptor.start();
-		LogFactory.getLogger().info("disruptor init.");
+		ringBuffer = disruptor.start();
+		LogFactory.getLogger().info("----> disruptor init.");
 	}
 
 	@Override
