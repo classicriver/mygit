@@ -65,9 +65,5 @@ public class HbaseClient {
 			e.printStackTrace();
 		}
 	}
-	public static void main(String[] args) {
-		HbaseClient hbaseClient = new HbaseClient();
-		hbaseClient.save();
-		hbaseClient.shutdown();
-	}
+	
 }
