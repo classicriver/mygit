@@ -10,7 +10,6 @@ import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import com.tw.config.Config;
 import com.tw.disruptor.IntEventExceptionHandler;
 import com.tw.disruptor.ProtocolEventFactory;
 import com.tw.disruptor.WorkHandlerBuilder;
@@ -18,6 +17,7 @@ import com.tw.log.LogFactory;
 import com.tw.model.Protocol;
 import com.tw.mq.producer.MQProducer;
 import com.tw.mq.producer.RocketMQProducerImpl;
+import com.tw.resources.ConfigProperties;
 import com.tw.server.hanlder.ServerInitializer;
 
 /**
@@ -38,13 +38,13 @@ public class DisruptorServerImpl extends AbstractNettyServer {
 	/**
 	 * 消息实现类
 	 */
-	private MQProducer cilent = new RocketMQProducerImpl();
+	private final MQProducer producer = new RocketMQProducerImpl();
 	/**
 	 * Analysizer线程工厂
 	 */
-	private ThreadFactory workers = new ThreadFactory() {
+	private final ThreadFactory workers = new ThreadFactory() {
 		private AtomicInteger atomic = new AtomicInteger();
-
+		@Override
 		public Thread newThread(Runnable r) {
 			return new Thread(r, "AnalysizerThread: "
 					+ this.atomic.getAndIncrement());
@@ -69,7 +69,7 @@ public class DisruptorServerImpl extends AbstractNettyServer {
 		// disruptor.handleEventsWith(handlers);每个handler会单独建立一个线程，链式handler，ringbuff的每条数据都会被所有handler处理
 		// disruptor.handleEventsWithWorkerPool(handlers);每个handler会单独建立一个线程，并发消费ringbuff的数据
 		disruptor.handleEventsWithWorkerPool(WorkHandlerBuilder.build(
-				Config.getMaxThreads(), cilent));
+				ConfigProperties.getInstance().getMaxThreads(), producer));
 		ringBuffer = disruptor.start();
 		LogFactory.getLogger().info("----> disruptor init.");
 	}
@@ -78,7 +78,7 @@ public class DisruptorServerImpl extends AbstractNettyServer {
 	public void subClose() {
 		// TODO Auto-generated method stub
 		disruptor.shutdown();
-		cilent.close();
+		producer.close();
 	}
 
 }

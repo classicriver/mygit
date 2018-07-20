@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumWriter;
 
 import com.tw.common.utils.Constants;
-import com.tw.config.Config;
+import com.tw.resources.ConfigProperties;
 
 /**
  * 
@@ -20,11 +21,11 @@ import com.tw.config.Config;
  * @time 2018年5月24日
  * @version 1.0
  */
-public class AvroWriter extends AbstractAvroConfig {
+public class AvroWriter extends AvroConfig {
 
 	private static final String FORMAT = "yyyy年MM月dd日 HH时mm分ss秒";
 	
-	private String getFileName(){
+	private String generateFileName(){
 		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT);  
 		return sdf.format(new Date());
 	}
@@ -43,7 +44,7 @@ public class AvroWriter extends AbstractAvroConfig {
 			e1.printStackTrace();
 		}*/
 		//动态序列化
-		File diskFile = new File(Config.getStoragePath()+getFileName()+Constants.AVROSUFFIX);
+		File diskFile = new File(ConfigProperties.getInstance().getStoragePath()+generateFileName()+Constants.AVROSUFFIX);
 		DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<GenericRecord>(schema);  
 		DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<GenericRecord>(datumWriter);  
 		try {

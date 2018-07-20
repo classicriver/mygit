@@ -14,7 +14,7 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 
 import com.tw.common.utils.Constants;
 import com.tw.common.utils.Utils;
-import com.tw.config.Config;
+import com.tw.resources.ConfigProperties;
 
 /**
  * 
@@ -23,7 +23,7 @@ import com.tw.config.Config;
  * @time 2018年5月24日
  * @version 1.0
  */
-public class AvroReader extends AbstractAvroConfig {
+public class AvroReader extends AvroConfig {
 	/*
 	 * public List<Message> readSerializeFileAsList() { List<Message> messages =
 	 * new ArrayList<Message>(); File file = new File(Config.getStoragePath());
@@ -44,14 +44,14 @@ public class AvroReader extends AbstractAvroConfig {
 
 	public List<Message> readSerializeFileAsList() {
 		List<Message> messages = new ArrayList<Message>();
-		File file = new File(Config.getStoragePath());
+		File file = new File(ConfigProperties.getInstance().getStoragePath());
 		if (file.isDirectory()) {
 			String[] fileNames = file.list();
 			for (String filename : fileNames) {
 				File avroFile = null;
 				DataFileReader<GenericRecord> dataFileReader = null;
 				try {
-					avroFile = new File(Config.getStoragePath() + "\\"
+					avroFile = new File(ConfigProperties.getInstance().getStoragePath() + "\\"
 							+ filename);
 					DatumReader<GenericRecord> datumReader = new GenericDatumReader<GenericRecord>(
 							schema);

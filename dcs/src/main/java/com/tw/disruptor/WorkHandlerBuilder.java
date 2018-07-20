@@ -12,11 +12,11 @@ import com.tw.mq.producer.MQProducer;
  */
 public class WorkHandlerBuilder {
 
-	public static ProtocolWorkHandler[] build(int count, MQProducer cilent) {
+	public static ProtocolWorkHandler[] build(int count, MQProducer producer) {
 		ProtocolWorkHandler[] handlers = new ProtocolWorkHandler[count];
 		for (int i = 0; i < count; i++) {
 			handlers[i] = new ProtocolWorkHandler(new DefaultAnalysizerImpl(),
-					cilent);
+					producer);
 		}
 		return handlers;
 	}

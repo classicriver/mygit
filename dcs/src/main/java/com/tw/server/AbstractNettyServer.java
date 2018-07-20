@@ -9,8 +9,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-import com.tw.config.Config;
 import com.tw.log.LogFactory;
+import com.tw.resources.ConfigProperties;
 /**
  * 
  * @author xiesc
@@ -20,8 +20,8 @@ import com.tw.log.LogFactory;
  */
 public abstract class AbstractNettyServer implements Server {
 
-	private final NioEventLoopGroup parentGroup = new NioEventLoopGroup(Config.getMaxThreads());
-	private final NioEventLoopGroup childGroup = new NioEventLoopGroup(Config.getMaxThreads());
+	private final NioEventLoopGroup parentGroup = new NioEventLoopGroup(ConfigProperties.getInstance().getMaxThreads());
+	private final NioEventLoopGroup childGroup = new NioEventLoopGroup(ConfigProperties.getInstance().getMaxThreads());
 	private final ServerBootstrap server = new ServerBootstrap();
 
 	@Override
@@ -36,7 +36,7 @@ public abstract class AbstractNettyServer implements Server {
 					.childOption(ChannelOption.TCP_NODELAY, true) //禁用Nagle算法提高响应速度
 					.group(parentGroup, childGroup);
 			init(server);
-			ChannelFuture channel = server.bind(Config.getServerPort()).sync();
+			ChannelFuture channel = server.bind(ConfigProperties.getInstance().getServerPort()).sync();
 			LogFactory.getLogger().info("----> server started....");
 			registerShutDownHook();
 			try {

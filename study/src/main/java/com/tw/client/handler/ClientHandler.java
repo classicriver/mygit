@@ -1,7 +1,5 @@
 package com.tw.client.handler;
 
-import java.util.concurrent.locks.ReentrantLock;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

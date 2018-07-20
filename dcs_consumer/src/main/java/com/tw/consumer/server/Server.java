@@ -26,8 +26,9 @@ public class Server {
 	
 	private WorkHandlerBuilder builder;
 	
-	private ThreadFactory workers = new ThreadFactory() {
+	private final ThreadFactory workers = new ThreadFactory() {
 		private AtomicInteger atomic = new AtomicInteger();
+		@Override
 		public Thread newThread(Runnable r) {
 			return new Thread(r, "AnalysizerThread: "
 					+ this.atomic.getAndIncrement());
@@ -38,7 +39,7 @@ public class Server {
 		// 创建工厂
 		EventFactory<MMessage> factory = new MMessageEventFactory();
 		// 创建bufferSize ,也就是RingBuffer大小，必须是8的N次方
-		int bufferSize = 1024 * 1024 * 8;
+		final int bufferSize = 1024 * 1024 * 8;
 		disruptor = new Disruptor<MMessage>(factory, bufferSize, workers,
 				ProducerType.MULTI, new BlockingWaitStrategy());
 		disruptor.setDefaultExceptionHandler(new IntEventExceptionHandler());

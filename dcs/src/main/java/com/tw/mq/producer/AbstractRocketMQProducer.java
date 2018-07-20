@@ -13,7 +13,7 @@ import org.apache.rocketmq.remoting.exception.RemotingConnectException;
 import org.apache.rocketmq.remoting.exception.RemotingSendRequestException;
 import org.apache.rocketmq.remoting.exception.RemotingTimeoutException;
 
-import com.tw.config.Config;
+import com.tw.resources.ConfigProperties;
 
 public abstract class AbstractRocketMQProducer implements MQProducer {
 
@@ -23,8 +23,8 @@ public abstract class AbstractRocketMQProducer implements MQProducer {
 	protected final static DefaultMQProducer producer;
 
 	static {
-		producer = new DefaultMQProducer(Config.getProducerName());
-		producer.setNamesrvAddr(Config.getNameServer());
+		producer = new DefaultMQProducer(ConfigProperties.getInstance().getProducerName());
+		producer.setNamesrvAddr(ConfigProperties.getInstance().getNameServer());
 		// producer.setInstanceName(UUID.randomUUID().toString());
 		producer.setVipChannelEnabled(false);
 		producer.setRetryTimesWhenSendFailed(3);

@@ -54,35 +54,35 @@ public class Config {
 	}
 
 	public static int getMaxThreads() {
-		return Integer.parseInt((String) getOrSetDefault(MAXTHREADS, Runtime
+		return Integer.parseInt((String) getOrSetDefaultProperty(MAXTHREADS, Runtime
 				.getRuntime().availableProcessors() * 2));
 	}
 
 	public static int getServerPort() {
-		return Integer.parseInt((String) getOrSetDefault(SERVERPORT, 10000));
+		return Integer.parseInt((String) getOrSetDefaultProperty(SERVERPORT, 10000));
 	}
 
 	public static String getNameServer() {
-		return (String) getOrSetDefault(NAMESERVER, "");
+		return (String) getOrSetDefaultProperty(NAMESERVER, "");
 	}
 
 	public static String getProducerName() {
-		return (String) getOrSetDefault(PRODUCERNAME, "");
+		return (String) getOrSetDefaultProperty(PRODUCERNAME, "");
 	}
 
 	public static int getMachineId() {
-		return Integer.parseInt((String) getOrSetDefault(MACHINEID, 1));
+		return Integer.parseInt((String) getOrSetDefaultProperty(MACHINEID, 1));
 	}
 
 	public static int getRepeatInterval() {
-		return Integer.parseInt((String) getOrSetDefault(REPEATINTERVAL, 60));
+		return Integer.parseInt((String) getOrSetDefaultProperty(REPEATINTERVAL, 60));
 	}
 
 	public static String getStoragePath() {
-		return (String) getOrSetDefault(STORAGEPATH, "");
+		return (String) getOrSetDefaultProperty(STORAGEPATH, "");
 	}
 	
-	private static Object getOrSetDefault(String key, Object def) {
+	private static Object getOrSetDefaultProperty(String key, Object def) {
 		Object temp = valueCache.get(key);
 		if (null == temp) {
 			String property = pro.getProperty(key);

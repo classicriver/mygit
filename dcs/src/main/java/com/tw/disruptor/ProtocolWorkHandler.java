@@ -14,17 +14,17 @@ public class ProtocolWorkHandler implements WorkHandler<Protocol>{
 	/**
 	 * MQ客户端
 	 */
-	private final MQProducer client;
+	private final MQProducer producer;
 	
 	public ProtocolWorkHandler(Analysizer analysize,MQProducer client){
 		this.analysize = analysize;
-		this.client = client;
+		this.producer = client;
 	}
 	
 	@Override
 	public void onEvent(Protocol event) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println(Thread.currentThread().getName()+" ProtocolEventHandler: "+event.getMessage());
-		client.send(analysize.analysize(event));
+		producer.send(analysize.analysize(event));
 	}
 }

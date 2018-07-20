@@ -7,8 +7,12 @@ import org.quartz.JobDetail;
 import org.quartz.ScheduleBuilder;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
+
+import com.tw.resources.PropertyResources;
 
 /**
  * 
@@ -17,7 +21,7 @@ import org.quartz.TriggerBuilder;
  * @time 2018年5月22日
  * @version 1.0
  */
-public class QuartzScheduler extends AbstractQuartzScheduler {
+public class QuartzScheduler extends PropertyResources {
 
 	private Scheduler scheduler;
 	private JobDataMap map = new JobDataMap();
@@ -27,8 +31,8 @@ public class QuartzScheduler extends AbstractQuartzScheduler {
 	}
 
 	public QuartzScheduler(){
-		// 通过schedulerFactory获取一个调度器
 		try {
+			SchedulerFactory schedulerfactory = new StdSchedulerFactory(pro);
 			scheduler = schedulerfactory.getScheduler();
 		} catch (SchedulerException e) {
 			// TODO Auto-generated catch block
@@ -38,16 +42,14 @@ public class QuartzScheduler extends AbstractQuartzScheduler {
 	
 	public void startSimpleScheduler(String jobName, String triggerName,
 			int second, Class<? extends Job> jobClass) {
-		this.startScheduler(jobName, triggerName,
+		startScheduler(jobName, triggerName,
 				SimpleScheduleBuilder.repeatSecondlyForever(second), jobClass);
 	}
 
-	@Override
 	public void startScheduler(String jobName, String triggerName,
 			ScheduleBuilder<?> builder, Class<? extends Job> jobClass) {
 		try {
 			// 创建jobDetail实例，绑定Job实现类
-			// 指明job的名称，所在组的名称，以及绑定job类
 			JobDetail job = JobBuilder.newJob(jobClass)
 					.withIdentity(jobName, Scheduler.DEFAULT_GROUP).build();
 
@@ -62,20 +64,15 @@ public class QuartzScheduler extends AbstractQuartzScheduler {
 
 			scheduler.scheduleJob(job, tb.build());
 			// 把作业和触发器注册到任务调度中
-			// 启动调度
 			scheduler.start();
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void shutdown() {
-		// 停止调度
-		try {
-			scheduler.shutdown();
-		} catch (SchedulerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	@Override
+	public String getProFileName() {
+		// TODO Auto-generated method stub
+		return "quartz.properties";
 	}
 }

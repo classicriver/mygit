@@ -26,8 +26,9 @@ public class Client implements Runnable {
 		client.channel(NioSocketChannel.class).group(worker)
 				.handler(new ClientHandler());
 		try {
-			//ChannelFuture future = client.connect("106.14.8.149", 8099).sync();
-			ChannelFuture future = client.connect("172.20.90.37", 10000).sync();
+			ChannelFuture future = client.connect("172.20.90.37", 50001).sync();
+			//ChannelFuture future = client.connect("125.71.200.163", 8099).sync();
+			//ChannelFuture future = client.connect("172.20.90.37", 10000).sync();
 			Channel channel = future.channel();
 			channel.writeAndFlush(Unpooled.copiedBuffer(String.valueOf(i)
 					.getBytes()));

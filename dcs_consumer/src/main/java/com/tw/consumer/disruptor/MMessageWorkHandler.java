@@ -18,4 +18,6 @@ public class MMessageWorkHandler implements WorkHandler<MMessage>{
 		// TODO Auto-generated method stub
 		System.out.println(Thread.currentThread().getName()+" ProtocolEventHandler: "+event.getMessage());
 	}
+	
+	
 }
