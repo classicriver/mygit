@@ -20,8 +20,9 @@ import com.tw.resources.ConfigProperties;
  */
 public abstract class AbstractNettyServer implements Server {
 
-	private final NioEventLoopGroup parentGroup = new NioEventLoopGroup(ConfigProperties.getInstance().getMaxThreads());
-	private final NioEventLoopGroup childGroup = new NioEventLoopGroup(ConfigProperties.getInstance().getMaxThreads());
+	private final ConfigProperties config = ConfigProperties.getInstance();
+	private final NioEventLoopGroup parentGroup = new NioEventLoopGroup();
+	private final NioEventLoopGroup childGroup = new NioEventLoopGroup();
 	private final ServerBootstrap server = new ServerBootstrap();
 
 	@Override
@@ -36,7 +37,7 @@ public abstract class AbstractNettyServer implements Server {
 					.childOption(ChannelOption.TCP_NODELAY, true) //禁用Nagle算法提高响应速度
 					.group(parentGroup, childGroup);
 			init(server);
-			ChannelFuture channel = server.bind(ConfigProperties.getInstance().getServerPort()).sync();
+			ChannelFuture channel = server.bind(config.getServerPort()).sync();
 			LogFactory.getLogger().info("----> server started....");
 			registerShutDownHook();
 			try {

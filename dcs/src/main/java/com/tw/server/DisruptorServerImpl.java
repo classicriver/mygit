@@ -36,7 +36,7 @@ public class DisruptorServerImpl extends AbstractNettyServer {
 	private Disruptor<Protocol> disruptor;
 
 	/**
-	 * 消息实现类
+	 * MQ实现类
 	 */
 	private final MQProducer producer = new RocketMQProducerImpl();
 	/**

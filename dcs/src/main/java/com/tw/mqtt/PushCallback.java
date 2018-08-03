@@ -21,7 +21,8 @@ public class PushCallback implements MqttCallback {
 	@Override
 	public void messageArrived(String arg0, MqttMessage arg1) throws Exception {
 		// TODO Auto-generated method stub
-
+		System.out.println(arg0);
+		System.out.println(arg1);
 	}
 
 }

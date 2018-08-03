@@ -1,4 +1,4 @@
-package com.tw.resources;
+package com.tw.ddcs.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,7 +6,7 @@ import java.util.Properties;
 /**
  * 
  * @author xiesc
- * @TODO	Property文件加载类
+ * @TODO	Property资源加载类
  * @time 2018年7月20日
  * @version 1.0
  */

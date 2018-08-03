@@ -2,7 +2,7 @@
 <configuration status="OFF">
 	<properties>
 		<property name="LOG_HOME">D:/logs/</property>
-		<property name="FILE_NAME">dcslog</property>
+		<property name="FILE_NAME">ddcslog</property>
 	</properties>
 	<appenders>
 		<Console name="Console" target="SYSTEM_OUT">
@@ -29,7 +29,7 @@
 		</RollingFile>
 	</appenders>
 	<loggers>
-		<root level="debug">
+		<root level="error">
 			<appender-ref ref="RollingFile" />
 			<appender-ref ref="Console" />
 			<appender-ref ref="Error" />

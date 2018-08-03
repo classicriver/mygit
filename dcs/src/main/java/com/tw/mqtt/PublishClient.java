@@ -2,14 +2,16 @@ package com.tw.mqtt;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-public class Client {
+public class PublishClient {
 	 public static final String HOST = "tcp://39.108.125.245:1883";
-	    public static final String TOPIC = "Pubdata";
-	    private static final String clientid = "tn_link";
+	    public static final String TOPIC = "real";
+	    private static final String clientid = "87974454";
 	    private MqttClient client;
 	    private MqttConnectOptions options;
 	    private String userName = "ygwl";
@@ -35,23 +37,41 @@ public class Client {
 	            options.setKeepAliveInterval(20);
 	            // 设置回调
 	            client.setCallback(new PushCallback());
-	            MqttTopic topic = client.getTopic(TOPIC);
+	           MqttTopic topic = client.getTopic(TOPIC);
 	            //setWill方法，如果项目中需要知道客户端是否掉线可以调用该方法。设置最终端口的通知消息
 	            options.setWill(topic, "close".getBytes(), 2, true);
 	 
 	            client.connect(options);
 	            //订阅消息
-	            int[] Qos  = {0};
-	            String[] topic1 = {TOPIC};
-	            client.subscribe(topic1, Qos);
+	           // int[] Qos  = {1};
+	            //String[] topic1 = {TOPIC};
+	            MqttMessage msg = new MqttMessage();
+	            //msg.setId(123);
+	            msg.setPayload("it's a test string".getBytes());
+	            msg.setQos(0);
+	            msg.setRetained(false);
+	            MqttTopic topic2 = client.getTopic(TOPIC);
+	            
+	            for(int i = 0;i <10000;i++){
+	            	msg.setPayload(("{\"sn\": \"TN001\",\"time\": \"2018-08-01 15:14:17\",\"data_yc\": {\"C1_D1\": [{\"desc\": \"ipv1\",\"value\": \"8.000\"}, {\"desc\": \"ipv2\",\"value\": \"8.000\"}, {\"desc\": \"ipv3\",\"value\": \"8.000\"}, {\"desc\": \"inverter_sn\",\"value\": \"8.000\"}],\"C1_D2\": [{\"desc\": \"ipv1\",\"value\": \"8.000\"}, {\"desc\": \"ipv2\",\"value\": \"8.000\"}, {\"desc\": \"ipv3\",\"value\": \"8.000\"}, {\"desc\": \"inverter_sn\",\"value\": \"8.000\"}]},\"data_yx\": {\"C1_D1\": [{\"desc\": \"yx1\",\"value\": \"0\"}, {\"desc\": \"yx2\",\"value\": \"0\"}, {\"desc\": \"yx3\",\"value\": \"0\"}, {\"desc\": \"yx4\",\"value\": \"0\"}],\"C1_D2\": [{\"desc\": \"yx1\",\"value\": \"0\"}, {\"desc\": \"yx2\",\"value\": \"0\"}, {\"desc\": \"yx3\",\"value\": \"0\"}, {\"desc\": \"yx4\",\"value\": \"0\"}]}}").getBytes());
+	            	MqttDeliveryToken token = topic2.publish(msg);
+		            token.waitForCompletion();
+	            }
+	            //client.publish(TOPIC, msg);
+	            
+	            //client.subscribe(topic1, Qos);
+	 
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
 	    }
 	 
 	    public static void main(String[] args) throws MqttException {
-	    	Client client = new Client();
+	    	long start = System.currentTimeMillis();
+	    	PublishClient client = new PublishClient();
 	        client.start();
+	        long end = System.currentTimeMillis();
+	        System.out.println(end - start);
 	    }
 
 }

@@ -14,7 +14,7 @@ public abstract class FileResources implements Resources {
 
 	protected FileInputStream stream;
 	
-	protected FileResources() {
+	protected FileResources(){
 		load();
 	}
 	
