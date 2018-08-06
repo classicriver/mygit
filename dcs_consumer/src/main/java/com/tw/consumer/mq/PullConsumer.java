@@ -24,7 +24,7 @@ public class PullConsumer {
 	private final RingBuffer<MMessage> ringBuffer;
 
 	static {
-		consumer.setNamesrvAddr(Config.getNameServer());
+		consumer.setNamesrvAddr(Config.getInstance().getNameServer());
 	}
 
 	public PullConsumer(RingBuffer<MMessage> ringBuffer){

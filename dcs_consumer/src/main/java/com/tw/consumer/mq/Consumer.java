@@ -15,9 +15,9 @@ import com.tw.consumer.config.Config;
 public class Consumer {
 	 public static void main(String[] args) throws InterruptedException, MQClientException {
 	        //指定一个Consumer Group 来创建一个consumer
-	        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(Config.getProducerName());
+	        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(Config.getInstance().getProducerName());
 	        //指定NameServer 地址,consumer和NameServer建立长链接,并且获取topic信息以及broker的ip和地址
-	        consumer.setNamesrvAddr(Config.getNameServer());
+	        consumer.setNamesrvAddr(Config.getInstance().getNameServer());
 	        //指定消费offset的位置。TIMESTAMP表示从consumer建立后,producer向broker新发送的消息开始
 	        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_TIMESTAMP);
 	        //指定消费topic,和过滤的TAG

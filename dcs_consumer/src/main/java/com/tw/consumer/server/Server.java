@@ -45,7 +45,7 @@ public class Server {
 		disruptor.setDefaultExceptionHandler(new IntEventExceptionHandler());
 		builder = new WorkHandlerBuilder();
 		disruptor.handleEventsWithWorkerPool(builder.build(
-				Config.getMaxThreads()));
+				Config.getInstance().getMaxThreads()));
 		ringBuffer = disruptor.start();
 	}
 	

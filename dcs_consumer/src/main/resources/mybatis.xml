@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 引用db.properties配置文件 -->
+    <properties resource="druid.properties" />
+
+    <typeAliases>
+        <typeAlias type="com.tw.ddcs.datasource.DruidDataSourceFactory"
+            alias="druid" />
+    </typeAliases>
+
+    <!-- development : 开发模式 work : 工作模式 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC" />
+            <!-- 配置数据库连接信息 -->
+            <dataSource type="druid">
+                <!-- value属性值引用db.properties配置文件中配置的值 -->
+                <property name="driver" value="${jdbc.driverClassName}" />
+                <property name="url" value="${jdbc.url}" />
+                <property name="username" value="${jdbc.username}" />
+                <property name="password" value="${jdbc.password}" />
+                <property name="maxActive" value="${druid.maxActive}" />
+                <property name="minIdle" value="${druid.minIdle}" />
+                <property name="maxWait" value="${druid.maxWait}" />
+                <property name="minIdle" value="${druid.minIdle}" />
+                <property name="filters" value="${druid.filters}" />
+                <property name="initialSize" value="${druid.initialSize}" />
+                <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}" />
+                <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}" />
+                <property name="alidationQuery" value="${druid.validationQuery}" />
+                <property name="testWhileIdle" value="${druid.testWhileIdle}" />
+                <property name="testOnBorrow" value="${druid.testOnBorrow}" />
+                <property name="testOnReturn" value="${druid.testOnReturn}" />
+                <property name="maxOpenPreparedStatements" value="${druid.maxOpenPreparedStatements}" />
+                <property name="removeAbandoned" value="${druid.removeAbandoned}" />
+                <property name="removeAbandonedTimeout" value="${druid.removeAbandonedTimeout}" />
+                <property name="logAbandoned" value="${druid.logAbandoned}" />
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- mybatis的mapper文件，每个xml配置文件对应一个接口 -->
+    <mappers>
+        <!-- <mapper resource="mapper/SolarManMapper.xml" />
+        <mapper resource="mapper/AlertMapper.xml" /> -->
+    </mappers>
+</configuration>

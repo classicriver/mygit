@@ -1,4 +1,4 @@
-package com.tw.ddcs.dao;
+package com.tw.consumer.dao;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,9 +7,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.tw.ddcs.config.DdcsConfig;
-import com.tw.ddcs.datasource.MybatisProvider;
-import com.tw.ddcs.mybatis.mapper.BaseMapper;
+import com.tw.consumer.config.Config;
+import com.tw.consumer.datasource.MybatisProvider;
+import com.tw.consumer.mapper.BaseMapper;
+
 /**
  * 
  * @author xiesc
@@ -19,12 +20,18 @@ import com.tw.ddcs.mybatis.mapper.BaseMapper;
  */
 public abstract class DefaultDao<T> implements BaseDao<T> {
 	
-	private final SqlSession session = new MybatisProvider().getSqlSession();
-	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
+	private final SqlSession session;
+	private final List<T> list;
 	/**
 	 * list的size()方法并不是线程安全的，加了一个计数器
 	 */
-	private final AtomicInteger counter = new AtomicInteger();
+	private final AtomicInteger counter;
+	
+	protected DefaultDao(){
+		session = new MybatisProvider().getSqlSession();
+		list = Collections.synchronizedList(new ArrayList<T>());
+		counter = new AtomicInteger();
+	}
 	
 	@Override
 	public int insert(T t) {
@@ -42,7 +49,7 @@ public abstract class DefaultDao<T> implements BaseDao<T> {
 		int state = -1;
 		list.add(t);
 		int size = counter.getAndIncrement();
-		if(size % DdcsConfig.getInstance().getBatchNumber() == 0){
+		if(size % Config.getInstance().getBatchNumber() == 0){
 			submit();
 		}
 		state = 1;

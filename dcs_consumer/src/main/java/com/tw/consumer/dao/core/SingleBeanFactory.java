@@ -1,4 +1,4 @@
-package com.tw.ddcs.db.core;
+package com.tw.consumer.dao.core;
 
 import java.util.concurrent.ConcurrentHashMap;
 /**
@@ -10,11 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SingleBeanFactory {
 	
-	protected static final ConcurrentHashMap<String, Object> beanCache = new ConcurrentHashMap<>();
+	protected static final ConcurrentHashMap<String, Object> beans = new ConcurrentHashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public <T> T getBean(Class<T> clazz) {
-		T obj = (T) beanCache.get(clazz.getName());
+		T obj = (T) beans.get(clazz.getName());
 		if(null == obj){
 			obj = initBean(clazz);
 		}
@@ -23,11 +23,12 @@ public class SingleBeanFactory {
 	
 	@SuppressWarnings("unchecked")
 	private synchronized <T> T initBean(Class<T> clazz){
-		T ins = (T) beanCache.get(clazz.getName());
+		String clazzName = clazz.getName();
+		T ins = (T) beans.get(clazzName);
 		try {
 			if(null == ins){
 				ins =  clazz.newInstance();
-				beanCache.put(clazz.getName(), ins);
+				beans.put(clazzName, ins);
 			}
 		} catch (InstantiationException | IllegalAccessException e) {
 			// TODO Auto-generated catch block

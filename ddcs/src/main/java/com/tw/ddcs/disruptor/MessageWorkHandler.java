@@ -9,7 +9,7 @@ import java.util.Map;
 import com.lmax.disruptor.WorkHandler;
 import com.tw.ddcs.dao.AlertDao;
 import com.tw.ddcs.dao.SolarManDao;
-import com.tw.ddcs.db.core.DaoFactory;
+import com.tw.ddcs.dao.core.DaoFactory;
 import com.tw.ddcs.model.Alert;
 import com.tw.ddcs.model.Message;
 import com.tw.ddcs.model.SolarMan;
@@ -50,7 +50,6 @@ public class MessageWorkHandler implements WorkHandler<Message>{
 	@SuppressWarnings("unchecked")
 	private void saveYcData(HashMap<String, Object> data,String sn,Date date) throws Exception{
 		Iterator<String> it = data.keySet().iterator();
-		
 		while(it.hasNext()){
 			HashMap<String, Object> map = new HashMap<>();
 			String key = it.next();

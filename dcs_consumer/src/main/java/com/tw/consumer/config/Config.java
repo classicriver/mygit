@@ -1,9 +1,9 @@
 package com.tw.consumer.config;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
+
+import com.tw.consumer.resources.PropertyResources;
 
 /**
  * 
@@ -12,7 +12,7 @@ import java.util.Properties;
  * @time 2018年5月14日
  * @version 1.0
  */
-public class Config {
+public class Config extends PropertyResources{
 	
 	private final static String MAXTHREADS = "tw.analysizer.maxThreads";
 	/**
@@ -39,50 +39,56 @@ public class Config {
 	 * 序列化到本地磁盘的路径
 	 */
 	private final static String STORAGEPATH = "tw.storage.path";
+	
+	private final static String BATCHNUMBER = "tw.mysql.batchNumber";
 
 	private final static Map<String, Object> valueCache = new HashMap<>();
-	private final static Properties pro = new Properties();
 
-	static {
-		try {
-			pro.load(Config.class.getClassLoader().getResourceAsStream(
-					"config.properties"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private Config() {
 	}
 
-	public static int getMaxThreads() {
+	public static Config getInstance() {
+		return SingletonConfig.PRO;
+	}
+
+	private static class SingletonConfig {
+		private static final Config PRO = new Config();
+	}
+
+	public int getMaxThreads() {
 		return Integer.parseInt((String) getOrSetDefaultProperty(MAXTHREADS, Runtime
 				.getRuntime().availableProcessors() * 2));
 	}
 
-	public static int getServerPort() {
+	public int getServerPort() {
 		return Integer.parseInt((String) getOrSetDefaultProperty(SERVERPORT, 10000));
 	}
 
-	public static String getNameServer() {
+	public String getNameServer() {
 		return (String) getOrSetDefaultProperty(NAMESERVER, "");
 	}
 
-	public static String getProducerName() {
+	public String getProducerName() {
 		return (String) getOrSetDefaultProperty(PRODUCERNAME, "");
 	}
 
-	public static int getMachineId() {
+	public int getMachineId() {
 		return Integer.parseInt((String) getOrSetDefaultProperty(MACHINEID, 1));
 	}
 
-	public static int getRepeatInterval() {
+	public int getRepeatInterval() {
 		return Integer.parseInt((String) getOrSetDefaultProperty(REPEATINTERVAL, 60));
 	}
 
-	public static String getStoragePath() {
+	public String getStoragePath() {
 		return (String) getOrSetDefaultProperty(STORAGEPATH, "");
 	}
 	
-	private static Object getOrSetDefaultProperty(String key, Object def) {
+	public int getBatchNumber(){
+		return Integer.parseInt((String) getOrSetDefaultProperty(BATCHNUMBER, 50));
+	}
+	
+	private Object getOrSetDefaultProperty(String key, Object def) {
 		Object temp = valueCache.get(key);
 		if (null == temp) {
 			String property = pro.getProperty(key);
@@ -95,6 +101,12 @@ public class Config {
 		} else {
 			return temp;
 		}
+	}
+
+	@Override
+	protected String getProFileName() {
+		// TODO Auto-generated method stub
+		return "config.properties";
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.tw.ddcs.disruptor;
 
-import com.tw.ddcs.db.core.DaoFactory;
+import com.tw.ddcs.dao.core.DaoFactory;
 /**
  * 
  * @author xiesc

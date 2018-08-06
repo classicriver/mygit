@@ -1,6 +1,6 @@
-package com.tw.ddcs.dao;
+package com.tw.consumer.dao;
 
-public interface DdcsDao<T> {
+public interface BaseDao<T> {
 	
 	public int insert(T t);
 	
