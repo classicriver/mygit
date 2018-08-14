@@ -13,18 +13,24 @@ import com.tw.ddcs.mybatis.mapper.BaseMapper;
 /**
  * 
  * @author xiesc
- * @TODO
+ * @TODO 带缓存的抽象dao类（thread safe）
  * @time 2018年8月2日
  * @version 1.0
  */
 public abstract class DefaultDao<T> implements BaseDao<T> {
 	
-	private final SqlSession session = new MybatisProvider().getSqlSession();
-	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
+	private final SqlSession session;
+	private final List<T> list;
 	/**
 	 * list的size()方法并不是线程安全的，加了一个计数器
 	 */
-	private final AtomicInteger counter = new AtomicInteger();
+	private final AtomicInteger counter;
+	
+	protected DefaultDao(){
+		session = new MybatisProvider().getSqlSession();
+		list = Collections.synchronizedList(new ArrayList<T>());
+		counter = new AtomicInteger();
+	}
 	
 	@Override
 	public int insert(T t) {
@@ -61,4 +67,5 @@ public abstract class DefaultDao<T> implements BaseDao<T> {
 	}
 
 	protected abstract BaseMapper<T> getMapper(SqlSession session);
+	
 }

@@ -14,13 +14,25 @@ public final class Constants {
 	/**
 	 * rocketmq默认topic
 	 */
-	public static final String DEFUALTTOPIC = "PushTopic";
+	public static final String DEFUALTMQTOPIC = "PushTopic";
 	/**
 	 *rocketmq默认tag 
 	 */
-	public static final String DEFUALTTAG = "tag";
+	public static final String DEFUALTMQTAG = "tag";
 	/**
 	 * avro定时序列化的jobname
 	 */
 	public static final String AVROSCHEDULERJOBNAME = "AvroWriterJob";
+	/**
+	 * avro定时序列化的trigger
+	 */
+	public static final String AVROSCHEDULERTRIGGERNAME = "AvroWriterTrigger";
+	/**
+	 * MQ监听线程jobname
+	 */
+	public static final String MQLISTENINGJOBNAME = "AvroWriterJob";
+	/**
+	 * MQ监听线程trigger
+	 */
+	public static final String MQLISTENINGTRIGGERNAME = "AvroWriterTrigger";
 }

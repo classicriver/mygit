@@ -19,6 +19,7 @@ import com.tw.ddcs.mqtt.impl.DefaultClientImpl;
 import com.tw.ddcs.quartz.QuartzScheduler;
 import com.tw.ddcs.quartz.job.MysqlSubmitJob;
 import com.tw.ddcs.server.Server;
+
 /**
  * 
  * @author xiesc
@@ -32,13 +33,14 @@ public class DefaultServerImpl implements Server {
 	 */
 	private RingBuffer<Message> ringBuffer;
 	private Disruptor<Message> disruptor;
-	private final QuartzScheduler scheduler = new QuartzScheduler();
 	private MqttClient mqtt;
+	private final QuartzScheduler scheduler = QuartzScheduler.getInstance();
 	/**
-	 *线程工厂
+	 * 线程工厂
 	 */
 	private final ThreadFactory workers = new ThreadFactory() {
 		private AtomicInteger atomic = new AtomicInteger();
+
 		@Override
 		public Thread newThread(Runnable r) {
 			return new Thread(r, "DDCS : persistence"
@@ -61,8 +63,8 @@ public class DefaultServerImpl implements Server {
 		// 启动mqtt客户端服务
 		mqtt = new DefaultClientImpl(ringBuffer);
 		mqtt.start();
-		//启动mysql定时提交调度
-		scheduler.startSimpleScheduler("mysqlJob",
+		// 启动mysql定时提交调度
+		scheduler.createRepeatSecondScheduler("mysqlJob",
 				"mysqlTrigger", DdcsConfig.getInstance().getRepeatInterval(),
 				MysqlSubmitJob.class);
 		// 注册关机hook,清理线程
@@ -75,8 +77,9 @@ public class DefaultServerImpl implements Server {
 		// TODO Auto-generated method stub
 		disruptor.shutdown();
 		mqtt.close();
-		
+		scheduler.close();
 	}
+
 	/**
 	 * 关机hook
 	 */

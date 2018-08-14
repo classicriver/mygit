@@ -7,9 +7,9 @@ import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class Client {
-	 public static final String HOST = "tcp://39.108.125.245:1883";
-	    public static final String TOPIC = "Pubdata";
-	    private static final String clientid = "tn_link";
+	 public static final String HOST = "tcp://bsd.ygwl.net:1883";
+	    public static final String TOPIC = "$queue/real";
+	    private static final String clientid = "tn_link111123";
 	    private MqttClient client;
 	    private MqttConnectOptions options;
 	    private String userName = "ygwl";

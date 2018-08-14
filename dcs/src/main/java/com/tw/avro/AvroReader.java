@@ -24,23 +24,41 @@ import com.tw.resources.ConfigProperties;
  * @version 1.0
  */
 public class AvroReader extends AvroConfig {
-	/*
-	 * public List<Message> readSerializeFileAsList() { List<Message> messages =
-	 * new ArrayList<Message>(); File file = new File(Config.getStoragePath());
-	 * if (file.isDirectory()) { String[] fileNames = file.list(); for (String
-	 * filename : fileNames) { File avroFile = null; DataFileReader<Protocol1>
-	 * fileReader = null; try { avroFile = new File(Config.getStoragePath() +
-	 * "\\" + filename); DatumReader<Protocol1> reader = new
-	 * SpecificDatumReader<Protocol1>( Protocol1.class); fileReader = new
-	 * DataFileReader<Protocol1>(avroFile, reader); while (fileReader.hasNext())
-	 * { Message message = new Message(Constants.DEFUALTTOPIC,
-	 * Constants.DEFUALTTAG, Utils.getStringUniqueId(), fileReader .next()
-	 * .getMessage() .toString() .getBytes( RemotingHelper.DEFAULT_CHARSET));
-	 * messages.add(message); } } catch (IOException e) { // TODO Auto-generated
-	 * catch block e.printStackTrace(); } try { fileReader.close(); } catch
-	 * (IOException e) { // TODO Auto-generated catch block e.printStackTrace();
-	 * } //删除文件 avroFile.delete(); } } return messages; }
-	 */
+
+	/*public List<Message> readSerializeFileAsList() { 
+		List<Message> messages = new ArrayList<Message>(); 
+		File file = new File(Config.getStoragePath());
+	    if (file.isDirectory()) { 
+	    	String[] fileNames = file.list();
+	    	for (String filename : fileNames) { 
+	    		File avroFile = null; 
+	    		DataFileReader<Protocol1> fileReader = null; 
+	    		try { 
+	    			avroFile = new File(Config.getStoragePath() +"\\" + filename); 
+	    			DatumReader<Protocol1> reader = new SpecificDatumReader<Protocol1>( Protocol1.class);
+	    			fileReader = new DataFileReader<Protocol1>(avroFile, reader);
+	    			while (fileReader.hasNext()){ 
+	    				Message message = new Message(Constants.DEFUALTTOPIC,
+	    											Constants.DEFUALTTAG,
+	    											Utils.getStringUniqueId(), 
+	    											fileReader .next().getMessage().toString().getBytes(RemotingHelper.DEFAULT_CHARSET));
+	    				messages.add(message);
+	    			} 
+	    		} catch (IOException e) { // TODO Auto-generated
+	    			e.printStackTrace(); 
+	    			} 
+		   try { 
+			   fileReader.close();
+			   } catch(IOException e) { 
+				   // TODO Auto-generated catch block e.printStackTrace();
+				   e.printStackTrace();
+			   }
+		   // 删除文件 
+		   avroFile.delete(); 
+		   } 
+	    } 
+	  return messages; 
+	}*/
 
 	public List<Message> readSerializeFileAsList() {
 		List<Message> messages = new ArrayList<Message>();
@@ -51,18 +69,18 @@ public class AvroReader extends AvroConfig {
 				File avroFile = null;
 				DataFileReader<GenericRecord> dataFileReader = null;
 				try {
-					avroFile = new File(ConfigProperties.getInstance().getStoragePath() + "\\"
-							+ filename);
+					avroFile = new File(ConfigProperties.getInstance()
+							.getStoragePath() + "\\" + filename);
 					DatumReader<GenericRecord> datumReader = new GenericDatumReader<GenericRecord>(
 							schema);
 					dataFileReader = new DataFileReader<GenericRecord>(
 							avroFile, datumReader);
-					GenericRecord _current = null;
+					GenericRecord current = null;
 					while (dataFileReader.hasNext()) {
-						Message message = new Message(Constants.DEFUALTTOPIC,
-								Constants.DEFUALTTAG,
+						Message message = new Message(Constants.DEFUALTMQTOPIC,
+								Constants.DEFUALTMQTAG,
 								Utils.getStringUniqueId(), dataFileReader
-										.next(_current)
+										.next(current)
 										.get("message")
 										.toString()
 										.getBytes(

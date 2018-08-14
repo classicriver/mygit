@@ -14,7 +14,7 @@ import com.tw.resources.ConfigProperties;
 /**
  * 
  * @author xiesc
- * @TODO netty服务抽象类
+ * @TODO netty服务类
  * @time 2018年5月14日
  * @version 1.0
  */

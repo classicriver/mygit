@@ -13,6 +13,7 @@ import org.apache.rocketmq.remoting.exception.RemotingConnectException;
 import org.apache.rocketmq.remoting.exception.RemotingSendRequestException;
 import org.apache.rocketmq.remoting.exception.RemotingTimeoutException;
 
+import com.tw.common.utils.MQStatus;
 import com.tw.resources.ConfigProperties;
 
 public abstract class AbstractRocketMQProducer implements MQProducer {
@@ -58,7 +59,7 @@ public abstract class AbstractRocketMQProducer implements MQProducer {
 	 * @return
 	 */
 	@Override
-	public boolean mqServerIsUp() {
+	public MQStatus getMQStatus() {
 		// 从mq服务器获取所有的Broker
 		ClusterInfo brokerClusterInfo;
 		try {
@@ -69,14 +70,14 @@ public abstract class AbstractRocketMQProducer implements MQProducer {
 					.getBrokerAddrTable();
 			// MQ上线了
 			if (brokerAddrTable.size() > 0) {
-				return true;
+				return MQStatus.UP;
 			}
 		} catch (RemotingTimeoutException | RemotingSendRequestException
 				| RemotingConnectException | InterruptedException
 				| MQBrokerException e) {
-			return false;
+			return MQStatus.DOWN;
 		}
-		return false;
+		return MQStatus.DOWN;
 	}
 
 	protected abstract void send0(String msg);

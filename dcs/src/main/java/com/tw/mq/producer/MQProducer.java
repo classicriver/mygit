@@ -2,6 +2,8 @@ package com.tw.mq.producer;
 
 import java.util.List;
 
+import com.tw.common.utils.MQStatus;
+
 
 public interface MQProducer {
 	
@@ -9,9 +11,9 @@ public interface MQProducer {
 	
 	public void send(List<?> list);
 	
-	public boolean mqServerIsUp();
+	public MQStatus getMQStatus();
 	
-	public void setIsDown(Boolean down);
+	public void setMQStatus(MQStatus status);
 	
 	public void close();
 	

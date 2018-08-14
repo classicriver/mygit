@@ -1,9 +1,7 @@
 package com.tw.quartz.job;
 
-import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.quartz.DisallowConcurrentExecution;
@@ -39,7 +37,6 @@ public class ScheduleWriterJob implements Job {
 		if (size > 0) {
 			LogFactory.getLogger().warn(" ----> "+Utils.getDateString()+" starting serialize queue data.");
 			final AvroWriter writer = new AvroWriter();
-			DataFileWriter<GenericRecord> dataFileWriter = writer.getWriter();
 			for (int i = 0; i < size; i++) {
 				/*Message message = serializeQueue.poll();
 				GenericRecord genericMessage = new GenericData.Record(writer.getSchema()); 
@@ -50,13 +47,9 @@ public class ScheduleWriterJob implements Job {
 				genericMessage.put("body", ByteBuffer.wrap(message.getBody()));*/
 				GenericRecord genericMessage = new GenericData.Record(writer.getSchema()); 
 				genericMessage.put("message", serializeQueue.poll());
-				try {
-					dataFileWriter.append(genericMessage);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				writer.appendData(genericMessage);
 			}
-			writer.syncAndClose(dataFileWriter);
+			writer.syncAndClose();
 			LogFactory.getLogger().warn(" ----> "+Utils.getDateString()+" serialize queue data success.");
 		}
 	}

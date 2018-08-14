@@ -7,12 +7,14 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.quartz.SchedulerException;
 
 import com.tw.avro.AvroReader;
+import com.tw.common.utils.Constants;
+import com.tw.common.utils.MQStatus;
 import com.tw.common.utils.Utils;
 import com.tw.log.LogFactory;
 import com.tw.mq.producer.MQProducer;
+import com.tw.quartz.QuartzScheduler;
 /**
  * 
  * @author xiesc
@@ -22,7 +24,6 @@ import com.tw.mq.producer.MQProducer;
  */
 //设置@DisallowConcurrentExecution以后程序会等上个任务执行完毕以后再开始执行，可以保证任务不会并发执行
 @DisallowConcurrentExecution
-@SuppressWarnings("unchecked")
 public class MQListeningJob implements Job {
 
 	@Override
@@ -30,14 +31,15 @@ public class MQListeningJob implements Job {
 			throws JobExecutionException {
 		// TODO Auto-generated method stub
 		JobDataMap jobDataMap = context.getTrigger().getJobDataMap();
+		@SuppressWarnings("unchecked")
 		ConcurrentLinkedQueue<String> serializeQueue = (ConcurrentLinkedQueue<String>) jobDataMap
 				.get("queue");
 		MQProducer producer = (MQProducer) jobDataMap.get("MQProducer");
 		//检查MQ服务器状态
-		if (producer.mqServerIsUp()) {
+		if (producer.getMQStatus().equals(MQStatus.UP)) {
 			LogFactory.getLogger().warn("----> "+Utils.getDateString()+" MQ is online,starting deserialization local data.");
 			// 设置MQ状态为上线状态
-			producer.setIsDown(false);
+			producer.setMQStatus(MQStatus.UP);
 			/*（手动触发可能会在当前调度执行完之后执行，会导致queue的数据在AvroReader已经反序列化完成之后再被写入到磁盘上）
 			try {
 				context.getScheduler().triggerJob(
@@ -54,13 +56,11 @@ public class MQListeningJob implements Job {
 			//读取本地已序列化的avro数据批量发送到mq
 			final AvroReader reader = new AvroReader();
 			producer.send(reader.readSerializeFileAsList());
-			//关闭调度
-			try {
-				context.getScheduler().shutdown();
-			} catch (SchedulerException e) {
-				e.printStackTrace();
-			}
-			LogFactory.getLogger().warn("----> "+Utils.getDateString()+" deserialization local data success,shutdown scheduler.");
+			//关闭job
+			QuartzScheduler scheduler = QuartzScheduler.getInstance();
+			scheduler.removeJob(Constants.AVROSCHEDULERJOBNAME,Constants.AVROSCHEDULERTRIGGERNAME);
+			scheduler.removeJob(Constants.MQLISTENINGJOBNAME,Constants.MQLISTENINGTRIGGERNAME);
+			LogFactory.getLogger().warn("----> "+Utils.getDateString()+" deserialization local data success,shutdown mqjob...");
 		}
 	}
 
