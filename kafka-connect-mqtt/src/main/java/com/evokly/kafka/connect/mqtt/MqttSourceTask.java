@@ -10,7 +10,6 @@ import com.evokly.kafka.connect.mqtt.util.Version;
 
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
-
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -18,7 +17,6 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,13 +210,13 @@ public class MqttSourceTask extends SourceTask implements MqttCallback {
      *                   shut down.
      */
     @Override
-    public void messageArrived(String topic, MqttMessage message) throws Exception {
-        log.debug("[{}] New message on '{}' arrived.", mMqttClientId, topic);
+    public void messageArrived(String mqttTopic, MqttMessage message) throws Exception {
+        log.debug("[{}] New message on '{}' arrived.", mMqttClientId, mqttTopic);
 
         this.mQueue.add(
                 mConfig.getConfiguredInstance(MqttSourceConstant.MESSAGE_PROCESSOR,
                         MqttMessageProcessor.class)
-                    .process(topic, message)
+                    .process(message)
         );
     }
 }

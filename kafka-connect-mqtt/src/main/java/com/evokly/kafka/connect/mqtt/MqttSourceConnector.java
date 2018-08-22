@@ -72,9 +72,12 @@ public class MqttSourceConnector extends SourceConnector {
      */
     @Override
     public List<Map<String, String>> taskConfigs(int maxTasks) {
-        List<Map<String, String>> taskConfigs = new ArrayList<>(1);
-        Map<String, String> taskProps = new HashMap<>(mConfigProperties);
-        taskConfigs.add(taskProps);
+    	List<Map<String, String>> taskConfigs = new ArrayList<>();
+        Map<String, String> taskProps = new HashMap<>();
+        taskProps.putAll(mConfigProperties);
+        for (int i = 0; i < maxTasks; i++){
+            taskConfigs.add(taskProps);
+        }
         return taskConfigs;
     }
 
