@@ -1,4 +1,4 @@
-package com.tw.consumer.dao.core;
+package com.tw.consumer.core;
 
 import java.util.concurrent.ConcurrentHashMap;
 /**
@@ -13,7 +13,7 @@ public class SingleBeanFactory {
 	protected static final ConcurrentHashMap<String, Object> beans = new ConcurrentHashMap<>();
 
 	@SuppressWarnings("unchecked")
-	public <T> T getBean(Class<T> clazz) {
+	public static <T> T getBean(Class<T> clazz) {
 		T obj = (T) beans.get(clazz.getName());
 		if(null == obj){
 			obj = initBean(clazz);
@@ -22,7 +22,7 @@ public class SingleBeanFactory {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private synchronized <T> T initBean(Class<T> clazz){
+	private static synchronized <T> T initBean(Class<T> clazz){
 		String clazzName = clazz.getName();
 		T ins = (T) beans.get(clazzName);
 		try {

@@ -3,6 +3,8 @@ package com.tw.consumer.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import com.tw.consumer.log.LogFactory;
 /**
  * 
  * @author xiesc
@@ -28,6 +30,7 @@ public abstract class PropertyResources implements Resources{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			LogFactory.getLogger().error("exception happened.",e.getMessage());
 		}finally{
 			close();
 		}

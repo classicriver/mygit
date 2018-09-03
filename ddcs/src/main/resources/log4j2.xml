@@ -1,7 +1,8 @@
 <!-- status为不记录log4j本身的日志 -->
 <configuration status="OFF">
 	<properties>
-		<property name="LOG_HOME">D:/logs/</property>
+		<!-- <property name="LOG_HOME">D:/logs/</property> windows-->
+		<property name="LOG_HOME">/home/ygwl/deploy/ddcslogs</property>
 		<property name="FILE_NAME">ddcslog</property>
 	</properties>
 	<appenders>
@@ -29,7 +30,7 @@
 		</RollingFile>
 	</appenders>
 	<loggers>
-		<root level="error">
+		<root level="info">
 			<appender-ref ref="RollingFile" />
 			<appender-ref ref="Console" />
 			<appender-ref ref="Error" />

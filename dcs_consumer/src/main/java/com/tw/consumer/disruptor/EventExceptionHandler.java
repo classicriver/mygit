@@ -10,7 +10,7 @@ import com.tw.consumer.model.MMessage;
  * @time 2018年5月14日
  * @version 1.0
  */
-public class IntEventExceptionHandler implements ExceptionHandler<MMessage> {
+public class EventExceptionHandler implements ExceptionHandler<MMessage> {
 
 	public void handleEventException(Throwable ex, long sequence, MMessage event) {
 		LogFactory.getLogger().error("handleEventException", ex);

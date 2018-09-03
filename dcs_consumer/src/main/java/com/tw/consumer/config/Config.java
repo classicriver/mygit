@@ -13,8 +13,10 @@ import com.tw.consumer.resources.PropertyResources;
  * @version 1.0
  */
 public class Config extends PropertyResources{
-	
-	private final static String MAXTHREADS = "tw.analysizer.maxThreads";
+	/**
+	 * disruptor handler数
+	 */
+	private final static String MAXHANDLERS = "tw.disruptor.maxHandlers";
 	/**
 	 * 监听端口 
 	 */
@@ -39,8 +41,30 @@ public class Config extends PropertyResources{
 	 * 序列化到本地磁盘的路径
 	 */
 	private final static String STORAGEPATH = "tw.storage.path";
-	
+	/**
+	 * mysql批量提交数目
+	 */
 	private final static String BATCHNUMBER = "tw.mysql.batchNumber";
+	/**
+	 * HBASE表名
+	 */
+	private final static String TABLENAME = "tw.hbase.tableName";
+	/**
+	 * hbase列簇
+	 */
+	private final static String FAMILY = "tw.hbase.family";
+	/**
+	 * hbase列名
+	 */
+	private final static String QUALIFIER = "tw.hbase.qualifier";
+	/**
+	 * kafka主题
+	 */
+	private final static String KAFKATOPICS = "tw.kafka.topics";
+	/**
+	 * consumer线程数
+	 */
+	private final static String KAFKACONSUMERS = "tw.kafka.consumerThread";
 
 	private final static Map<String, Object> valueCache = new HashMap<>();
 
@@ -55,8 +79,8 @@ public class Config extends PropertyResources{
 		private static final Config PRO = new Config();
 	}
 
-	public int getMaxThreads() {
-		return Integer.parseInt((String) getOrSetDefaultProperty(MAXTHREADS, Runtime
+	public int getMaxHandlers() {
+		return Integer.parseInt((String) getOrSetDefaultProperty(MAXHANDLERS, Runtime
 				.getRuntime().availableProcessors() * 2));
 	}
 
@@ -86,6 +110,27 @@ public class Config extends PropertyResources{
 	
 	public int getBatchNumber(){
 		return Integer.parseInt((String) getOrSetDefaultProperty(BATCHNUMBER, 50));
+	}
+	
+	public String getHbaseTableName() {
+		return (String) getOrSetDefaultProperty(TABLENAME, "");
+	}
+	
+	public String getHbaseFamily() {
+		return (String) getOrSetDefaultProperty(FAMILY, "");
+	}
+	
+	public String getHbaseQualifier() {
+		return (String) getOrSetDefaultProperty(QUALIFIER, "");
+	}
+	
+	public String[] getKafkaTopics() {
+		String topicsString = (String) getOrSetDefaultProperty(KAFKATOPICS, "");
+		return topicsString.split(",");
+	}
+	
+	public int getKafkaConsumers(){
+		return Integer.parseInt((String) getOrSetDefaultProperty(KAFKACONSUMERS, 5));
 	}
 	
 	private Object getOrSetDefaultProperty(String key, Object def) {

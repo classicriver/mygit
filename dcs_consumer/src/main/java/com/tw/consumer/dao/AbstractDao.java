@@ -18,7 +18,7 @@ import com.tw.consumer.mapper.BaseMapper;
  * @time 2018年8月2日
  * @version 1.0
  */
-public abstract class DefaultDao<T> implements BaseDao<T> {
+public abstract class AbstractDao<T> implements BaseDao<T> {
 	
 	private final SqlSession session;
 	private final List<T> list;
@@ -27,7 +27,7 @@ public abstract class DefaultDao<T> implements BaseDao<T> {
 	 */
 	private final AtomicInteger counter;
 	
-	protected DefaultDao(){
+	protected AbstractDao(){
 		session = new MybatisProvider().getSqlSession();
 		list = Collections.synchronizedList(new ArrayList<T>());
 		counter = new AtomicInteger();
@@ -37,21 +37,21 @@ public abstract class DefaultDao<T> implements BaseDao<T> {
 	public int insert(T t) {
 		// TODO Auto-generated method stub
 		int state = -1;
-		BaseMapper<T> mapper = getMapper(session);
-		mapper.insert(t);
-		state = 1;
-		return state;
-	}
-	
-	@Override
-	public int batchInsert(T t) {
-		// TODO Auto-generated method stub
-		int state = -1;
 		list.add(t);
 		int size = counter.getAndIncrement();
 		if(size % Config.getInstance().getBatchNumber() == 0){
 			submit();
 		}
+		state = 1;
+		return state;
+	}
+	
+	@Override
+	public int batchInsert(List<T> t) {
+		// TODO Auto-generated method stub
+		int state = -1;
+		list.addAll(t);
+		submit();
 		state = 1;
 		return state;
 	}

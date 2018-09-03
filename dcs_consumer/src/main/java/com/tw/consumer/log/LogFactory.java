@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.util.StackLocatorUtil;
+import org.apache.logging.log4j.util.ReflectionUtil;
 
 /**
  * 
@@ -34,7 +34,7 @@ public class LogFactory {
 	}
 
 	public static Logger getLogger() {
-		Class<?> callerClass = StackLocatorUtil.getCallerClass(2);
+		Class<?> callerClass = ReflectionUtil.getCallerClass(2);
 		String className = callerClass.getName();
 		Logger logger;
 		if (null == loggerCache.get(className)) {

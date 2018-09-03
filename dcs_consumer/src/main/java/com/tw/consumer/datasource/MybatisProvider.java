@@ -9,6 +9,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.session.SqlSessionManager;
 
+import com.tw.consumer.log.LogFactory;
+
 /**
  * @Description: TODO(mybatis初始化类) 
  * @author: sc
@@ -17,9 +19,9 @@ import org.apache.ibatis.session.SqlSessionManager;
 public class MybatisProvider{
 
     private static final String CONFIG_PATH = "mybatis.xml";
-    private SqlSessionManager  session;
+    private static SqlSessionManager session;
     
-    {
+    static {
     	InputStream stream;
 		try {
 			stream = Resources.getResourceAsStream(CONFIG_PATH);
@@ -28,6 +30,7 @@ public class MybatisProvider{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			LogFactory.getLogger().error("exception happened.",e.getMessage());
 		}
     }
     /**

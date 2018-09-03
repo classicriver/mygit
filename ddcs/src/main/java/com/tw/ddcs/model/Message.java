@@ -24,6 +24,8 @@ public class Message {
 	 * 上传时间
 	 */
 	private String time;
+	
+	private boolean managed;
 
 	public String getTime() {
 		return time;
@@ -55,6 +57,14 @@ public class Message {
 
 	public void setData_yx(HashMap<String,Object> data_yx) {
 		this.data_yx = data_yx;
+	}
+
+	public boolean isManaged() {
+		return managed;
+	}
+
+	public void setManaged(boolean managed) {
+		this.managed = managed;
 	}
 	
 }

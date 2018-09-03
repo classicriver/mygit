@@ -11,7 +11,7 @@ import com.evokly.kafka.connect.mqtt.util.Version;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -31,7 +31,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * MqttSourceTask is a Kafka Connect SourceTask implementation that reads
  * from MQTT and generates Kafka Connect records.
  */
-public class MqttSourceTask extends SourceTask implements MqttCallback {
+public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
     private static final Logger log = LoggerFactory.getLogger(MqttSourceConnector.class);
 
     MqttClient mClient;
@@ -39,6 +39,7 @@ public class MqttSourceTask extends SourceTask implements MqttCallback {
     String mMqttClientId;
     BlockingQueue<MqttMessageProcessor> mQueue = new LinkedBlockingQueue<>();
     MqttSourceConnectorConfig mConfig;
+    MqttConnectOptions connectOptions;
 
     /**
      * Get the version of this task. Usually this should be the same as the corresponding
@@ -72,7 +73,7 @@ public class MqttSourceTask extends SourceTask implements MqttCallback {
 
 
         // Setup MQTT Connect Options
-        MqttConnectOptions connectOptions = new MqttConnectOptions();
+        connectOptions = new MqttConnectOptions();
 
         String sslCa = mConfig.getString(MqttSourceConstant.MQTT_SSL_CA_CERT);
         String sslCert = mConfig.getString(MqttSourceConstant.MQTT_SSL_CERT);
@@ -112,7 +113,8 @@ public class MqttSourceTask extends SourceTask implements MqttCallback {
             connectOptions.setPassword(
                     mConfig.getString(MqttSourceConstant.MQTT_PASSWORD).toCharArray());
         }
-
+        //自动重连
+        connectOptions.setAutomaticReconnect(true);
         // Connect to Broker
         try {
             // Address of the server to connect to, specified as a URI, is overridden using
@@ -219,4 +221,18 @@ public class MqttSourceTask extends SourceTask implements MqttCallback {
                     .process(message)
         );
     }
+
+    //mqtt重连成功后，要重新订阅topic
+	@Override
+	public void connectComplete(boolean reconnect, String serverURI) {
+		// TODO Auto-generated method stub
+		String topic = mConfig.getString(MqttSourceConstant.MQTT_TOPIC);
+        Integer qos = mConfig.getInt(MqttSourceConstant.MQTT_QUALITY_OF_SERVICE);
+        try {
+			mClient.subscribe(topic, qos);
+		} catch (MqttException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

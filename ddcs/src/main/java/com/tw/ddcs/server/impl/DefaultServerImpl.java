@@ -12,10 +12,10 @@ import com.tw.ddcs.config.DdcsConfig;
 import com.tw.ddcs.disruptor.IntEventExceptionHandler;
 import com.tw.ddcs.disruptor.MessageEventFactory;
 import com.tw.ddcs.disruptor.WorkHandlerBuilder;
+import com.tw.ddcs.http.server.HttpServer;
 import com.tw.ddcs.log.LogFactory;
 import com.tw.ddcs.model.Message;
-import com.tw.ddcs.mqtt.MqttClient;
-import com.tw.ddcs.mqtt.impl.DefaultClientImpl;
+import com.tw.ddcs.mqtt.MqttService;
 import com.tw.ddcs.quartz.QuartzScheduler;
 import com.tw.ddcs.quartz.job.MysqlSubmitJob;
 import com.tw.ddcs.server.Server;
@@ -28,19 +28,15 @@ import com.tw.ddcs.server.Server;
  * @version 1.0
  */
 public class DefaultServerImpl implements Server {
-	/**
-	 * 环形队列
-	 */
+	//环形队列
 	private RingBuffer<Message> ringBuffer;
 	private Disruptor<Message> disruptor;
-	private MqttClient mqtt;
+	private MqttService mqtt;
 	private final QuartzScheduler scheduler = QuartzScheduler.getInstance();
-	/**
-	 * 线程工厂
-	 */
+	private HttpServer httpServer ;
+	// 线程工厂
 	private final ThreadFactory workers = new ThreadFactory() {
 		private AtomicInteger atomic = new AtomicInteger();
-
 		@Override
 		public Thread newThread(Runnable r) {
 			return new Thread(r, "DDCS : persistence"
@@ -61,23 +57,35 @@ public class DefaultServerImpl implements Server {
 				.build(DdcsConfig.getInstance().getMaxThreads()));
 		ringBuffer = disruptor.start();
 		// 启动mqtt客户端服务
-		mqtt = new DefaultClientImpl(ringBuffer);
+		mqtt = new MqttService(ringBuffer);
 		mqtt.start();
 		// 启动mysql定时提交调度
 		scheduler.createRepeatSecondScheduler("mysqlJob",
 				"mysqlTrigger", DdcsConfig.getInstance().getRepeatInterval(),
 				MysqlSubmitJob.class);
-		// 注册关机hook,清理线程
+		// 注册关机hook
 		registerShutDownHook();
 		LogFactory.getLogger().info("----> server started.");
+		//启动http服务,监听关闭请求
+		httpServer = new HttpServer();
+		httpServer.start();
+
 	}
 
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
 		disruptor.shutdown();
-		mqtt.close();
+		mqtt.getMqttClient().close();
 		scheduler.close();
+		httpServer.close();
+		//等待1秒再关闭
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -93,5 +101,4 @@ public class DefaultServerImpl implements Server {
 			}
 		}));
 	}
-
 }

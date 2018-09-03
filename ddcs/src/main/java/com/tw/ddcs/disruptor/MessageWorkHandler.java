@@ -7,10 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.lmax.disruptor.WorkHandler;
+import com.tw.ddcs.config.GeneralMachineConfig;
 import com.tw.ddcs.dao.AlertDao;
 import com.tw.ddcs.dao.SolarManDao;
 import com.tw.ddcs.dao.core.DaoFactory;
 import com.tw.ddcs.model.Alert;
+import com.tw.ddcs.model.GeneralMachineModel;
 import com.tw.ddcs.model.Message;
 import com.tw.ddcs.model.SolarMan;
 import com.tw.ddcs.utils.Utils;
@@ -35,7 +37,11 @@ public class MessageWorkHandler implements WorkHandler<Message>{
 		String sn = event.getSn();
 		Date date = Utils.getDate(event.getTime());
 		HashMap<String, Object> data_yc = event.getData_yc();
-		saveYcData(data_yc,sn,date);
+		if(event.isManaged()){
+			saveManagedData(data_yc,sn,date);
+		}else{
+			saveYcData(data_yc,sn,date);
+		}
 		HashMap<String, Object> data_yx = event.getData_yx();
 		saveYxData(data_yx,sn,date);
 		
@@ -48,18 +54,12 @@ public class MessageWorkHandler implements WorkHandler<Message>{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	private void saveYcData(HashMap<String, Object> data,String sn,Date date) throws Exception{
+	private void saveYcData(Map<String, Object> data,String sn,Date date) throws Exception{
 		Iterator<String> it = data.keySet().iterator();
 		while(it.hasNext()){
-			HashMap<String, Object> map = new HashMap<>();
 			String key = it.next();
-			map.put("datetime", date);
-			map.put("inverter_sn", sn);
 			ArrayList<Map<?,?>> objects = (ArrayList<Map<?,?>>) data.get(key);
-			for(Map<?,?> obj : objects){
-				map.put((String) obj.get("desc"), obj.get("value"));
-			}
-			daoFactory.getDao(SolarManDao.class).batchInsert(Utils.mapToObject(map, SolarMan.class));
+			daoFactory.getDao(SolarManDao.class).batchInsert(Utils.mapToObject(getYcData(objects,sn,date), SolarMan.class));
 		}
 	}
 	/**
@@ -70,7 +70,7 @@ public class MessageWorkHandler implements WorkHandler<Message>{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	private void saveYxData(HashMap<String, Object> data,String sn,Date date) throws Exception{
+	private void saveYxData(Map<String, Object> data,String sn,Date date) throws Exception{
 		Iterator<String> it = data.keySet().iterator();
 		while(it.hasNext()){
 			String key = it.next();
@@ -80,8 +80,49 @@ public class MessageWorkHandler implements WorkHandler<Message>{
 				obj.put("inverter_sn", sn);
 				daoFactory.getDao(AlertDao.class).batchInsert(Utils.mapToObject(obj, Alert.class));
 			}
-			
 		}
 	}
-
+	/**
+	 * 有配置的遥测数据
+	 * @param data
+	 * @param sn
+	 * @param date
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	private void saveManagedData(Map<String, Object> data,String sn,Date date) throws Exception{
+		Iterator<String> it = data.keySet().iterator();
+		while(it.hasNext()){
+			String key = it.next();
+			ArrayList<Map<?,?>> subData = (ArrayList<Map<?,?>>) data.get(key);
+			Map<String, Object> ycData = getYcData(subData,sn,date);
+			Map<String, Object> result = new HashMap<>();
+			result.put("datetime", date);
+			
+			//获取配置文件中的字段
+			GeneralMachineModel configModel = GeneralMachineConfig.getConfig(sn);
+			
+			for(int i = 1;i <= configModel.getCirculation();i++){
+				Map<String, String> properties = configModel.getProperties();
+				Iterator<String> iterator = properties.keySet().iterator();
+				while(iterator.hasNext()){
+					String key1 = (String)iterator.next();
+					String proValue = properties.get(key1);
+					result.put(proValue, ycData.get(key1.replace("${id}",String.valueOf(i))));
+				}
+				result.put("inverter_sn", sn+"_"+i);
+				daoFactory.getDao(SolarManDao.class).batchInsert(Utils.mapToObject(result, SolarMan.class));
+			}
+		}
+	}
+	
+	private Map<String, Object> getYcData(ArrayList<Map<?,?>> datas,String sn,Date date){
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("datetime", date);
+			map.put("inverter_sn", sn);
+			for(Map<?,?> obj : datas){
+				map.put((String) obj.get("desc"), obj.get("value"));
+			}
+		return map;
+	}
 }

@@ -3,6 +3,8 @@ package com.tw.ddcs.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.paho.client.mqttv3.MqttClient;
+
 import com.tw.ddcs.resources.PropertyResources;
 /**
  * 
@@ -28,8 +30,15 @@ public class DdcsConfig extends PropertyResources{
 	private final static String REPEATINTERVAL = "tw.mysql.repeatInterval";
 	
 	private final static String BATCHNUMBER = "tw.mysql.batchNumber";
-
-
+	
+	private final static String MQTTQOS = "tw.mqtt.qos";
+	
+	private final static String MANAGEREDFILENAMES = "tw.managered.fileNames";
+	/**
+	 * 序列化到本地磁盘的路径
+	 */
+	private final static String STORAGEPATH = "tw.storage.path";
+	
 	private final static Map<String, Object> valueCache = new HashMap<>();
 
 	private DdcsConfig() {
@@ -47,7 +56,7 @@ public class DdcsConfig extends PropertyResources{
 		Object temp = valueCache.get(key);
 		if (null == temp) {
 			String property = pro.getProperty(key);
-			if (!"".equals(property)) {
+			if (!"".equals(property) && null != property) {
 				valueCache.put(key, property);
 				return property;
 			}
@@ -78,7 +87,7 @@ public class DdcsConfig extends PropertyResources{
 	}
 	
 	public String getMqttClientid(){
-		return (String) getOrSetDefault(CLIENTID,"");
+		return (String) getOrSetDefault(CLIENTID,MqttClient.generateClientId());
 	}
 	
 	public String getMqttUserName(){
@@ -95,5 +104,18 @@ public class DdcsConfig extends PropertyResources{
 	
 	public int getBatchNumber(){
 		return Integer.parseInt((String) getOrSetDefault(BATCHNUMBER, 50));
+	}
+	
+	public int getMqttQos(){
+		return Integer.parseInt((String) getOrSetDefault(MQTTQOS, 1));
+	}
+	
+	public String getStoragePath() {
+		return (String) getOrSetDefault(STORAGEPATH, "");
+	}
+	
+	public String[] getManagedFileNames(){
+			String names = (String) getOrSetDefault(MANAGEREDFILENAMES, "");
+			return names.split(",");
 	}
 }

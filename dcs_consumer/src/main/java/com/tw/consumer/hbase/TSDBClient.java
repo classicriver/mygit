@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import net.opentsdb.core.Aggregators;
+/*import net.opentsdb.core.Aggregators;
 import net.opentsdb.core.DataPoint;
 import net.opentsdb.core.DataPoints;
 import net.opentsdb.core.Query;
@@ -93,7 +93,7 @@ public class TSDBClient {
 	public static void main(String[] args) {
 		TSDBClient client = new TSDBClient();
 		long start = System.currentTimeMillis();
-		/*for(int i = 0;i<10000000;i++){
+		for(int i = 0;i<10000000;i++){
 			client.write();
 			try {
 				Thread.sleep(1);
@@ -101,10 +101,11 @@ public class TSDBClient {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
 		client.query();
 		client.shutdown();
 		long end = System.currentTimeMillis();
 		System.out.println("timeleft---------->" + (end-start));
 	}
 }
+*/

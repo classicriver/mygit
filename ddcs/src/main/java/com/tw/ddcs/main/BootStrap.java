@@ -1,7 +1,5 @@
 package com.tw.ddcs.main;
 
-import java.io.IOException;
-
 import com.tw.ddcs.server.Server;
 import com.tw.ddcs.server.impl.DefaultServerImpl;
 /**
@@ -12,20 +10,20 @@ import com.tw.ddcs.server.impl.DefaultServerImpl;
  * @version 1.0
  */
 public class BootStrap {
-	
 	public static void main(String[] args) {
 		
 		Server server = null;
 		try{
 			server = new DefaultServerImpl();
 			server.start();
-			try {
+			//本地测试使用
+			/*try {
 				System.in.read();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.exit(0);
+			System.exit(0);*/
 		}catch(Exception e){
 			e.printStackTrace();
 			server.close();

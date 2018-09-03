@@ -22,7 +22,6 @@ import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.filter.ValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.filter.CompareFilter;
-import org.hbase.async.HBaseClient;
 
 
 public class HbaseClientQuery {

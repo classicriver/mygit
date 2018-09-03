@@ -17,9 +17,9 @@ import org.apache.ibatis.session.SqlSessionManager;
 public class MybatisProvider{
 
     private static final String CONFIG_PATH = "mybatis.xml";
-    private SqlSessionManager  session;
+    private static SqlSessionManager session;
     
-    {
+    static {
     	InputStream stream;
 		try {
 			stream = Resources.getResourceAsStream(CONFIG_PATH);

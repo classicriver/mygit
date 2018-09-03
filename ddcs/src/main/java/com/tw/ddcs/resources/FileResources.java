@@ -1,4 +1,4 @@
-package com.tw.consumer.resources;
+package com.tw.ddcs.resources;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

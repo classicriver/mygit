@@ -1,33 +1,28 @@
 package com.tw.consumer.disruptor;
 
-import com.tw.consumer.hbase.HbaseClient;
+import com.tw.consumer.analysizer.AnalyzerProxy;
+import com.tw.consumer.config.Config;
 /**
  * 
  * @author xiesc
- * @TODO  
+ * @TODO  disruptor的handler建造器
  * @time 2018年5月31日
  * @version 1.0
  */
 public class WorkHandlerBuilder {
 
-	private HbaseClient[] clients;
-	
-	public MMessageWorkHandler[] build(int count) {
-		clients = new HbaseClient[count];
+	private AnalyzerProxy analyzer = new AnalyzerProxy();
+	/**
+	 * 有几个handler就有几条线程，一个线程一个handler
+	 * @return
+	 */
+	public MMessageWorkHandler[] build() {
+		int count = Config.getInstance().getMaxHandlers();
 		MMessageWorkHandler[] handlers = new MMessageWorkHandler[count];
-		//the htable instance is not thread safe.
 		for (int i = 0; i < count; i++) {
-			clients[i] = new HbaseClient();
-			handlers[i] = new MMessageWorkHandler(clients[i]);
+			handlers[i] = new MMessageWorkHandler(analyzer);
 		}
 		return handlers;
 	}
-	
-	public void shutdownHTables(){
-		if(clients.length > 0){
-			for(HbaseClient c : clients){
-				c.shutdown();
-			}
-		}
-	}
+
 }

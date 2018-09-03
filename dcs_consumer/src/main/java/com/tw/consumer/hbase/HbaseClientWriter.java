@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.opentsdb.core.TSDB;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
@@ -93,6 +91,7 @@ public class HbaseClientWriter {
 			//TSDBClient client = new TSDBClient();
 			Random r = new Random();
 			for(int i = 0;i<10000;i++){
+				table.setAutoFlushTo(false);
 				Put put = new Put(new RowKeyHelper().getRowKey());
 				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("aa"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
 				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("bb"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
