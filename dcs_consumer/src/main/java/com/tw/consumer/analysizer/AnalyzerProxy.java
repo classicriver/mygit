@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import com.tw.consumer.core.SingleBeanFactory;
-import com.tw.consumer.model.MMessage;
+import com.tw.consumer.model.OriginMessage;
 /**
  * 
  * @author xiesc
@@ -15,8 +15,7 @@ import com.tw.consumer.model.MMessage;
  */
 public class AnalyzerProxy implements Analyzer {
 
-	private final static Analyzer analyzerRdbms = SingleBeanFactory.getBean(AnalyzerRdbms.class);
-	private final static Analyzer analyzerNosql = SingleBeanFactory.getBean(AnalyzerNosql.class);
+	private final static Analyzer analyzerYanHua = SingleBeanFactory.getBean(AnalyzerYanHua.class);
 	private Analyzer analyzerProxy;
 
 	public AnalyzerProxy() {
@@ -27,9 +26,9 @@ public class AnalyzerProxy implements Analyzer {
 	}
 
 	@Override
-	public String analysizeAndSave(MMessage message) {
+	public void analysize(OriginMessage message) {
 		// TODO Auto-generated method stub
-		return analyzerProxy.analysizeAndSave(message);
+		analyzerProxy.analysize(message);
 	}
 
 	private class AnalyzerInvocationHandler implements InvocationHandler {
@@ -41,12 +40,8 @@ public class AnalyzerProxy implements Analyzer {
 		public Object invoke(Object proxy, Method method, Object[] args)
 				throws Throwable {
 			// TODO Auto-generated method stub
-			MMessage msg = (MMessage) args[0];
-			if("".equals("")){
-				return method.invoke(analyzerRdbms, args);
-			}else{
-				return method.invoke(analyzerNosql, args);
-			}
+			return method.invoke(analyzerYanHua, args);
+			
 		}
 	}
 

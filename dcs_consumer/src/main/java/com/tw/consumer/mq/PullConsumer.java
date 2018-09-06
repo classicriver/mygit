@@ -15,19 +15,19 @@ import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import com.lmax.disruptor.RingBuffer;
 import com.tw.consumer.config.Config;
-import com.tw.consumer.model.MMessage;
+import com.tw.consumer.model.OriginMessage;
 import com.tw.consumer.utils.Constants;
 
 public class PullConsumer {
 
 	private static final DefaultMQPullConsumer consumer = new DefaultMQPullConsumer("Dcs_Group_1");
-	private final RingBuffer<MMessage> ringBuffer;
+	private final RingBuffer<OriginMessage> ringBuffer;
 
 	static {
 		consumer.setNamesrvAddr(Config.getInstance().getNameServer());
 	}
 
-	public PullConsumer(RingBuffer<MMessage> ringBuffer){
+	public PullConsumer(RingBuffer<OriginMessage> ringBuffer){
 		this.ringBuffer = ringBuffer;
 	}
 	
@@ -58,7 +58,7 @@ public class PullConsumer {
 										long sequence = ringBuffer.next();
 										try {
 											 // Get the entry in the Disruptor for the sequence
-											MMessage event = ringBuffer.get(sequence);
+											OriginMessage event = ringBuffer.get(sequence);
 											// Fill with data
 											event.setMessage(new String(msg.getBody())); 
 										} finally {

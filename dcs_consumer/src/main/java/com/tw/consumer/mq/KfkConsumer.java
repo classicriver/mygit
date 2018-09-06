@@ -11,7 +11,7 @@ import org.apache.kafka.common.TopicPartition;
 import com.lmax.disruptor.RingBuffer;
 import com.tw.consumer.config.KafkaConfig;
 import com.tw.consumer.log.LogFactory;
-import com.tw.consumer.model.MMessage;
+import com.tw.consumer.model.OriginMessage;
 /**
  * 
  * @author xiesc
@@ -21,10 +21,10 @@ import com.tw.consumer.model.MMessage;
  */
 public class KfkConsumer extends KafkaConfig implements Runnable {
 
-	private final RingBuffer<MMessage> ringBuffer;
+	private final RingBuffer<OriginMessage> ringBuffer;
 	private Boolean flag = true;
 
-	public KfkConsumer(RingBuffer<MMessage> ringBuffer) {
+	public KfkConsumer(RingBuffer<OriginMessage> ringBuffer) {
 		this.ringBuffer = ringBuffer;
 	}
 
@@ -42,7 +42,7 @@ public class KfkConsumer extends KafkaConfig implements Runnable {
 						long sequence = ringBuffer.next();
 						try {
 							// Get the entry in the Disruptor for the sequence
-							MMessage event = ringBuffer.get(sequence);
+							OriginMessage event = ringBuffer.get(sequence);
 							// Fill with data
 							event.setMessage(record.value());
 						} finally {

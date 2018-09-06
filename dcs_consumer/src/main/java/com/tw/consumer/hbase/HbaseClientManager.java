@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.ibatis.reflection.ExceptionUtil;
 
+import com.tw.consumer.core.AutoShutdown;
+
 /**
  * 
  * @author xiesc
@@ -17,31 +19,23 @@ import org.apache.ibatis.reflection.ExceptionUtil;
  * @time 2018年8月16日
  * @version 1.0
  */
-public class HbaseClientManager implements HbaseClientInterface {
+public class HbaseClientManager implements HbaseClientInterface,AutoShutdown {
 
 	private ThreadLocal<HbaseClient> localHbaseClient = new ThreadLocal<HbaseClient>();
 	private final HbaseClientInterface clientProxy;
 	private Map<Integer, HbaseClient> pools = new ConcurrentHashMap<>();
 
-	private HbaseClientManager() {
+	public HbaseClientManager() {
 		this.clientProxy = (HbaseClientInterface) Proxy.newProxyInstance(
 				HbaseClientInterface.class.getClassLoader(),
 				new Class[] { HbaseClientInterface.class },
 				new HbaseClientInterceptor());
 	}
 
-	public static HbaseClientManager getInstance() {
-		return SingletonManager.MANAGER;
-	}
-
-	private static class SingletonManager {
-		private static final HbaseClientManager MANAGER = new HbaseClientManager();
-	}
-
 	@Override
-	public void save(byte[] data) {
+	public void save(Put put) {
 		// TODO Auto-generated method stub
-		clientProxy.save(data);
+		clientProxy.save(put);
 	}
 
 	@Override
@@ -53,18 +47,10 @@ public class HbaseClientManager implements HbaseClientInterface {
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
-		/*final HbaseClient hbaseClient = localHbaseClient.get();
-	    if (hbaseClient == null) {
-	      throw new SqlSessionException("Error:  Cannot close.  No managed session is started.");
-	    }
-	    try {
-	    	hbaseClient.close();
-	    } finally {
-	    	localHbaseClient.set(null);
-	    }*/
 		for (int key : pools.keySet()) {
-			pools.get(key).close();;
+			pools.get(key).close();
 		}
+		HbaseClient.closeConnection();
 	}
 
 	private class HbaseClientInterceptor implements InvocationHandler {
@@ -95,5 +81,17 @@ public class HbaseClientManager implements HbaseClientInterface {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void flush() {
+		// TODO Auto-generated method stub
+		clientProxy.flush();
+	}
+
+	@Override
+	public void shutdown() {
+		// TODO Auto-generated method stub
+		close();
 	}
 }

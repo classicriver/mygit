@@ -2,9 +2,9 @@ package com.tw.consumer.disruptor;
 
 import com.lmax.disruptor.WorkHandler;
 import com.tw.consumer.analysizer.AnalyzerProxy;
-import com.tw.consumer.model.MMessage;
+import com.tw.consumer.model.OriginMessage;
 
-public class MMessageWorkHandler implements WorkHandler<MMessage>{
+public class MMessageWorkHandler implements WorkHandler<OriginMessage>{
 	
 	private final AnalyzerProxy analyzer;
 	
@@ -14,9 +14,9 @@ public class MMessageWorkHandler implements WorkHandler<MMessage>{
 	}
 
 	@Override
-	public void onEvent(MMessage event) throws Exception {
+	public void onEvent(OriginMessage message) throws Exception {
 		// TODO Auto-generated method stub
-		//analyzer.analysizeAndSave(event);
-		System.out.println(Thread.currentThread().getName()+" ProtocolEventHandler: "+event.getMessage());
+		analyzer.analysize(message);
+		//System.out.println(Thread.currentThread().getName()+" ProtocolEventHandler: "+event.getMessage());
 	}
 }

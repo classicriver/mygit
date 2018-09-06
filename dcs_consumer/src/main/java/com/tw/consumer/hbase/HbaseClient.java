@@ -6,11 +6,9 @@ import java.util.List;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.util.Bytes;
 
 import com.tw.consumer.config.Config;
 import com.tw.consumer.config.HbaseConfig;
-import com.tw.consumer.utils.RowKeyHelper;
 
 public class HbaseClient extends HbaseConfig implements HbaseClientInterface {
 
@@ -20,18 +18,17 @@ public class HbaseClient extends HbaseConfig implements HbaseClientInterface {
 		try {
 			table = (HTable) conn.getTable(TableName.valueOf(Config
 					.getInstance().getHbaseTableName()));
+			//关闭自动提交
 			table.setAutoFlush(false, true);
-			table.setWriteBufferSize(2 * 1024 * 1024);
+			//缓冲区1MB，满了提交
+			table.setWriteBufferSize(1 * 1024 * 1024);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void save(byte[] data) {
-		Put put = new Put(new RowKeyHelper().getRowKey());
-		put.addColumn(Bytes.toBytes(Config.getInstance().getHbaseFamily()),
-				Bytes.toBytes(Config.getInstance().getHbaseQualifier()), data);
+	public void save(Put put) {
 		try {
 			table.put(put);
 		} catch (IOException e) {
@@ -56,6 +53,23 @@ public class HbaseClient extends HbaseConfig implements HbaseClientInterface {
 		// TODO Auto-generated method stub
 		try {
 			table.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void flush(){
+		try {
+			table.flushCommits();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void closeConnection(){
+		try {
 			conn.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

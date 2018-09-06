@@ -1,7 +1,7 @@
 package com.tw.consumer.disruptor;
 
 import com.lmax.disruptor.EventFactory;
-import com.tw.consumer.model.MMessage;
+import com.tw.consumer.model.OriginMessage;
 /**
  * 
  * @author xiesc
@@ -9,10 +9,10 @@ import com.tw.consumer.model.MMessage;
  * @time 2018年5月14日
  * @version 1.0
  */
-public class MMessageEventFactory implements EventFactory<MMessage>{
+public class MMessageEventFactory implements EventFactory<OriginMessage>{
 	
-	public MMessage newInstance() {
-		return new MMessage();
+	public OriginMessage newInstance() {
+		return new OriginMessage();
 	}
 	
 }

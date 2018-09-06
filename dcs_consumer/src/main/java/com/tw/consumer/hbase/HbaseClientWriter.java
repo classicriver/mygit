@@ -92,7 +92,7 @@ public class HbaseClientWriter {
 			Random r = new Random();
 			for(int i = 0;i<10000;i++){
 				table.setAutoFlushTo(false);
-				Put put = new Put(new RowKeyHelper().getRowKey());
+				Put put = new Put(new RowKeyHelper().getRowKey(""));
 				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("aa"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
 				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("bb"), Bytes.toBytes(String.valueOf(r.nextInt(99))));
 				put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("cc"), Bytes.toBytes(String.valueOf(r.nextInt(99))));

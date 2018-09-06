@@ -2,7 +2,7 @@ package com.tw.consumer.disruptor;
 
 import com.lmax.disruptor.ExceptionHandler;
 import com.tw.consumer.log.LogFactory;
-import com.tw.consumer.model.MMessage;
+import com.tw.consumer.model.OriginMessage;
 /**
  * 
  * @author xiesc
@@ -10,9 +10,9 @@ import com.tw.consumer.model.MMessage;
  * @time 2018年5月14日
  * @version 1.0
  */
-public class EventExceptionHandler implements ExceptionHandler<MMessage> {
+public class EventExceptionHandler implements ExceptionHandler<OriginMessage> {
 
-	public void handleEventException(Throwable ex, long sequence, MMessage event) {
+	public void handleEventException(Throwable ex, long sequence, OriginMessage event) {
 		LogFactory.getLogger().error("handleEventException", ex);
 	}
 

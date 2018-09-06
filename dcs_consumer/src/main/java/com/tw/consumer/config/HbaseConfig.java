@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 /**
@@ -18,8 +19,8 @@ public class HbaseConfig{
 	protected static Connection conn ;
 	
 	static {
-			Configuration conf = new Configuration();
-			InputStream stream = HbaseConfig.class.getClassLoader().getResourceAsStream("hbase.properties");
+			Configuration conf = HBaseConfiguration.create();
+			InputStream stream = HbaseConfig.class.getClassLoader().getResourceAsStream("hbase-site.xml");
 			conf.addResource(stream);
 			try {
 				conn = ConnectionFactory.createConnection(conf);
@@ -35,5 +36,4 @@ public class HbaseConfig{
 				}
 			}
 	}
-
 }

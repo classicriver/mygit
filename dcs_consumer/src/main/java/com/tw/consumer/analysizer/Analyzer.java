@@ -1,6 +1,6 @@
 package com.tw.consumer.analysizer;
 
-import com.tw.consumer.model.MMessage;
+import com.tw.consumer.model.OriginMessage;
 
 /**
  * 
@@ -11,6 +11,6 @@ import com.tw.consumer.model.MMessage;
  */
 public interface Analyzer {
 
-	public String analysizeAndSave(MMessage message);
+	public void analysize(OriginMessage message);
 	
 }

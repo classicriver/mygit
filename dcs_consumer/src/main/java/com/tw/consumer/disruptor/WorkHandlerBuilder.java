@@ -11,7 +11,7 @@ import com.tw.consumer.config.Config;
  */
 public class WorkHandlerBuilder {
 
-	private AnalyzerProxy analyzer = new AnalyzerProxy();
+	private final AnalyzerProxy analyzer = new AnalyzerProxy();
 	/**
 	 * 有几个handler就有几条线程，一个线程一个handler
 	 * @return

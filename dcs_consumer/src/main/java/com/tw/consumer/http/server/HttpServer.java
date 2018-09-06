@@ -1,5 +1,7 @@
 package com.tw.consumer.http.server;
 
+import com.tw.consumer.core.AutoShutdown;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -16,7 +18,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
  * @time 2018年8月31日
  * @version 1.0
  */
-public class HttpServer {
+public class HttpServer implements AutoShutdown{
 
 	private final NioEventLoopGroup parentGroup = new NioEventLoopGroup(1);
 	private final NioEventLoopGroup childGroup = new NioEventLoopGroup(1);
@@ -42,8 +44,10 @@ public class HttpServer {
 			e.printStackTrace();
 		}
 	}
-	
-	public void close() {
+
+	@Override
+	public void shutdown() {
+		// TODO Auto-generated method stub
 		parentGroup.shutdownGracefully();
 		childGroup.shutdownGracefully();
 	};
