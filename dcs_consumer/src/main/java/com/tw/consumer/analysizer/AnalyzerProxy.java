@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import com.tw.consumer.core.SingleBeanFactory;
 import com.tw.consumer.model.OriginMessage;
 /**
  * 
@@ -15,7 +14,7 @@ import com.tw.consumer.model.OriginMessage;
  */
 public class AnalyzerProxy implements Analyzer {
 
-	private final static Analyzer analyzerYanHua = SingleBeanFactory.getBean(AnalyzerYanHua.class);
+	private final static Analyzer analyzerYanHua = new AnalyzerYanHua();
 	private Analyzer analyzerProxy;
 
 	public AnalyzerProxy() {

@@ -22,12 +22,16 @@ public class KfkConsumerFactory implements AutoShutdown{
 	//kafka consumer线程池
 	private final ExecutorService executor = ThreadFactoryBean.getFixedThreadPool("kafkaConsumerThread: ", threadCount);;				
 	private final List<KfkConsumer> consumers = new ArrayList<>();
-
+	private final RingBuffer<OriginMessage> ringBuffer;
+	
+	public KfkConsumerFactory(RingBuffer<OriginMessage> ringBuffer){
+		this.ringBuffer = ringBuffer;
+	}
 	/**
 	 * KfkConsumer 并不是线程安全的，每个线程单独创建一个KfkConsumer.
 	 * @param count
 	 */
-	public void startConsumers(final RingBuffer<OriginMessage> ringBuffer){
+	public void startConsumers(){
 		for (int i = 0; i < threadCount; i++) {
 			KfkConsumer consumer = new KfkConsumer(ringBuffer);
 			executor.execute(consumer);

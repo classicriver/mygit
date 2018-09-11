@@ -31,4 +31,12 @@ public final class Constants {
 	 * 逆变器
 	 */
 	public static final String INVERTER = "002";
+	/**
+	 * 遥测列簇
+	 */
+	public static final byte[] FAMILYYC = "yc".getBytes();
+	/**
+	 * 遥信列簇
+	 */
+	public static final byte[] FAMILYYX = "yx".getBytes();
 }

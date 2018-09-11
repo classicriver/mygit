@@ -2,6 +2,6 @@ package com.tw.consumer.utils;
 
 public interface RowKeyGenerator {
 	
-	public byte[] getRowKey(String sn);
+	public byte[] getRowKey(long time,String sn);
 	
 }

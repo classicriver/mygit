@@ -13,25 +13,50 @@ public class SingleBeanFactory {
 	
 	protected static final ConcurrentHashMap<String, Object> beans = new ConcurrentHashMap<>();
 
+	/**
+	 * 构造函数无参bean
+	 * @param clazz
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(Class<T> clazz) {
 		T obj = (T) beans.get(clazz.getName());
 		if(null == obj){
-			obj = initBean(clazz);
+			obj = initBean(clazz,null,null);
+		}
+		return obj;
+	}
+	/**
+	 * 构造函数有参bean
+	 * @param clazz 
+	 * @param parameterTypes 参数类
+	 * @param parameters 参数对象
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getBean(Class<T> clazz,Class<?>[] parameterTypes,Object[] parameters) {
+		T obj = (T) beans.get(clazz.getName());
+		if(null == obj){
+			obj = initBean(clazz,parameterTypes,parameters);
 		}
 		return obj;
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static synchronized <T> T initBean(Class<T> clazz){
+	private synchronized static <T> T initBean(Class<T> clazz,Class<?>[] parameterTypes,Object[] parameters){
 		String clazzName = clazz.getName();
 		T ins = (T) beans.get(clazzName);
 		try {
+			//判空，避免并发时重复创建对象
 			if(null == ins){
-				ins =  clazz.newInstance();
+				if(null != parameterTypes && null != parameters){
+					ins = clazz.getConstructor(parameterTypes).newInstance(parameters);
+				}else{
+					ins =  clazz.newInstance();
+				}
 				beans.put(clazzName, ins);
 			}
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -76,8 +76,9 @@ public class KfkConsumer extends KafkaConfig implements Runnable {
 		}
 		consumer.close();
 	}
-	
+
 	public void stop() {
+		// TODO Auto-generated method stub
 		this.flag = false;
 	}
 }

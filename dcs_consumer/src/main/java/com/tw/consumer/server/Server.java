@@ -16,6 +16,7 @@ import com.tw.consumer.http.server.HttpServer;
 import com.tw.consumer.log.LogFactory;
 import com.tw.consumer.model.OriginMessage;
 import com.tw.consumer.mq.KfkConsumerFactory;
+import com.tw.consumer.redis.RedisThreadFactory;
 
 public class Server {
 	//环形队列
@@ -25,18 +26,20 @@ public class Server {
 	private final ThreadFactory workers = ThreadFactoryBean.getThreadFactory("AnalysizerThread: ");
 
 	public void start() {
-		try {
+		try {	
 			// 创建工厂
 			final EventFactory<OriginMessage> factory = new MMessageEventFactory();
 			// 创建bufferSize ,也就是RingBuffer大小，必须是8的N次方
-			final int bufferSize = 1024 * 1024 * 8;
+			final int bufferSize = 1024 * 4;
 			disruptor = new Disruptor<OriginMessage>(factory, bufferSize, workers,
 					ProducerType.MULTI, new BlockingWaitStrategy());
 			disruptor.setDefaultExceptionHandler(new EventExceptionHandler());
 			disruptor.handleEventsWithWorkerPool(new WorkHandlerBuilder().build());
 			ringBuffer = disruptor.start();
 			//启动kafka consumer线程
-			SingleBeanFactory.getBean(KfkConsumerFactory.class).startConsumers(ringBuffer);
+			SingleBeanFactory.getBean(KfkConsumerFactory.class,new Class[]{RingBuffer.class},new Object[]{ringBuffer}).startConsumers();
+			//开启redis线程
+			SingleBeanFactory.getBean(RedisThreadFactory.class).start();
 			//注册关机hook
 			registerShutDownHook();
 			LogFactory.getLogger().info("server started.....");
@@ -52,9 +55,9 @@ public class Server {
 		disruptor.shutdown();
 		SingleBeanFactory.autoShutdown();
 		LogFactory.getLogger().info("server shutdown success.");
-		//主线程等10秒，让其他线程完成关闭工作.
+		//主线程等5秒，让其他线程完成关闭工作.
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

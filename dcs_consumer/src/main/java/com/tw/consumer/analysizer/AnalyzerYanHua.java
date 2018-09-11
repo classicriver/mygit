@@ -1,6 +1,7 @@
 package com.tw.consumer.analysizer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -12,6 +13,8 @@ import com.tw.consumer.core.SingleBeanFactory;
 import com.tw.consumer.hbase.HbaseClientManager;
 import com.tw.consumer.model.OriginMessage;
 import com.tw.consumer.model.YhMessage;
+import com.tw.consumer.redis.RedisAdapter;
+import com.tw.consumer.utils.Constants;
 import com.tw.consumer.utils.RowKeyHelper;
 /**
  * @author xiesc
@@ -23,12 +26,17 @@ public class AnalyzerYanHua implements Analyzer{
 	
 	private final static Gson gson = new Gson();
 	private final static HbaseClientManager manager = SingleBeanFactory.getBean(HbaseClientManager.class);
-	
+	private final RedisAdapter redis = new RedisAdapter();
+	/**
+	 * hbase rowkey生成器
+	 */
+	private final static RowKeyHelper rowKeyHelper = SingleBeanFactory.getBean(RowKeyHelper.class);
+	private final static byte[] snColumnBytes = "sn".getBytes();
+	private final static byte[] timeColumnBytes = "time".getBytes();
 	@Override
 	public void analysize(OriginMessage message) {
 		// TODO Auto-generated method stub
-		String jsonString = message.getMessage();
-		YhMessage yhMessage = gson.fromJson(jsonString, YhMessage.class);
+		YhMessage yhMessage = gson.fromJson(message.getMessage(), YhMessage.class);
 		saveData2Hbase(yhMessage);
 	}
 	/**
@@ -42,21 +50,49 @@ public class AnalyzerYanHua implements Analyzer{
 		//遥信
 		Map<String, Object> data_yx = yhMessage.getData_yx();
 		Iterator<String> it = data_yc.keySet().iterator();
+		/** <p>
+		 * map 格式{逆变器sn1:[{desc:ipv1,value:1.0},{desc:ipv2,value:2.0}],逆变器sn2:[{......}]}
+		 * <p>
+		 */
 		while(it.hasNext()){
 			String sn = it.next();
-			Put put = new Put(new RowKeyHelper().getRowKey(sn));
-			ArrayList<Map<String,String>> ycList = (ArrayList<Map<String,String>>) data_yc.get(sn);
-			ArrayList<Map<String,String>> yxList = (ArrayList<Map<String,String>>) data_yx.get(sn);
+			long currentTime = System.currentTimeMillis();
+			Put put = new Put(rowKeyHelper.getRowKey(currentTime,sn));
+			getSnAndTimeColumn(sn ,currentTime ,put);
+			//处理遥测和遥信数据
+			ArrayList<Map<String,Object>> ycList = (ArrayList<Map<String,Object>>) data_yc.get(sn);
+			ArrayList<Map<String,Object>> yxList = (ArrayList<Map<String,Object>>) data_yx.get(sn);
+			//写入redis缓存
+			Map<String,Object> ycMap = new HashMap<String, Object>();
+			Map<String,Object> yxMap = new HashMap<String, Object>();
 			for(int i = 0; i < ycList.size();i++){
-				getPuts(put,"yc".getBytes(),ycList.get(i));
-				getPuts(put,"yx".getBytes(),yxList.get(i));
+				getDataPuts(put,Constants.FAMILYYC,ycList.get(i));
+				getDataPuts(put,Constants.FAMILYYX,yxList.get(i));
+				mapTransverter(ycMap,ycList.get(i));
+				mapTransverter(yxMap,yxList.get(i));
 			}
+			redis.save(sn+"_yc", ycMap);
+			redis.save(sn+"_yx", yxMap);
 			manager.save(put);
 		}
 	}
 	
-	private Put getPuts(Put put,byte[] family,Map<String,String> qualifierMap){
-		put.addColumn(family,Bytes.toBytes(qualifierMap.get("desc")),Bytes.toBytes(qualifierMap.get("value")));
-		return put;
+	private void getDataPuts(Put put,byte[] family,Map<String,Object> qualifierMap){
+		put.addColumn(family,Bytes.toBytes((String)qualifierMap.get("desc")),Bytes.toBytes((String)qualifierMap.get("value")));
+	}
+	
+	//遥测、遥信两个列簇 冗余sn和时间，方便hive统计查询
+	private void getSnAndTimeColumn(String sn,long time,Put put){
+		byte[] currentTimeBytes = Bytes.toBytes(time);
+		byte[] snBytes = Bytes.toBytes(sn);
+		put.addColumn(Constants.FAMILYYC,timeColumnBytes,currentTimeBytes);
+		put.addColumn(Constants.FAMILYYX,timeColumnBytes,currentTimeBytes);
+		put.addColumn(Constants.FAMILYYC,snColumnBytes,snBytes);
+		put.addColumn(Constants.FAMILYYX,snColumnBytes,snBytes);
+	}
+	
+	private Map<String,Object> mapTransverter(Map<String,Object> map , Map<String,Object> qualifierMap){
+		map.put((String)qualifierMap.get("desc"), (String)qualifierMap.get("value"));
+		return map;
 	}
 }

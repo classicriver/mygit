@@ -65,6 +65,30 @@ public class Config extends PropertyResources{
 	 * consumer线程数
 	 */
 	private final static String KAFKACONSUMERS = "tw.kafka.consumerThread";
+	
+	/**
+	 * redis主机ip
+	 */
+	private final static String REDISHOST = "tw.redis.host";
+	
+	/**
+	 * redis主机ip
+	 */
+	private final static String REDISPORT = "tw.redis.port";
+	
+	/**
+	 * redis主机ip
+	 */
+	private final static String REDISIDLE = "tw.reids.maxIdle";
+	/**
+	 * redis主机ip
+	 */
+	private final static String REDISTOTAL = "tw.reids.maxTotal";
+	/**
+	 * redis线程个数
+	 */
+	private final static String REDISTHREADS = "tw.reids.maxThreads";
+	
 
 	private final static Map<String, Object> valueCache = new HashMap<>();
 
@@ -131,6 +155,26 @@ public class Config extends PropertyResources{
 	
 	public int getKafkaConsumers(){
 		return Integer.parseInt((String) getOrSetDefaultProperty(KAFKACONSUMERS, 5));
+	}
+	
+	public String getRedisHost() {
+		return (String) getOrSetDefaultProperty(REDISHOST, "");
+	}
+	
+	public int getRedisPort(){
+		return Integer.parseInt((String) getOrSetDefaultProperty(REDISPORT, 6379));
+	}
+	
+	public int getRedisIdle(){
+		return Integer.parseInt((String) getOrSetDefaultProperty(REDISIDLE, 50));
+	}
+	
+	public int getRedisTotal(){
+		return Integer.parseInt((String) getOrSetDefaultProperty(REDISTOTAL, 100));
+	}
+	
+	public int getRedisThreads(){
+		return Integer.parseInt((String) getOrSetDefaultProperty(REDISTHREADS, 1));
 	}
 	
 	private Object getOrSetDefaultProperty(String key, Object def) {
