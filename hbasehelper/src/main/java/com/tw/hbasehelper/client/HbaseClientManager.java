@@ -35,7 +35,7 @@ public class HbaseClientManager implements HbaseClientInterface {
 	@Override
 	public void close() throws Exception {
 		// TODO Auto-generated method stub
-		HbaseClient hbaseClient = localHbaseClient.get();
+		/*HbaseClient hbaseClient = localHbaseClient.get();
 		if (hbaseClient == null) {
 			throw new Exception(
 					"Error:  Cannot close.  No managed session is started.");
@@ -44,7 +44,8 @@ public class HbaseClientManager implements HbaseClientInterface {
 			hbaseClient.close();
 		} finally {
 			localHbaseClient.set(null);
-		}
+		}*/
+		HbaseClient.closeConnection();
 	}
 
 	private class HbaseClientInterceptor implements InvocationHandler {

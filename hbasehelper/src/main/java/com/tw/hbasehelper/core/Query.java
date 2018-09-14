@@ -6,10 +6,8 @@ import java.util.concurrent.ExecutionException;
 
 import com.tw.hbasehelper.utils.FamilyType;
 
-public class HbaseHelper{
-	
-	private final Query executor = new QueryExecutor();
-	
+public interface Query {
+
 	/**
 	 * @param sn
 	 *            设备sn号
@@ -19,12 +17,9 @@ public class HbaseHelper{
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public Map<String, Object> query(String sn, String time)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return executor.query(sn, time);
-	}
-	
+	public abstract Map<String, Object> query(String sn, String time)
+			throws Exception;
+
 	/**
 	 * @param sn
 	 *            设备sn号
@@ -36,12 +31,9 @@ public class HbaseHelper{
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public Map<String, Object> query(String sn, String time, FamilyType family)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return executor.query(sn, time, family);
-	}
-	
+	public abstract Map<String, Object> query(String sn, String time,
+			FamilyType family) throws Exception;
+
 	/**
 	 * @param sn
 	 *            设备sn号
@@ -55,14 +47,11 @@ public class HbaseHelper{
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public Map<String, Object> query(String sn, String time, FamilyType family,
-			String... column) throws Exception {
-		// TODO Auto-generated method stub
-		return executor.query(sn, time, family, column);
-	}
-
+	public abstract Map<String, Object> query(String sn, String time,
+			FamilyType family, String... column) throws Exception;
 
 	/**
+	 * 
 	 * @param sn
 	 * @param time
 	 *            字符串时间格式 yyyy-MM-dd HH:mm:ss
@@ -72,12 +61,9 @@ public class HbaseHelper{
 	 * @return
 	 * @throws Exception
 	 */
-	public <T> T query(String sn, String time, FamilyType family, Class<T> clazz)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return executor.query(sn, time, family, clazz);
-	}
-	
+	public abstract <T> T query(String sn, String time, FamilyType family,
+			Class<T> clazz) throws Exception;
+
 	/**
 	 * @param sn
 	 * @param startTime
@@ -87,12 +73,10 @@ public class HbaseHelper{
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public List<Map<String, Map<String, Object>>> rangeQuery(String sn,
-			String startTime, String endTime) throws Exception {
-		// TODO Auto-generated method stub
-		return executor.rangeQuery(sn, startTime, endTime);
-	}
-	
+	public abstract List<Map<String, Map<String, Object>>> rangeQuery(
+			String sn, String startTime, String endTime)
+			throws Exception;
+
 	/**
 	 * @param sn
 	 * @param startTime
@@ -104,11 +88,9 @@ public class HbaseHelper{
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public List<Map<String, Object>> rangeQuery(String sn, String startTime,
-			String endTime, FamilyType family) throws Exception {
-		// TODO Auto-generated method stub
-		return executor.rangeQuery(sn, startTime, endTime, family);
-	}
+	public abstract List<Map<String, Object>> rangeQuery(String sn,
+			String startTime, String endTime, FamilyType family)
+			throws Exception;
 
 	/**
 	 * @param sn
@@ -123,12 +105,9 @@ public class HbaseHelper{
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public List<Map<String, Object>> rangeQuery(String sn, String startTime,
-			String endTime, FamilyType family, String... column)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return executor.rangeQuery(sn, startTime, endTime, family, column);
-	}
+	public abstract List<Map<String, Object>> rangeQuery(String sn,
+			String startTime, String endTime, FamilyType family,
+			String... column) throws Exception;
 
 	/**
 	 * @param sn
@@ -142,10 +121,7 @@ public class HbaseHelper{
 	 * @return
 	 * @throws Exception
 	 */
-	public <T> List<T> rangeQuery(String sn, String startTime, String endTime,
-			FamilyType family, Class<T> clazz) throws Exception {
-		// TODO Auto-generated method stub
-		return executor.rangeQuery(sn, startTime, endTime, family, clazz);
-	}
+	public abstract <T> List<T> rangeQuery(String sn, String startTime,
+			String endTime, FamilyType family, Class<T> clazz) throws Exception;
 
 }
