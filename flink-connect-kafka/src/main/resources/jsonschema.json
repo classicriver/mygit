@@ -1,0 +1,17 @@
+{
+	type: object, 
+	properties: { 
+		TGSN: { 
+			type: string,
+			description: none
+		}, 
+		IPV2: { 
+			type: number,
+			description: sum
+		}, 
+		timestamps: { 
+			type: number,
+			description: none
+		} 
+	}
+}
