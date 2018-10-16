@@ -23,7 +23,7 @@
 <configuration>
 	<property>
     		<name>hbase.rootdir</name>
-    		<value>hdfs://172.20.90.193:9000/hbase</value>
+    		<value>hdfs://server01:8020/hbase</value>
   	</property>
   	<property>
     		<name>hbase.cluster.distributed</name>
@@ -35,7 +35,7 @@
     	</property>
 	<property>
    		<name>hbase.zookeeper.quorum</name>
- 		<value>172.20.90.193</value>
+ 		<value>server01,server02,server03</value>
 	</property>
 	<property>
 		<name>hbase.master.info.port</name>

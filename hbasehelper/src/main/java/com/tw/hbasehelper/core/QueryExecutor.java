@@ -154,6 +154,7 @@ public class QueryExecutor implements Query{
 			}
 		}finally{
 			client.close();
+			threadPool.shutdown();
 		}
 		return result;
 	}
@@ -161,7 +162,7 @@ public class QueryExecutor implements Query{
 	public static void main(String[] args) {
 			List<Map<String, Object>> rangeQuery = null;
 			try {
-				rangeQuery = new QueryExecutor().rangeQuery("HG_D28", "2018-9-13 16:00:00", "2018-9-13 16:15:00", FamilyType.YC);
+				rangeQuery = new QueryExecutor().rangeQuery("HG_D28", "2018-9-13 16:00:00", "2018-9-13 16:15:00", FamilyType.YC,new String("C1.D28.Tag2"));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
