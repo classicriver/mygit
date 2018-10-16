@@ -6,7 +6,7 @@
 
 	<groupId>com.tw</groupId>
 	<artifactId>consumer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 
 	<name>consumer</name>
 	<!-- FIXME change it to the project's website -->
@@ -201,7 +201,7 @@
 		<!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.12</artifactId>
+			<artifactId>kafka_2.11</artifactId>
 			<version>2.0.0</version>
 			<!-- 排除掉log4j1的依赖，使用log4j2 -->
 			<exclusions>
@@ -245,6 +245,7 @@
 		</dependency>
 		
 	</dependencies>
+
 	<build>
 		<finalName>Consumer</finalName>
 		<plugins>

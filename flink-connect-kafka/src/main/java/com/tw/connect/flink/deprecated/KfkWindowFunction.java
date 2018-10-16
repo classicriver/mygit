@@ -1,4 +1,4 @@
-package com.tw.connect.flink;
+package com.tw.connect.flink.deprecated;
 
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;

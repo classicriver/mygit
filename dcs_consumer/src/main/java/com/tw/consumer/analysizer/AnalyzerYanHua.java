@@ -15,6 +15,7 @@ import com.tw.consumer.model.OriginMessage;
 import com.tw.consumer.model.YhMessage;
 import com.tw.consumer.redis.RedisAdapter;
 import com.tw.consumer.utils.Constants;
+import com.tw.consumer.utils.ObjectTranscoder;
 import com.tw.consumer.utils.RowKeyHelper;
 /**
  * @author xiesc
@@ -37,14 +38,16 @@ public class AnalyzerYanHua implements Analyzer{
 	public void analysize(OriginMessage message) {
 		// TODO Auto-generated method stub
 		YhMessage yhMessage = gson.fromJson(message.getMessage(), YhMessage.class);
-		saveData2Hbase(yhMessage);
+		saveData(yhMessage);
+		//减轻GC压力
+		message.setMessage(null);
 	}
 	/**
 	 * 遥测、遥信两个列簇
 	 * @param yhMessage
 	 */
 	@SuppressWarnings("unchecked")
-	private void saveData2Hbase(YhMessage yhMessage){
+	private void saveData(YhMessage yhMessage){
 		//遥测
 		Map<String, Object> data_yc = yhMessage.getData_yc();
 		//遥信
@@ -62,7 +65,7 @@ public class AnalyzerYanHua implements Analyzer{
 			//处理遥测和遥信数据
 			ArrayList<Map<String,Object>> ycList = (ArrayList<Map<String,Object>>) data_yc.get(sn);
 			ArrayList<Map<String,Object>> yxList = (ArrayList<Map<String,Object>>) data_yx.get(sn);
-			//写入redis缓存
+			
 			Map<String,Object> ycMap = new HashMap<String, Object>();
 			Map<String,Object> yxMap = new HashMap<String, Object>();
 			for(int i = 0; i < ycList.size();i++){
@@ -71,8 +74,9 @@ public class AnalyzerYanHua implements Analyzer{
 				mapTransverter(ycMap,ycList.get(i));
 				mapTransverter(yxMap,yxList.get(i));
 			}
-			redis.save(sn+"_yc", ycMap);
-			redis.save(sn+"_yx", yxMap);
+			//写入redis缓存
+			redis.save((sn+"_yc").getBytes(), ObjectTranscoder.serialize(ycMap));
+			redis.save((sn+"_yx").getBytes(), ObjectTranscoder.serialize(yxMap));
 			manager.save(put);
 		}
 	}
@@ -83,7 +87,7 @@ public class AnalyzerYanHua implements Analyzer{
 	
 	//遥测、遥信两个列簇 冗余sn和时间，方便hive统计查询
 	private void getSnAndTimeColumn(String sn,long time,Put put){
-		byte[] currentTimeBytes = Bytes.toBytes(time);
+		byte[] currentTimeBytes = Bytes.toBytes(String.valueOf(time));
 		byte[] snBytes = Bytes.toBytes(sn);
 		put.addColumn(Constants.FAMILYYC,timeColumnBytes,currentTimeBytes);
 		put.addColumn(Constants.FAMILYYX,timeColumnBytes,currentTimeBytes);

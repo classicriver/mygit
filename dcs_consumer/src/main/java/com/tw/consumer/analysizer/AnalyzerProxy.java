@@ -14,7 +14,7 @@ import com.tw.consumer.model.OriginMessage;
  */
 public class AnalyzerProxy implements Analyzer {
 
-	private final static Analyzer analyzerYanHua = new AnalyzerYanHua();
+	private final static Analyzer analyzerYanHua = new AnalyzerYanHua01();
 	private Analyzer analyzerProxy;
 
 	public AnalyzerProxy() {

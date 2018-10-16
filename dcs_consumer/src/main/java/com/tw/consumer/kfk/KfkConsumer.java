@@ -1,4 +1,4 @@
-package com.tw.consumer.mq;
+package com.tw.consumer.kfk;
 
 import java.time.Duration;
 import java.util.List;
@@ -39,7 +39,7 @@ public class KfkConsumer extends KafkaConfig implements Runnable {
 					List<ConsumerRecord<String, String>> partitionRecords = records
 							.records(partition);
 					for (ConsumerRecord<String, String> record : partitionRecords) {
-						long sequence = ringBuffer.next();
+						/*long sequence = ringBuffer.next();
 						try {
 							// Get the entry in the Disruptor for the sequence
 							OriginMessage event = ringBuffer.get(sequence);
@@ -47,7 +47,8 @@ public class KfkConsumer extends KafkaConfig implements Runnable {
 							event.setMessage(record.value());
 						} finally {
 							ringBuffer.publish(sequence);
-						}
+						}*/
+						System.out.println(record.value());
 					}
 					// 上报位移信息
 					long lastOffset = partitionRecords.get(

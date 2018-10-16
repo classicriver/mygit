@@ -1,7 +1,8 @@
-package com.tw.connect.flink;
+package com.tw.connect.flink.deprecated;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Order implements Serializable{
 	/**
@@ -43,5 +44,10 @@ public class Order implements Serializable{
 		SimpleDateFormat format = new SimpleDateFormat(
 				"yyyy-MM-dd HH:mm:ss.SSS");
 		return "TGSN :" + TGSN+" IPV2 : "+IPV2+" TIME : "+format.format(TIME);
+	}
+	public static void main(String[] args) {
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		String date = f.format(new Date());
+		System.out.println(date);
 	}
 }

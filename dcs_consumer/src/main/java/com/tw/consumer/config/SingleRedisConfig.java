@@ -23,4 +23,8 @@ public class SingleRedisConfig {
         config.setTestOnReturn(true);
         pool = new JedisPool(config, Config.getInstance().getRedisHost(), Config.getInstance().getRedisPort());
     }
+    
+    public static void close(){
+    	pool.close();
+    }
 }

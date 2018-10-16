@@ -1,26 +1,21 @@
 package com.tw.consumer.model;
 
-import java.util.Map;
-
 public class RedisModel {
 	
-	private String key;
-	private Map<String,Object> map;
+	private byte[] key;
+	private byte[] value;
 	
-	public String getKey() {
+	public byte[] getKey() {
 		return key;
 	}
-	
-	public void setKey(String key) {
+	public void setKey(byte[] key) {
 		this.key = key;
 	}
-	
-	public Map<String,Object> getMap() {
-		return map;
+	public byte[] getValue() {
+		return value;
 	}
-	
-	public void setMap(Map<String,Object> map) {
-		this.map = map;
+	public void setValue(byte[] value) {
+		this.value = value;
 	}
 	
 }

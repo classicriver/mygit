@@ -1,4 +1,4 @@
-package com.tw.connect.flink;
+package com.tw.connect.flink.deprecated;
 
 import javax.annotation.Nullable;
 
@@ -13,14 +13,16 @@ import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 
-public class FlinkStreamHandler extends FlinkConfig {
+import com.tw.connect.core.AbstractAggregation;
+import com.tw.connect.core.AbstractSchema;
+
+public class FlinkStreamHandler extends AbstractAggregation {
 
 	//private final Gson gson = new Gson();
 	private final StreamExecutionEnvironment env = StreamExecutionEnvironment
 			.getExecutionEnvironment();
 
-	@Override
-	void init() {
+	public void run() {
 		// TODO Auto-generated method stub
 		// 以EventTime作为处理时间
 		env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -87,6 +89,27 @@ public class FlinkStreamHandler extends FlinkConfig {
 		}
 	}
 	 public static void main(String[] args) {
-		new FlinkStreamHandler().start();
+		new FlinkStreamHandler().run();
+	}
+	@Override
+	protected AbstractSchema getSchema() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected String getTopic() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	protected String getFlinkTableSourceName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	protected String getMysqlTableName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

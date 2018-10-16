@@ -1,0 +1,21 @@
+{
+	type: object, 
+	properties: { 
+		ESN: { 
+			type: string,
+			description: none
+		}, 
+		OUTPUT_POWER_DAY: { 
+			type: number,
+			description: sum as day_energy_power
+		},
+		ACTIVE_POWER: { 
+			type: number,
+			description: max as max_input_power
+		}, 
+		TIMESTAMPS: { 
+			type: number,
+			description: none as statistics_date
+		} 
+	}
+}

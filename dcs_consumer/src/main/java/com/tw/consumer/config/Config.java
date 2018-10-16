@@ -88,6 +88,10 @@ public class Config extends PropertyResources{
 	 * redis线程个数
 	 */
 	private final static String REDISTHREADS = "tw.reids.maxThreads";
+	/**
+	 * redis线程个数
+	 */
+	private final static String FLINKTPOIC = "tw.flink.topic";
 	
 
 	private final static Map<String, Object> valueCache = new HashMap<>();
@@ -137,7 +141,7 @@ public class Config extends PropertyResources{
 	}
 	
 	public String getHbaseTableName() {
-		return (String) getOrSetDefaultProperty(TABLENAME, "");
+		return (String) getOrSetDefaultProperty(TABLENAME, "test");
 	}
 	
 	public String getHbaseFamily() {
@@ -149,7 +153,7 @@ public class Config extends PropertyResources{
 	}
 	
 	public String[] getKafkaTopics() {
-		String topicsString = (String) getOrSetDefaultProperty(KAFKATOPICS, "");
+		String topicsString = (String) getOrSetDefaultProperty(KAFKATOPICS, "test");
 		return topicsString.split(",");
 	}
 	
@@ -158,7 +162,7 @@ public class Config extends PropertyResources{
 	}
 	
 	public String getRedisHost() {
-		return (String) getOrSetDefaultProperty(REDISHOST, "");
+		return (String) getOrSetDefaultProperty(REDISHOST, "127.0.0.1");
 	}
 	
 	public int getRedisPort(){
@@ -175,6 +179,10 @@ public class Config extends PropertyResources{
 	
 	public int getRedisThreads(){
 		return Integer.parseInt((String) getOrSetDefaultProperty(REDISTHREADS, 1));
+	}
+	
+	public String getFlinkTopic() {
+		return (String) getOrSetDefaultProperty(FLINKTPOIC, "MQTT_YC_STREAM");
 	}
 	
 	private Object getOrSetDefaultProperty(String key, Object def) {

@@ -35,4 +35,9 @@ private final static SnowFlake snow = new SnowFlake(Config.getInstance().getMach
 		}
 		return calendar.getTimeInMillis();
 	}
+	public static void main(String[] args) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		System.out.println(format.format(new Date(Long.valueOf("1537491600000"))));
+		
+	}
 }

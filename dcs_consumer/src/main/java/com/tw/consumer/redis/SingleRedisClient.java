@@ -1,7 +1,5 @@
 package com.tw.consumer.redis;
 
-import java.util.Map;
-
 import redis.clients.jedis.Jedis;
 
 import com.tw.consumer.config.SingleRedisConfig;
@@ -19,27 +17,26 @@ public class SingleRedisClient extends SingleRedisConfig{
 		return pool.getResource();
 	}
 	
-	public void set(String key,Map<String,Object> value){
+	public void set(byte[] key,byte[] value){
 		Jedis jedis = null;
 		try{
 			jedis = getJedis();
-			jedis.set(key.getBytes(), ObjectTranscoder.serialize(value));
+			jedis.set(key, ObjectTranscoder.serialize(value));
 		}finally{
 			jedis.close();
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Map<String,Object> get(String key){
+	public <T> T  get(String key,Class<T> clazz){
 		Jedis jedis = null;
-		Map<String,Object> map;
+		T obj;
 		try{
 			jedis = getJedis();
-			map = (Map<String, Object>) ObjectTranscoder.deserialize(jedis.get(key.getBytes()));
+			obj = (T) ObjectTranscoder.deserialize(jedis.get(key.getBytes()));
 		}finally{
 			jedis.close();
 		}
-		return map;
+		return obj;
 	}
-
 }

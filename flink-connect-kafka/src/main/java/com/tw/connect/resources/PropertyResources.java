@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.tw.connect.log.LogFactory;
 /**
- * 
  * @author xiesc
  * @TODO	Property文件加载类
  * @time 2018年7月20日
@@ -30,7 +28,6 @@ public abstract class PropertyResources implements Resources{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			LogFactory.getLogger().error("exception happened.",e.getMessage());
 		}finally{
 			close();
 		}
