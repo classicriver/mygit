@@ -154,20 +154,21 @@ public class QueryExecutor implements Query{
 			}
 		}finally{
 			client.close();
-			threadPool.shutdown();
+			//threadPool.shutdown();
 		}
 		return result;
 	}
 	
-	public static void main(String[] args) {
+/*public static void main(String[] args) {
+			BasicConfigurator.configure();
 			List<Map<String, Object>> rangeQuery = null;
 			try {
-				rangeQuery = new QueryExecutor().rangeQuery("HG_D28", "2018-9-13 16:00:00", "2018-9-13 16:15:00", FamilyType.YC,new String("C1.D28.Tag2"));
+				rangeQuery = new QueryExecutor().rangeQuery("NBQ1", "2018-10-17 10:33:00", "2018-10-18 10:33:00", FamilyType.YC);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println(rangeQuery);
-	}
+	}*/
 	
 }

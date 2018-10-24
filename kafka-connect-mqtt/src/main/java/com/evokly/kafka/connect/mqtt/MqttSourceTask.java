@@ -28,210 +28,213 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * MqttSourceTask is a Kafka Connect SourceTask implementation that reads
- * from MQTT and generates Kafka Connect records.
+ * MqttSourceTask is a Kafka Connect SourceTask implementation that reads from
+ * MQTT and generates Kafka Connect records.
  */
 public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
-    private static final Logger log = LoggerFactory.getLogger(MqttSourceConnector.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(MqttSourceConnector.class);
 
-    MqttClient mClient;
-    String mKafkaTopic;
-    String mMqttClientId;
-    BlockingQueue<MqttMessageProcessor> mQueue = new LinkedBlockingQueue<>();
-    MqttSourceConnectorConfig mConfig;
-    MqttConnectOptions connectOptions;
+	MqttClient mClient;
+	String mKafkaTopic;
+	String mMqttClientId;
+	BlockingQueue<MqttMessageProcessor> mQueue = new LinkedBlockingQueue<>();
+	MqttSourceConnectorConfig mConfig;
+	MqttConnectOptions connectOptions;
 
-    /**
-     * Get the version of this task. Usually this should be the same as the corresponding
-     * {@link MqttSourceConnector} class's version.
-     *
-     * @return the version, formatted as a String
-     */
-    @Override
-    public String version() {
-        return Version.getVersion();
-    }
+	/**
+	 * Get the version of this task. Usually this should be the same as the
+	 * corresponding {@link MqttSourceConnector} class's version.
+	 *
+	 * @return the version, formatted as a String
+	 */
+	@Override
+	public String version() {
+		return Version.getVersion();
+	}
 
-    /**
-     * Start the task.
-     *
-     * @param props initial configuration
-     */
-    @Override
-    public void start(Map<String, String> props) {
-        log.info("Start a MqttSourceTask");
+	/**
+	 * Start the task.
+	 *
+	 * @param props
+	 *            initial configuration
+	 */
+	@Override
+	public void start(Map<String, String> props) {
+		log.info("Start a MqttSourceTask");
 
-        mConfig = new MqttSourceConnectorConfig(props);
+		mConfig = new MqttSourceConnectorConfig(props);
+		mMqttClientId = mConfig.getString(MqttSourceConstant.MQTT_CLIENT_ID) != null ? mConfig
+				.getString(MqttSourceConstant.MQTT_CLIENT_ID) : MqttClient
+				.generateClientId();
+		// Setup Kafka
+		mKafkaTopic = mConfig.getString(MqttSourceConstant.KAFKA_TOPIC);
+		// Setup MQTT Connect Options
+		connectOptions = new MqttConnectOptions();
 
+		String sslCa = mConfig.getString(MqttSourceConstant.MQTT_SSL_CA_CERT);
+		String sslCert = mConfig.getString(MqttSourceConstant.MQTT_SSL_CERT);
+		String sslPrivateKey = mConfig
+				.getString(MqttSourceConstant.MQTT_SSL_PRIV_KEY);
 
-        mMqttClientId = mConfig.getString(MqttSourceConstant.MQTT_CLIENT_ID) != null
-                ? mConfig.getString(MqttSourceConstant.MQTT_CLIENT_ID)
-                : MqttClient.generateClientId();
+		if (sslCa != null && sslCert != null && sslPrivateKey != null) {
+			try {
+				connectOptions.setSocketFactory(SslUtils.getSslSocketFactory(
+						sslCa, sslCert, sslPrivateKey, ""));
+			} catch (Exception e) {
+				log.info("[{}] error creating socketFactory", mMqttClientId);
+				e.printStackTrace();
+				return;
+			}
+		}
 
-        // Setup Kafka
-        mKafkaTopic = mConfig.getString(MqttSourceConstant.KAFKA_TOPIC);
+		if (mConfig.getBoolean(MqttSourceConstant.MQTT_CLEAN_SESSION)) {
+			connectOptions.setCleanSession(mConfig
+					.getBoolean(MqttSourceConstant.MQTT_CLEAN_SESSION));
+		}
+		connectOptions.setConnectionTimeout(mConfig
+				.getInt(MqttSourceConstant.MQTT_CONNECTION_TIMEOUT));
+		connectOptions.setKeepAliveInterval(mConfig
+				.getInt(MqttSourceConstant.MQTT_KEEP_ALIVE_INTERVAL));
+		connectOptions.setServerURIs(mConfig.getString(
+				MqttSourceConstant.MQTT_SERVER_URIS).split(","));
 
+		if (mConfig.getString(MqttSourceConstant.MQTT_USERNAME) != null) {
+			connectOptions.setUserName(mConfig
+					.getString(MqttSourceConstant.MQTT_USERNAME));
+		}
 
-        // Setup MQTT Connect Options
-        connectOptions = new MqttConnectOptions();
+		if (mConfig.getString(MqttSourceConstant.MQTT_PASSWORD) != null) {
+			connectOptions.setPassword(mConfig.getString(
+					MqttSourceConstant.MQTT_PASSWORD).toCharArray());
+		}
+		// 自动重连
+		connectOptions.setAutomaticReconnect(true);
+		// Connect to Broker
+		try {
+			// Address of the server to connect to, specified as a URI, is
+			// overridden using
+			// MqttConnectOptions#setServerURIs(String[]) bellow.
+			mClient = new MqttClient("tcp://127.0.0.1:1883", mMqttClientId,
+					new MemoryPersistence());
+			mClient.setCallback(this);
+			mClient.connect(connectOptions);
+			log.info("[{}] Connected to Broker", mMqttClientId);
+		} catch (MqttException e) {
+			log.error("[{}] Connection to Broker failed!", mMqttClientId, e);
+		}
+		// Setup topic
+		this.subscribe();
+	}
 
-        String sslCa = mConfig.getString(MqttSourceConstant.MQTT_SSL_CA_CERT);
-        String sslCert = mConfig.getString(MqttSourceConstant.MQTT_SSL_CERT);
-        String sslPrivateKey = mConfig.getString(MqttSourceConstant.MQTT_SSL_PRIV_KEY);
+	/**
+	 * Stop this task.
+	 */
+	@Override
+	public void stop() {
+		log.info("Stoping the MqttSourceTask");
+		try {
+			mClient.disconnect();
 
-        if (sslCa != null
-                && sslCert != null
-                && sslPrivateKey != null) {
-            try {
-                connectOptions.setSocketFactory(
-                        SslUtils.getSslSocketFactory(sslCa, sslCert, sslPrivateKey, "")
-                );
-            } catch (Exception e) {
-                log.info("[{}] error creating socketFactory", mMqttClientId);
-                e.printStackTrace();
-                return;
-            }
-        }
+			log.info("[{}] Disconnected from Broker.", mMqttClientId);
+		} catch (MqttException e) {
+			log.error("[{}] Disconnecting from Broker failed!", mMqttClientId,
+					e);
+		}
+	}
 
-        if (mConfig.getBoolean(MqttSourceConstant.MQTT_CLEAN_SESSION)) {
-            connectOptions.setCleanSession(
-                    mConfig.getBoolean(MqttSourceConstant.MQTT_CLEAN_SESSION));
-        }
-        connectOptions.setConnectionTimeout(
-                mConfig.getInt(MqttSourceConstant.MQTT_CONNECTION_TIMEOUT));
-        connectOptions.setKeepAliveInterval(
-                mConfig.getInt(MqttSourceConstant.MQTT_KEEP_ALIVE_INTERVAL));
-        connectOptions.setServerURIs(
-                mConfig.getString(MqttSourceConstant.MQTT_SERVER_URIS).split(","));
+	/**
+	 * Poll this SourceTask for new records. This method should block if no data
+	 * is currently available.
+	 *
+	 * @return a list of source records
+	 *
+	 * @throws InterruptedException
+	 *             thread is waiting, sleeping, or otherwise occupied, and the
+	 *             thread is interrupted, either before or during the activity
+	 */
+	@Override
+	public List<SourceRecord> poll() throws InterruptedException {
+		List<SourceRecord> records = new ArrayList<>();
+		MqttMessageProcessor message = mQueue.take();
+		log.debug("[{}] Polling new data from queue for '{}' topic.",
+				mMqttClientId, mKafkaTopic);
 
-        if (mConfig.getString(MqttSourceConstant.MQTT_USERNAME) != null) {
-            connectOptions.setUserName(
-                    mConfig.getString(MqttSourceConstant.MQTT_USERNAME));
-        }
+		Collections.addAll(records, message.getRecords(mKafkaTopic));
+		return records;
+	}
 
-        if (mConfig.getString(MqttSourceConstant.MQTT_PASSWORD) != null) {
-            connectOptions.setPassword(
-                    mConfig.getString(MqttSourceConstant.MQTT_PASSWORD).toCharArray());
-        }
-        //自动重连
-        connectOptions.setAutomaticReconnect(true);
-        // Connect to Broker
-        try {
-            // Address of the server to connect to, specified as a URI, is overridden using
-            // MqttConnectOptions#setServerURIs(String[]) bellow.
-            mClient = new MqttClient("tcp://127.0.0.1:1883", mMqttClientId,
-                    new MemoryPersistence());
-            mClient.setCallback(this);
-            mClient.connect(connectOptions);
+	/**
+	 * This method is called when the connection to the server is lost.
+	 *
+	 * @param cause
+	 *            the reason behind the loss of connection.
+	 */
+	@Override
+	public void connectionLost(Throwable cause) {
+		log.error("MQTT connection lost!", cause);
+	}
 
-            log.info("[{}] Connected to Broker", mMqttClientId);
-        } catch (MqttException e) {
-            log.error("[{}] Connection to Broker failed!", mMqttClientId, e);
-        }
+	/**
+	 * Called when delivery for a message has been completed, and all
+	 * acknowledgments have been received.
+	 *
+	 * @param token
+	 *            the delivery token associated with the message.
+	 */
+	@Override
+	public void deliveryComplete(IMqttDeliveryToken token) {
+		// Nothing to implement.
+	}
 
-        // Setup topic
-        try {
-            String topic = mConfig.getString(MqttSourceConstant.MQTT_TOPIC);
-            Integer qos = mConfig.getInt(MqttSourceConstant.MQTT_QUALITY_OF_SERVICE);
+	/**
+	 * This method is called when a message arrives from the server.
+	 *
+	 * @param topic
+	 *            name of the topic on the message was published to
+	 * @param message
+	 *            the actual message.
+	 *
+	 * @throws Exception
+	 *             if a terminal error has occurred, and the client should be
+	 *             shut down.
+	 */
+	@Override
+	public void messageArrived(String mqttTopic, MqttMessage message)
+			throws Exception {
+		log.debug("[{}] New message on '{}' arrived.", mMqttClientId, mqttTopic);
+		this.mQueue.add(mConfig.getConfiguredInstance(
+				MqttSourceConstant.MESSAGE_PROCESSOR,
+				MqttMessageProcessor.class).process(message));
+	}
 
-            mClient.subscribe(topic, qos);
-
-            log.info("[{}] Subscribe to '{}' with QoS '{}'", mMqttClientId, topic,
-                    qos.toString());
-        } catch (MqttException e) {
-            log.error("[{}] Subscribe failed! ", mMqttClientId, e);
-        }
-    }
-
-    /**
-     * Stop this task.
-     */
-    @Override
-    public void stop() {
-        log.info("Stoping the MqttSourceTask");
-
-        try {
-            mClient.disconnect();
-
-            log.info("[{}] Disconnected from Broker.", mMqttClientId);
-        } catch (MqttException e) {
-            log.error("[{}] Disconnecting from Broker failed!", mMqttClientId, e);
-        }
-    }
-
-    /**
-     * Poll this SourceTask for new records. This method should block if no data is currently
-     * available.
-     *
-     * @return a list of source records
-     *
-     * @throws InterruptedException thread is waiting, sleeping, or otherwise occupied,
-     *                              and the thread is interrupted, either before or during the
-     *                              activity
-     */
-    @Override
-    public List<SourceRecord> poll() throws InterruptedException {
-        List<SourceRecord> records = new ArrayList<>();
-        MqttMessageProcessor message = mQueue.take();
-        log.debug("[{}] Polling new data from queue for '{}' topic.",
-                mMqttClientId, mKafkaTopic);
-
-        Collections.addAll(records, message.getRecords(mKafkaTopic));
-
-        return records;
-    }
-
-    /**
-     * This method is called when the connection to the server is lost.
-     *
-     * @param cause the reason behind the loss of connection.
-     */
-    @Override
-    public void connectionLost(Throwable cause) {
-        log.error("MQTT connection lost!", cause);
-    }
-
-    /**
-     * Called when delivery for a message has been completed, and all acknowledgments have been
-     * received.
-     *
-     * @param token the delivery token associated with the message.
-     */
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {
-        // Nothing to implement.
-    }
-
-    /**
-     * This method is called when a message arrives from the server.
-     *
-     * @param topic   name of the topic on the message was published to
-     * @param message the actual message.
-     *
-     * @throws Exception if a terminal error has occurred, and the client should be
-     *                   shut down.
-     */
-    @Override
-    public void messageArrived(String mqttTopic, MqttMessage message) throws Exception {
-        log.debug("[{}] New message on '{}' arrived.", mMqttClientId, mqttTopic);
-
-        this.mQueue.add(
-                mConfig.getConfiguredInstance(MqttSourceConstant.MESSAGE_PROCESSOR,
-                        MqttMessageProcessor.class)
-                    .process(message)
-        );
-    }
-
-    //mqtt重连成功后，要重新订阅topic
+	// mqtt重连成功后，要重新订阅topic
 	@Override
 	public void connectComplete(boolean reconnect, String serverURI) {
 		// TODO Auto-generated method stub
-		String topic = mConfig.getString(MqttSourceConstant.MQTT_TOPIC);
-        Integer qos = mConfig.getInt(MqttSourceConstant.MQTT_QUALITY_OF_SERVICE);
-        try {
-			mClient.subscribe(topic, qos);
+		this.subscribe();
+	}
+
+	private int[] String2Int(String[] arrs) {
+		int[] temp = new int[arrs.length];
+		for (int i = 0; i < arrs.length; i++) {
+			temp[i] = Integer.valueOf(arrs[i]);
+		}
+		return temp;
+	}
+
+	private void subscribe() {
+		String[] topics = mConfig.getString(MqttSourceConstant.MQTT_TOPIC)
+				.split(",");
+		int[] qos = String2Int(mConfig.getString(
+				MqttSourceConstant.MQTT_QUALITY_OF_SERVICE).split(","));
+		try {
+			mClient.subscribe(topics, qos);
+			log.info("[{}] Subscribe to '{}' with QoS '{}'", mMqttClientId,
+					topics, qos.toString());
 		} catch (MqttException e) {
 			// TODO Auto-generated catch block
+			log.error("[{}] Subscribe failed! ", mMqttClientId, e);
 			e.printStackTrace();
 		}
 	}

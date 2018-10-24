@@ -18,7 +18,13 @@ import org.apache.hadoop.hbase.filter.RowFilter;
 import com.tw.hbasehelper.utils.Constants;
 import com.tw.hbasehelper.utils.FamilyType;
 import com.tw.hbasehelper.utils.RowKeyHelper;
-
+/**
+ * 
+ * @author xiesc
+ * @TODO hbase查询条件构造类
+ * @time 2018年10月18日
+ * @version 1.0
+ */
 public class ConditionBuilder {
 
 	private final String region;
@@ -69,22 +75,19 @@ public class ConditionBuilder {
 		//列簇过滤
 		if (null != family) {
 			String familyString = null;
-			FamilyFilter ff = null;
 			switch (family) {
 			case YC:
 				familyString = Constants.YC;
-				ff = new FamilyFilter(CompareOp.EQUAL, new BinaryComparator(
-						familyString.getBytes()));
 				break;
 			case YX:
 				familyString = Constants.YX;
-				ff = new FamilyFilter(CompareOp.EQUAL, new BinaryComparator(
-						familyString.getBytes()));
 				break;
 			default:
+				familyString = Constants.YC;
 				break;
 			}
-			list.add(ff);
+			list.add(new FamilyFilter(CompareOp.EQUAL, new BinaryComparator(
+					familyString.getBytes())));
 			//列过滤
 			if (null != column && column.length > 0) {
 				for (String c : column) {
