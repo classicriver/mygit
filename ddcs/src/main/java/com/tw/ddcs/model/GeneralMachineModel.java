@@ -5,6 +5,7 @@ import java.util.Map;
 public class GeneralMachineModel {
 	
 	private int circulation;
+	private int provider_type;
 	private Map<String,String> properties;
 	
 	public int getCirculation() {
@@ -21,6 +22,14 @@ public class GeneralMachineModel {
 	
 	public void setProperties(Map<String,String> properties) {
 		this.properties = properties;
+	}
+
+	public int getProvider_type() {
+		return provider_type;
+	}
+
+	public void setProvider_type(int provider_type) {
+		this.provider_type = provider_type;
 	}
 	
 }

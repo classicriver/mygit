@@ -1,7 +1,7 @@
 package com.tw.ddcs.disruptor;
 
 import com.lmax.disruptor.EventFactory;
-import com.tw.ddcs.model.Message;
+import com.tw.ddcs.model.OriginMessage;
 /**
  * 
  * @author xiesc
@@ -9,12 +9,12 @@ import com.tw.ddcs.model.Message;
  * @time 2018年7月24日
  * @version 1.0
  */
-public class MessageEventFactory implements EventFactory<Message>{
+public class MessageEventFactory implements EventFactory<OriginMessage>{
 
 	@Override
-	public Message newInstance() {
+	public OriginMessage newInstance() {
 		// TODO Auto-generated method stub
-		return new Message();
+		return new OriginMessage();
 	}
 
 }

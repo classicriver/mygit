@@ -15,25 +15,39 @@ import org.apache.hadoop.hbase.client.ConnectionFactory;
  * @version 1.0
  */
 public class HbaseConfig{
+
+	private Connection conn ;
 	
-	protected static Connection conn ;
-	protected static InputStream stream;
-	static {
-			Configuration conf = HBaseConfiguration.create();
-			stream = HbaseConfig.class.getClassLoader().getResourceAsStream("hbase-site.xml");
+	public HbaseConfig() {
+		createConnection();
+	}
+	
+	private void createConnection(){
+		Configuration conf = HBaseConfiguration.create();
+		try(InputStream stream = HbaseConfig.class.getClassLoader().getResourceAsStream("hbase-site.xml");) {
 			conf.addResource(stream);
+			conn = ConnectionFactory.createConnection(conf);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public Connection getConnection() {
+		if(conn.isClosed()){
+			createConnection(); 
+		}
+		return conn;
+	}
+	
+	public void closeConnection(){
+		if(!conn.isClosed()){
 			try {
-				conn = ConnectionFactory.createConnection(conf);
+				conn.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}finally{
-				try {
-					stream.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
+		}
 	}
 }

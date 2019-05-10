@@ -12,5 +12,5 @@ public interface MqttMessageProcessor {
 
     MqttMessageProcessor process(MqttMessage message);
 
-    SourceRecord[] getRecords(String kafkaTopic);
+    SourceRecord getRecords(String kafkaTopic);
 }

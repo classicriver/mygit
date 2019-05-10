@@ -25,6 +25,7 @@ public class GeneralMachineConfig {
 				    final Properties pro = new Properties();
 				    pro.load(GeneralMachineConfig.class.getClassLoader().getResourceAsStream(path+fileName+suffix));
 				    model.setCirculation(Integer.valueOf((String) pro.get("circulation")));
+				    model.setProvider_type(Integer.valueOf((String) pro.get("provider_type")));
 					model.setProperties(properties2Map(pro));
 				    config.put(fileName, model);
 				    list.add(fileName);
@@ -57,6 +58,9 @@ public class GeneralMachineConfig {
 			while(iterator.hasNext()){
 				String proKey = (String)iterator.next();
 				if("circulation".equals(proKey)){
+					continue;
+				}
+				if("provider_type".equals(proKey)){
 					continue;
 				}
 				map.put(proKey, pro.getProperty(proKey));

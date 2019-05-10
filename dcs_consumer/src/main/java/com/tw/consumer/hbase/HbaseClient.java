@@ -20,8 +20,8 @@ public class HbaseClient extends HbaseConfig implements HbaseClientInterface {
 					.getInstance().getHbaseTableName()));
 			//关闭自动提交
 			table.setAutoFlush(false, true);
-			//缓冲区1MB，满了提交
-			table.setWriteBufferSize(1 * 1024 * 1024);
+			//缓冲区100kb，满了提交
+			table.setWriteBufferSize(100 * 1024 );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

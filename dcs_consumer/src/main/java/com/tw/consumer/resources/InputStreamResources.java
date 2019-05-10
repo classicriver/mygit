@@ -1,5 +1,6 @@
 package com.tw.consumer.resources;
 
+import java.io.IOException;
 import java.io.InputStream;
 /**
  * 
@@ -10,7 +11,6 @@ import java.io.InputStream;
  */
 public abstract class InputStreamResources implements Resources {
 
-	protected InputStream stream;
 	
 	protected InputStreamResources(){
 		load();
@@ -18,10 +18,15 @@ public abstract class InputStreamResources implements Resources {
 	
 	@Override
 	public void load() {
-		stream = InputStreamResources.class.getClassLoader().getResourceAsStream(getFileName());
+		try(InputStream stream = InputStreamResources.class.getClassLoader().getResourceAsStream(getFileName())){
+			init(stream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public abstract void close();
+	public abstract void init(InputStream stream);
 	
 	/**
 	 * @return classpath相对路径

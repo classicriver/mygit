@@ -3,6 +3,7 @@ package com.tw.consumer.http.server;
 import com.tw.consumer.core.AutoShutdown;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -34,7 +35,9 @@ public class HttpServer implements AutoShutdown{
 						ch.pipeline().addLast(new HttpServerHandler());
 					}
 				}).option(ChannelOption.SO_BACKLOG, 1024)
-				.childOption(ChannelOption.SO_KEEPALIVE, true)
+				.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+				.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+				.childOption(ChannelOption.SO_KEEPALIVE, false)
 				.group(parentGroup, childGroup);
 		try {
 			ChannelFuture channel = server.bind(9901).sync();
@@ -51,4 +54,8 @@ public class HttpServer implements AutoShutdown{
 		parentGroup.shutdownGracefully();
 		childGroup.shutdownGracefully();
 	};
+	
+	public static void main(String[] args) {
+		new HttpServer().start();
+	}
 }

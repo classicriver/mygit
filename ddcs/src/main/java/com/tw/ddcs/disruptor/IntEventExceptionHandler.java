@@ -2,7 +2,7 @@ package com.tw.ddcs.disruptor;
 
 import com.lmax.disruptor.ExceptionHandler;
 import com.tw.ddcs.log.LogFactory;
-import com.tw.ddcs.model.Message;
+import com.tw.ddcs.model.OriginMessage;
 
 /**
  * 
@@ -11,9 +11,9 @@ import com.tw.ddcs.model.Message;
  * @time 2018年5月14日
  * @version 1.0
  */
-public class IntEventExceptionHandler implements ExceptionHandler<Message> {
+public class IntEventExceptionHandler implements ExceptionHandler<OriginMessage> {
 
-	public void handleEventException(Throwable ex, long sequence, Message event) {
+	public void handleEventException(Throwable ex, long sequence, OriginMessage event) {
 		LogFactory.getLogger().error("handleEventException", ex);
 	}
 

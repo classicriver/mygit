@@ -14,7 +14,7 @@ import org.apache.flink.table.descriptors.Schema;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.tw.connect.aggregation.CentralizedInverterSchema;
+import com.tw.connect.aggregation.CascadeInverterSchema;
 import com.tw.connect.utils.Utils;
 /**
  * more infomation see https://ci.apache.org/projects/flink/flink-docs-release-1.6/dev/table/connect.html#json-format
@@ -45,14 +45,16 @@ public abstract class AbstractSchema {
 	/**
 	 * jsonschema和filink schema数据类型映射
 	 */
-	private Map<String,TypeInformation<?>> mapping = new HashMap<String,TypeInformation<?>>();
+	private final Map<String,TypeInformation<?>> typeMapping = new HashMap<String,TypeInformation<?>>();
 	/**
 	 * flink sql schema
 	 */
 	private final Schema flinkSchema = new Schema();
 	
+	private final String windowAlias = "alias"+System.nanoTime();
+	
 	protected AbstractSchema(){
-		try (InputStream inputStream = CentralizedInverterSchema.class.getClassLoader().getResourceAsStream(getSchemaName())) {
+		try (InputStream inputStream = CascadeInverterSchema.class.getClassLoader().getResourceAsStream(getSchemaName())) {
 			jsonSchema = new JSONObject(new JSONTokener(inputStream));
 			initMapping();
 			transform();
@@ -62,10 +64,15 @@ public abstract class AbstractSchema {
 		}
 	}
 	
+	public String getWindowAlias(){
+		return windowAlias;
+	}
+	
 	private void initMapping(){
-		mapping.put("STRING", Types.STRING());
-		mapping.put("NUMBER", Types.DECIMAL());
-		mapping.put("INTEGER", Types.DECIMAL());
+		typeMapping.put("STRING", Types.STRING());
+		typeMapping.put("NUMBER", Types.DECIMAL());
+		typeMapping.put("INTEGER", Types.DECIMAL());
+		//typeMapping.put("STRING:DATE-TIME", Types.SQL_TIMESTAMP());
 	}
 	
 	/**
@@ -123,16 +130,17 @@ public abstract class AbstractSchema {
 		Iterator<String> it = jsonObject.keySet().iterator();
 		while(it.hasNext()){
 			String fieldName = it.next().toUpperCase();
-			TypeInformation<?> fieldType = mapping.get(jsonObject.getJSONObject(fieldName).getString("type").toUpperCase());
+			JSONObject field = jsonObject.getJSONObject(fieldName);
+			TypeInformation<?> fieldType = getTypeMapping(field,field.getString("type").toUpperCase());
 			//description none 表示不参与聚合运算，逗号后的as 是该字段insert的别名
 			String description = jsonObject.getJSONObject(fieldName).getString("description");
 			//timestamps 既 eventtime
-			if("TIMESTAMPS".equals(fieldName)){
+			if("timestamps".toUpperCase().equals(fieldName)){
 				//水位线
 				flinkSchema.field(fieldName, Types.SQL_TIMESTAMP()).rowtime(new Rowtime()
-			    .timestampsFromSource().watermarksPeriodicBounded(60000));
+			    .timestampsFromSource().watermarksPeriodicBounded(300000));
 				//end是flink table每个window自带的字段,表示window结束时间，该字段作为统计结束时间
-				handleDescription(description,"w.end",insertFields);
+				handleDescription(description,windowAlias+".end",insertFields);
 				fieldTypes.add(Types.SQL_TIMESTAMP());
 			}else{
 				flinkSchema.field(fieldName, fieldType);
@@ -176,7 +184,7 @@ public abstract class AbstractSchema {
 		String agg = split[0].trim();
 		//判断字段是否要参与聚合运算
 		if(!"none".equals(agg)){
-			//参与聚合运算的  拼成flink需要的   FIELD.sum  的格式 ，.sum表示聚合运算类型
+			//参与聚合运算的  拼成flink需要的   FIELD.sum  的格式 ，.sum表示合计聚合
 			selectString.append(fieldName.trim() +"."+agg);
 		}else{
 			selectString.append(fieldName);
@@ -192,6 +200,16 @@ public abstract class AbstractSchema {
 		}
 		selectString.append(",");
 	}
+	//json数据类型映射
+	private TypeInformation<?> getTypeMapping(JSONObject field,String type){
+		/*if("STRING".equals(type)){
+			String format = field.getString("format").toUpperCase();
+			if("DATE-TIME".equals(format)){
+				return typeMapping.get(type+":"+format);
+			}
+		}*/
+		return typeMapping.get(type);
+	} 
 	
 	protected abstract String getSchemaName();
 

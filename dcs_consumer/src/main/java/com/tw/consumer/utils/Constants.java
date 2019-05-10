@@ -8,30 +8,6 @@ package com.tw.consumer.utils;
  */
 public final class Constants {
 	/**
-	 * avro文件后缀名
-	 */
-	public static final String AVROSUFFIX = ".avro";
-	/**
-	 * rocketmq默认topic
-	 */
-	public static final String DEFUALTTOPIC = "PushTopic";
-	/**
-	 *rocketmq默认tag 
-	 */
-	public static final String DEFUALTTAG = "tag";
-	/**
-	 * avro定时序列化的jobname
-	 */
-	public static final String AVROSCHEDULERJOBNAME = "AvroWriterJob";
-	/**
-	 * 汇流箱
-	 */
-	public static final String COMBINER = "001";
-	/**
-	 * 逆变器
-	 */
-	public static final String INVERTER = "002";
-	/**
 	 * 遥测列簇
 	 */
 	public static final byte[] FAMILYYC = "yc".getBytes();
@@ -39,4 +15,28 @@ public final class Constants {
 	 * 遥信列簇
 	 */
 	public static final byte[] FAMILYYX = "yx".getBytes();
+	/**
+	 * 组串式逆变器cube
+	 */
+	public static final String CASCADECUBE   = "jw_cascade_cube";
+	/**
+	 * 集中式逆变器
+	 */
+	public static final String CENTRALIZEDCUBE   = "jw_centralized_cube";
+	/**
+	 * 环境仪
+	 */
+	public static final String ENVIRCUBE   = "jw_envir_cube";
+	/**
+	 * 直流汇流箱
+	 */
+	public static final String COMBINERDCCUBE   = "jw_combinerdc_cube";
+	/**
+	 * kylin zk路径
+	 */
+	public static final String KYLINSCHEDULERPATH = "/tw/jw/kylin/schedule";
+	/**
+	 * kylin zk parent路径
+	 */
+	public static final String KYLINSCHEDULERPARENTPATH = "/tw/jw/kylin";
 }

@@ -32,11 +32,12 @@ public class Client implements Runnable{
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
 					// TODO Auto-generated method stub
-					
+					ch.pipeline().addLast(new ClientHandler());
 				}
 				
+				
 			});
-			ChannelFuture f = client.connect("127.0.0.1", 10000).sync();
+			ChannelFuture f = client.connect("127.0.0.1", 10001).sync();
 			f.channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -45,13 +46,16 @@ public class Client implements Runnable{
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		ExecutorService pool = Executors.newCachedThreadPool();
 		
 		//for(int i = 0 ; i < 1000;i++) {
 			Client c = new Client();
 			pool.execute(c);
 		//}
+			Thread.sleep(1000);
+			pool.shutdown();
+			System.exit(0);
 		
 	}
 }

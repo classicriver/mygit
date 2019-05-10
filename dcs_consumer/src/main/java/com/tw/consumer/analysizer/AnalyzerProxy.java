@@ -3,7 +3,10 @@ package com.tw.consumer.analysizer;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 
+import com.tw.consumer.model.GenericDeviceModel;
 import com.tw.consumer.model.OriginMessage;
 /**
  * 
@@ -14,10 +17,13 @@ import com.tw.consumer.model.OriginMessage;
  */
 public class AnalyzerProxy implements Analyzer {
 
-	private final static Analyzer analyzerYanHua = new AnalyzerYanHua01();
 	private Analyzer analyzerProxy;
+	private Semaphore semaphore;
+	private final Analyzer analyzerYanHua;
 
-	public AnalyzerProxy() {
+	public AnalyzerProxy(Semaphore semaphore,final LinkedBlockingQueue<GenericDeviceModel> queue) {
+		analyzerYanHua = new AnalyzerYanHua(queue);
+		this.semaphore = semaphore;
 		this.analyzerProxy = (Analyzer) Proxy
 				.newProxyInstance(Analyzer.class.getClassLoader(),
 						new Class[] { Analyzer.class },
@@ -28,6 +34,7 @@ public class AnalyzerProxy implements Analyzer {
 	public void analysize(OriginMessage message) {
 		// TODO Auto-generated method stub
 		analyzerProxy.analysize(message);
+		semaphore.release();
 	}
 
 	private class AnalyzerInvocationHandler implements InvocationHandler {

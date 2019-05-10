@@ -10,80 +10,112 @@ import java.util.Map;
 import java.util.NavigableMap;
 
 import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 
-import com.tw.hbasehelper.config.HbaseConfig;
-
-
-public class HbaseClient extends HbaseConfig implements HbaseClientInterface {
+public class HbaseClient {
 
 	private HTable table;
 
-	public HbaseClient() {
+	public HbaseClient(Connection conn, String tableName) {
 		try {
-			table = (HTable) conn.getTable(TableName.valueOf("kktest"));
+			table = (HTable) conn.getTable(TableName.valueOf(tableName));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Override
 	public void close() throws IOException {
 		// TODO Auto-generated method stub
 		table.close();
 	}
-	
-	public static void closeConnection(){
-		try {
-			conn.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
-	@Override
-	public List<Map<String,Map<String,Object>>> query(Scan scan) {
+	public List<Map<String, Object>> query(Scan scan) {
 		// TODO Auto-generated method stub
-		List<Map<String,Map<String,Object>>> result = new ArrayList<Map<String,Map<String,Object>>>();
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		ResultScanner scanner = null;
 		try {
 			scanner = table.getScanner(scan);
-			 for (Result res : scanner) {
-				 NavigableMap<byte[], NavigableMap<byte[], byte[]>> noVersionMap = res.getNoVersionMap();
-				 Iterator<byte[]> it = noVersionMap.keySet().iterator();
-				 Map<String,Map<String,Object>> map = new HashMap<String, Map<String,Object>>();
-				 while(it.hasNext()){
-					 byte[] family = it.next();
-					 map.put(new String(family,"UTF-8"), byteMap2StringMap(noVersionMap.get(family)));
-				 }
-				 result.add(map);
-			 }
+			for (Result res : scanner) {
+				result2Map( result,res);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			scanner.close();
 		}
-		
+
 		return result;
 	}
 	
-	private Map<String,Object> byteMap2StringMap(Map<byte[],byte[]> map){
-		Map<String,Object> newMap = new HashMap<String, Object>();
+	public List<Map<String, Object>> batchGet(List<Get> getList){
+		List<Map<String, Object>> rt = new ArrayList<Map<String, Object>>();
+		try {
+			Result[] results = table.get(getList);
+			for(Result res : results){
+				result2Map( rt,res);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rt;
+	}
+	
+	private List<Map<String, Object>> result2Map(List<Map<String, Object>> rt,Result res){
+		NavigableMap<byte[], NavigableMap<byte[], byte[]>> noVersionMap = res
+				.getNoVersionMap();
+		Iterator<byte[]> it = noVersionMap.keySet().iterator();
+		while (it.hasNext()) {
+			byte[] family = it.next();
+			rt.add(byteMap2StringMap(noVersionMap.get(family)));
+		}
+		return rt;
+		
+	}
+
+	private Map<String, Object> byteMap2StringMap(Map<byte[], byte[]> map) {
+		Map<String, Object> newMap = new HashMap<String, Object>();
 		Iterator<byte[]> it = map.keySet().iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			byte[] key = it.next();
 			try {
-				newMap.put(new String(key,"UTF-8"), new String(map.get(key),"Utf-8"));
+				newMap.put(new String(key, "UTF-8"), new String(map.get(key),
+						"Utf-8"));
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		return newMap;
+	}
+
+	public void save(List<Put> data) {
+		// TODO Auto-generated method stub
+		try {
+			table.put(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+
+	public void delete(List<Delete> deletes) {
+		// TODO Auto-generated method stub
+		try {
+			table.delete(deletes);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -4,6 +4,7 @@ package com.tw.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -31,6 +32,8 @@ public class Server {
 			boot.group(bossGroup, workerGroup)
 			.channel(NioServerSocketChannel.class)
 			.option(ChannelOption.SO_BACKLOG, 1024)
+			.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+			.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
 			.handler(new LoggingHandler(LogLevel.INFO))
 			.childHandler(new ChannelInitializer<Channel>() {
 				@Override

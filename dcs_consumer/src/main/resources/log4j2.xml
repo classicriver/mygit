@@ -1,8 +1,8 @@
 <!-- status为不记录log4j本身的日志 -->
 <configuration status="OFF">
 	<properties>
-		<property name="LOG_HOME">D:/logs/</property>
-		<property name="FILE_NAME">ddcslog</property>
+		<property name="LOG_HOME">/home/ygwl/logs/</property>
+		<property name="FILE_NAME">dcslog</property>
 	</properties>
 	<appenders>
 		<Console name="Console" target="SYSTEM_OUT">

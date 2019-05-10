@@ -6,7 +6,7 @@
 
   <groupId>com.tw</groupId>
   <artifactId>hbasehelper</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
   <name>hbasehelper</name>
   <!-- FIXME change it to the project's website -->
@@ -24,6 +24,20 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
 			<version>1.3.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpcore-nio</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpcore</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-common -->
 		<dependency>
@@ -37,6 +51,20 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-server</artifactId>
 			<version>1.3.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpcore-nio</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpcore</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-protocol -->
@@ -58,7 +86,6 @@
 			<artifactId>commons-logging</artifactId>
 			<version>1.2</version>
 		</dependency>
-
   </dependencies>
 
   <build>

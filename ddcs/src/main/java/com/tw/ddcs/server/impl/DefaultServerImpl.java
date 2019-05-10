@@ -14,7 +14,7 @@ import com.tw.ddcs.disruptor.MessageEventFactory;
 import com.tw.ddcs.disruptor.WorkHandlerBuilder;
 import com.tw.ddcs.http.server.HttpServer;
 import com.tw.ddcs.log.LogFactory;
-import com.tw.ddcs.model.Message;
+import com.tw.ddcs.model.OriginMessage;
 import com.tw.ddcs.mqtt.MqttService;
 import com.tw.ddcs.quartz.QuartzScheduler;
 import com.tw.ddcs.quartz.job.MysqlSubmitJob;
@@ -29,8 +29,8 @@ import com.tw.ddcs.server.Server;
  */
 public class DefaultServerImpl implements Server {
 	//环形队列
-	private RingBuffer<Message> ringBuffer;
-	private Disruptor<Message> disruptor;
+	private RingBuffer<OriginMessage> ringBuffer;
+	private Disruptor<OriginMessage> disruptor;
 	private MqttService mqtt;
 	private final QuartzScheduler scheduler = QuartzScheduler.getInstance();
 	private HttpServer httpServer ;
@@ -47,10 +47,10 @@ public class DefaultServerImpl implements Server {
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		EventFactory<Message> factory = new MessageEventFactory();
-		// RingBuffer size，必须是2的N次方
-		int ringBufferSize = 1024 * 1024 * 4;
-		disruptor = new Disruptor<Message>(factory, ringBufferSize, workers,
+		EventFactory<OriginMessage> factory = new MessageEventFactory();
+		// RingBuffer 数组大小，必须是2的N次方,设置太大会内存溢出
+		int ringBufferSize = 512;
+		disruptor = new Disruptor<OriginMessage>(factory, ringBufferSize, workers,
 				ProducerType.MULTI, new BlockingWaitStrategy());
 		disruptor.setDefaultExceptionHandler(new IntEventExceptionHandler());
 		disruptor.handleEventsWithWorkerPool(WorkHandlerBuilder
@@ -69,7 +69,6 @@ public class DefaultServerImpl implements Server {
 		//启动http服务,监听关闭请求
 		httpServer = new HttpServer();
 		httpServer.start();
-
 	}
 
 	@Override

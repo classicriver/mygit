@@ -8,7 +8,9 @@ package com.tw.consumer.core;
  * @version 1.0
  */
 public interface AutoShutdown {
-	
+	/**
+	 * * <p>只对被singleBeanFactory加载的Bean有效</p>
+	 */
 	public void shutdown();
 	
 }

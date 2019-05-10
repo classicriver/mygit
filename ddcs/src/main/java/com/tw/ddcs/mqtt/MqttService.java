@@ -3,14 +3,14 @@ package com.tw.ddcs.mqtt;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 import com.lmax.disruptor.RingBuffer;
-import com.tw.ddcs.model.Message;
+import com.tw.ddcs.model.OriginMessage;
 
 public class MqttService {
 	
-	private RingBuffer<Message> buf;
+	private RingBuffer<OriginMessage> buf;
 	private EmqttClient mqttClient;
 
-	public MqttService(RingBuffer<Message> buf) {
+	public MqttService(RingBuffer<OriginMessage> buf) {
 		// TODO Auto-generated constructor stub
 		this.buf = buf;
 	}

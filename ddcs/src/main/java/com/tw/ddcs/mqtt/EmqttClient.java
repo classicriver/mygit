@@ -17,10 +17,10 @@ import com.tw.ddcs.config.DdcsConfig;
 public class EmqttClient{
 
 	private static final String HOST = DdcsConfig.getInstance().getMqttHost();
-	private static final String TOPIC = DdcsConfig.getInstance().getMqttTopic();
+	private static final String[] TOPIC = DdcsConfig.getInstance().getMqttTopic();
 	private static final String USERNAME = DdcsConfig.getInstance().getMqttUserName();
 	private static final String PWD = DdcsConfig.getInstance().getMqttPwd();
-	private static final int QOS  = DdcsConfig.getInstance().getMqttQos();
+	private static final int[] QOS  = DdcsConfig.getInstance().getMqttQos();
 	
 	private MqttCallback callback;
 	private MqttClient client;
@@ -44,7 +44,7 @@ public class EmqttClient{
 			options.setKeepAliveInterval(20);
 			// 设置回调
 			client.setCallback(getCallback());
-			options.setWill(client.getTopic(TOPIC), "close".getBytes(), 2, true);
+			//options.setWill(client.getTopic(TOPIC), "close".getBytes(), 2, true);
 			client.connect(options);
 			// 订阅消息
             client.subscribe(TOPIC, QOS);

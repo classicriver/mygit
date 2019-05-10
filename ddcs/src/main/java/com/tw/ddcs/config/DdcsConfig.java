@@ -82,8 +82,9 @@ public class DdcsConfig extends PropertyResources{
 		return (String) getOrSetDefault(HOST,"");
 	}
 	
-	public String getMqttTopic(){
-		return (String) getOrSetDefault(TOPIC,"");
+	public String[] getMqttTopic(){
+		String topic = (String) getOrSetDefault(TOPIC,"");
+		return topic.split(",");
 	}
 	
 	public String getMqttClientid(){
@@ -106,8 +107,14 @@ public class DdcsConfig extends PropertyResources{
 		return Integer.parseInt((String) getOrSetDefault(BATCHNUMBER, 50));
 	}
 	
-	public int getMqttQos(){
-		return Integer.parseInt((String) getOrSetDefault(MQTTQOS, 1));
+	public int[] getMqttQos(){
+		String qos = (String) getOrSetDefault(MQTTQOS, 1);
+		String[] split = qos.split(",");
+		int[] intQos = new int[split.length];
+		for(int i = 0;i<split.length;i++){
+			intQos[i] = Integer.parseInt(split[i]);
+		}
+		return intQos;
 	}
 	
 	public String getStoragePath() {

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.ibatis.reflection.ExceptionUtil;
 
 import com.tw.consumer.core.AutoShutdown;
 
@@ -64,21 +63,13 @@ public class HbaseClientManager implements HbaseClientInterface,AutoShutdown {
 				throws Throwable {
 			HbaseClient client = HbaseClientManager.this.localHbaseClient.get();
 			if (client != null) {
-				try {
-					return method.invoke(client, args);
-				} catch (Throwable t) {
-					throw ExceptionUtil.unwrapThrowable(t);
-				}
+				return method.invoke(client, args);
 			} else {
 				client = new HbaseClient();
-				try {
-					final Object result = method.invoke(client, args);
-					HbaseClientManager.this.localHbaseClient.set(client);
-					pools.put(client.hashCode(), client);
-					return result;
-				} catch (Throwable t) {
-					throw ExceptionUtil.unwrapThrowable(t);
-				}
+				final Object result = method.invoke(client, args);
+				HbaseClientManager.this.localHbaseClient.set(client);
+				pools.put(client.hashCode(), client);
+				return result;
 			}
 		}
 	}

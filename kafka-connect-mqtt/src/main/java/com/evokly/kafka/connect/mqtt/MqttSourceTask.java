@@ -224,14 +224,17 @@ public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
 	}
 
 	private void subscribe() {
-		String[] topics = mConfig.getString(MqttSourceConstant.MQTT_TOPIC)
-				.split(",");
-		int[] qos = String2Int(mConfig.getString(
-				MqttSourceConstant.MQTT_QUALITY_OF_SERVICE).split(","));
+		/*String[] topics = mConfig.getString(MqttSourceConstant.MQTT_TOPIC)
+				.split(",");*/
+		/*int[] qos = String2Int(mConfig.getString(
+				MqttSourceConstant.MQTT_QUALITY_OF_SERVICE).split(","));*/
+		String topics = mConfig.getString(MqttSourceConstant.MQTT_TOPIC);
+		int qos = mConfig.getInt(
+				MqttSourceConstant.MQTT_QUALITY_OF_SERVICE);
 		try {
 			mClient.subscribe(topics, qos);
 			log.info("[{}] Subscribe to '{}' with QoS '{}'", mMqttClientId,
-					topics, qos.toString());
+					topics, qos);
 		} catch (MqttException e) {
 			// TODO Auto-generated catch block
 			log.error("[{}] Subscribe failed! ", mMqttClientId, e);

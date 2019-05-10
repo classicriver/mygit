@@ -2,8 +2,11 @@
 */ 
 package com.tw.netty;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.UnpooledUnsafeDirectByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPromise;
 
 /**
  * @Description: TODO
@@ -12,6 +15,7 @@ import io.netty.channel.ChannelHandlerContext;
 * @version V1.0   
  */
 public class ServerHandler extends ChannelHandlerAdapter{
+	private ByteBuf byteBuf = null;
 	private int count = 0;
 
 	/* (non-Javadoc)
@@ -20,7 +24,6 @@ public class ServerHandler extends ChannelHandlerAdapter{
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		// TODO Auto-generated method stub
-		
 		super.exceptionCaught(ctx, cause);
 	}
 
@@ -29,9 +32,18 @@ public class ServerHandler extends ChannelHandlerAdapter{
 	 */
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		System.out.println(" ----------->"+count++);
+		byteBuf = (ByteBuf)msg;
+		//byte[] array = byteBuf.array();
+		System.out.println(" ----------->"+msg.toString());
 		// TODO Auto-generated method stub
-		super.channelRead(ctx, msg);
+		//super.channelRead(ctx, msg);
+	}
+
+	@Override
+	public void write(ChannelHandlerContext ctx, Object msg,
+			ChannelPromise promise) throws Exception {
+		// TODO Auto-generated method stub
+		super.write(ctx, msg, promise);
 	}
 
 }

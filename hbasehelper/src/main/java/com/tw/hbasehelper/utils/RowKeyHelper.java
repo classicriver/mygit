@@ -1,6 +1,7 @@
 package com.tw.hbasehelper.utils;
 
 import org.apache.hadoop.hbase.util.Bytes;
+
 /**
  * @author xiesc
  * @TODO hbase  rowkey生成类
@@ -8,28 +9,33 @@ import org.apache.hadoop.hbase.util.Bytes;
  * @version 1.0
  */
 public class RowKeyHelper {
+
 	/**
-	 * 获取指定时间的rowkey
-	 * @param time 格式:yyyy-MM-dd hh:mm:ss
-	 * @return
-	 */
-	public byte[] getRowKey(String region,String time,String sn) {
-		return getRowKey(region,CommonUtils.timeString2Timestamp(time),sn);
-	}
-	/**
-	 * 生成的rowkey示例：1-1528685037028-sn
-	 * <br>1 - salt，
+	 * 生成的rowkey示例：3577-TH-N2-0901001-1541552700000
+	 * <br>esn - ，
 	 * <br>1528685037028 -  时间戳
-	 * <br>1551416 - sn序列号，
 	 * @return
 	 */
-	public byte[] getRowKey(String region,long timeMillis,String sn) {
-		byte[][] by = new byte[3][];
-		by[0] = Bytes.toBytes(region +"-");
-		by[1] = Bytes.toBytes(String.valueOf(timeMillis +"-"));
-		by[2] = Bytes.toBytes(String.valueOf(sn));
-		return  Bytes.add(by);
+	public byte[] getRowKey(String timeMillis,String sn) {
+		StringBuffer s = new StringBuffer();
+		//esn的hashcode取模 ，保证数据的随机
+		s.append(lpad(4,String.valueOf(Math.abs(sn.hashCode()) % 9999))+"-");
+		s.append(sn+"-");
+		s.append(timeMillis);
+		return  Bytes.toBytes(s.toString());
 	}
 	
+	/**
+     * 补齐不足长度
+     * @param length 长度
+     * @param value  模值 
+     * @return
+     */
+    public String lpad(int length, String code) {
+    	if(length-code.length() == 0){
+    		return code;
+    	}
+        return code+String.format("%1$0"+(length-code.length())+"d",0);
+    }
 	
 }

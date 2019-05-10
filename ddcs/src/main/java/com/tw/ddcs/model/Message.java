@@ -1,7 +1,6 @@
 package com.tw.ddcs.model;
 import java.util.HashMap;
 /**
- * 
  * @author xiesc
  * @TODO 
  * @time 2018年8月2日

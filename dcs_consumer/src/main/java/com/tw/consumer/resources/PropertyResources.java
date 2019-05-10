@@ -15,7 +15,6 @@ import com.tw.consumer.log.LogFactory;
 public abstract class PropertyResources implements Resources{
 
 	protected final Properties pro = new Properties();
-	private InputStream stream;
 
 	protected PropertyResources(){
 		load();
@@ -24,26 +23,12 @@ public abstract class PropertyResources implements Resources{
 	@Override
 	public void load() {
 		// TODO Auto-generated method stub
-		stream = PropertyResources.class.getClassLoader().getResourceAsStream(getProFileName());
-		try {
+		try(InputStream stream = PropertyResources.class.getClassLoader().getResourceAsStream(getProFileName())) {
 			pro.load(stream);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			LogFactory.getLogger().error("exception happened.",e.getMessage());
-		}finally{
-			close();
-		}
-	}
-
-	@Override
-	public void close() {
-		// TODO Auto-generated method stub
-		try {
-			stream.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	

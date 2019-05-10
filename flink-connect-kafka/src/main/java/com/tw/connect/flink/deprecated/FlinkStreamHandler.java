@@ -1,5 +1,7 @@
 package com.tw.connect.flink.deprecated;
 
+import java.util.Properties;
+
 import javax.annotation.Nullable;
 
 import org.apache.flink.api.common.functions.MapFunction;
@@ -13,10 +15,7 @@ import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 
-import com.tw.connect.core.AbstractAggregation;
-import com.tw.connect.core.AbstractSchema;
-
-public class FlinkStreamHandler extends AbstractAggregation {
+public class FlinkStreamHandler  {
 
 	//private final Gson gson = new Gson();
 	private final StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -24,6 +23,7 @@ public class FlinkStreamHandler extends AbstractAggregation {
 
 	public void run() {
 		// TODO Auto-generated method stub
+		Properties pro = new Properties();
 		// 以EventTime作为处理时间
 		env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 		DataStream<String> stream = env.addSource(new FlinkKafkaConsumer011<>(
@@ -88,28 +88,5 @@ public class FlinkStreamHandler extends AbstractAggregation {
 			e.printStackTrace();
 		}
 	}
-	 public static void main(String[] args) {
-		new FlinkStreamHandler().run();
-	}
-	@Override
-	protected AbstractSchema getSchema() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	protected String getTopic() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	protected String getFlinkTableSourceName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	protected String getMysqlTableName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

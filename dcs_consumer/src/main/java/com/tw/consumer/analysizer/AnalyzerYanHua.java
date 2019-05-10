@@ -1,102 +1,173 @@
 package com.tw.consumer.analysizer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.text.ParseException;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.google.gson.Gson;
+import com.tw.consumer.calculate.Calculation;
 import com.tw.consumer.core.SingleBeanFactory;
 import com.tw.consumer.hbase.HbaseClientManager;
 import com.tw.consumer.model.OriginMessage;
+import com.tw.consumer.model.GenericDeviceModel;
+import com.tw.consumer.model.RedisModel;
 import com.tw.consumer.model.YhMessage;
-import com.tw.consumer.redis.RedisAdapter;
+import com.tw.consumer.redis.RedisOperation;
+import com.tw.consumer.sender.RedisSender;
+import com.tw.consumer.strategy.CascadeStrategy;
+import com.tw.consumer.strategy.CentralizedStrategy;
+import com.tw.consumer.strategy.CombinerStrategy;
+import com.tw.consumer.strategy.Strategy;
 import com.tw.consumer.utils.Constants;
-import com.tw.consumer.utils.ObjectTranscoder;
+import com.tw.consumer.utils.DeviceType;
 import com.tw.consumer.utils.RowKeyHelper;
+
 /**
  * @author xiesc
  * @TODO 研华数据解析
  * @time 2018年8月31日
  * @version 1.0
  */
-public class AnalyzerYanHua implements Analyzer{
-	
-	private final static Gson gson = new Gson();
-	private final static HbaseClientManager manager = SingleBeanFactory.getBean(HbaseClientManager.class);
-	private final RedisAdapter redis = new RedisAdapter();
-	/**
-	 * hbase rowkey生成器
-	 */
-	private final static RowKeyHelper rowKeyHelper = SingleBeanFactory.getBean(RowKeyHelper.class);
-	private final static byte[] snColumnBytes = "sn".getBytes();
-	private final static byte[] timeColumnBytes = "time".getBytes();
+public class AnalyzerYanHua implements Analyzer {
+
+	private final Gson gson;
+	private final HbaseClientManager hbaseManager;
+	private final RedisSender rs;
+	private final Set<String> snCache;
+	private final Calculation calculation;
+	private final Strategy cascadeStrategy;
+	private final Strategy centralizedStrategy;
+	private final Strategy combinerStrategy;
+	//private final Strategy envirStrategy = new EnvirStrategy();
+	private final LinkedBlockingQueue<GenericDeviceModel> queue;
+	private final RowKeyHelper rowKeyHelper;
+	private final static String snColumnBytes = "esn";
+	private final static String timeColumnBytes = "timestamps";
+
+	public AnalyzerYanHua(LinkedBlockingQueue<GenericDeviceModel> queue) {
+		// TODO Auto-generated constructor stub
+		this.queue = queue;
+		gson = new Gson();
+		rs = SingleBeanFactory.getBean(RedisSender.class);
+		snCache = Collections
+				.synchronizedSet(new HashSet<String>());
+		rowKeyHelper = SingleBeanFactory
+				.getBean(RowKeyHelper.class);
+		hbaseManager = SingleBeanFactory
+				.getBean(HbaseClientManager.class);
+		calculation = new Calculation();
+		cascadeStrategy = new CascadeStrategy();
+		centralizedStrategy = new CentralizedStrategy();
+		combinerStrategy = new CombinerStrategy();
+	}
+
 	@Override
 	public void analysize(OriginMessage message) {
-		// TODO Auto-generated method stub
-		YhMessage yhMessage = gson.fromJson(message.getMessage(), YhMessage.class);
-		saveData(yhMessage);
-		//减轻GC压力
+		YhMessage yhMessage = gson.fromJson(message.getMessage(),
+				YhMessage.class);
+		try {
+			saveData(yhMessage);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		// help gc
+		yhMessage = null;
 		message.setMessage(null);
 	}
+
 	/**
 	 * 遥测、遥信两个列簇
+	 * 
 	 * @param yhMessage
+	 * @throws ParseException
 	 */
-	@SuppressWarnings("unchecked")
-	private void saveData(YhMessage yhMessage){
-		//遥测
-		Map<String, Object> data_yc = yhMessage.getData_yc();
-		//遥信
-		Map<String, Object> data_yx = yhMessage.getData_yx();
-		Iterator<String> it = data_yc.keySet().iterator();
-		/** <p>
-		 * map 格式{逆变器sn1:[{desc:ipv1,value:1.0},{desc:ipv2,value:2.0}],逆变器sn2:[{......}]}
-		 * <p>
-		 */
-		while(it.hasNext()){
-			String sn = it.next();
-			long currentTime = System.currentTimeMillis();
-			Put put = new Put(rowKeyHelper.getRowKey(currentTime,sn));
-			getSnAndTimeColumn(sn ,currentTime ,put);
-			//处理遥测和遥信数据
-			ArrayList<Map<String,Object>> ycList = (ArrayList<Map<String,Object>>) data_yc.get(sn);
-			ArrayList<Map<String,Object>> yxList = (ArrayList<Map<String,Object>>) data_yx.get(sn);
-			
-			Map<String,Object> ycMap = new HashMap<String, Object>();
-			Map<String,Object> yxMap = new HashMap<String, Object>();
-			for(int i = 0; i < ycList.size();i++){
-				getDataPuts(put,Constants.FAMILYYC,ycList.get(i));
-				getDataPuts(put,Constants.FAMILYYX,yxList.get(i));
-				mapTransverter(ycMap,ycList.get(i));
-				mapTransverter(yxMap,yxList.get(i));
+	private void saveData(YhMessage yhMessage) throws ParseException {
+		Map<String, Object> yc = yhMessage.getYc();
+		Map<String, Object> yx = yhMessage.getYx();
+		String sn = yhMessage.getEsn();
+		String timestamps = yhMessage.getTime();
+		if (timestamps.length() == 10) {
+			timestamps = timestamps + "000";
+		}
+		Put put = new Put(rowKeyHelper.getRowKey(timestamps, sn));
+		// 冗余sn和时间，方便统计和查询
+		yc.put(snColumnBytes, sn);
+		yc.put(timeColumnBytes, timestamps);
+		DeviceType type = DeviceType.OTHER;
+		if (sn.matches("(.*)-N1-(.*)")) {
+			type = DeviceType.CASCADE;
+			calculation.calculate(yc, cascadeStrategy);
+		} else if (sn.matches("(.*)-H1-(.*)")) {
+			type = DeviceType.COMBINER;
+			calculation.calculate(yc, combinerStrategy);
+		} else if (sn.matches("(.*)-N3-(.*)")) {
+			type = DeviceType.CENTRALIZED;
+			calculation.calculate(yc, centralizedStrategy);
+		} else if (sn.matches("(.*)-HJ-(.*)")) {
+			type = DeviceType.ENVIR;
+		}
+		// 遥信
+		if (null != yx) {
+			yx.put(snColumnBytes, sn);
+			yx.put(timeColumnBytes, timestamps);
+			putsTransverter(yx, Constants.FAMILYYX, put);
+		}
+		yc.remove("piList");
+		putsTransverter(yc, Constants.FAMILYYC, put);
+		saveEsn2Redis(sn);
+		handleDataByType(type, yc);
+		hbaseManager.save(put);
+	}
+
+	/**
+	 * 遥测或遥信的map转换成put
+	 * 
+	 * @param map
+	 * @param put
+	 */
+	private void putsTransverter(Map<String, Object> map, byte[] family, Put put) {
+		for(Map.Entry<String, Object> m : map.entrySet()){
+			Object value = m.getValue();
+			if (null != value && !"".equals(value)) {
+				put.addColumn(family, Bytes.toBytes(m.getKey()),
+						Bytes.toBytes(value.toString()));
 			}
-			//写入redis缓存
-			redis.save((sn+"_yc").getBytes(), ObjectTranscoder.serialize(ycMap));
-			redis.save((sn+"_yx").getBytes(), ObjectTranscoder.serialize(yxMap));
-			manager.save(put);
 		}
 	}
-	
-	private void getDataPuts(Put put,byte[] family,Map<String,Object> qualifierMap){
-		put.addColumn(family,Bytes.toBytes((String)qualifierMap.get("desc")),Bytes.toBytes((String)qualifierMap.get("value")));
+	/**
+	 * 写入队列
+	 * @param type  
+	 * @param yc
+	 */
+	private void handleDataByType(DeviceType type,Map<String, Object> yc) {
+		GenericDeviceModel pModel = new GenericDeviceModel();
+		pModel.setType(type);
+		pModel.setValue(yc);
+		try {
+			queue.put(pModel);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	//遥测、遥信两个列簇 冗余sn和时间，方便hive统计查询
-	private void getSnAndTimeColumn(String sn,long time,Put put){
-		byte[] currentTimeBytes = Bytes.toBytes(String.valueOf(time));
-		byte[] snBytes = Bytes.toBytes(sn);
-		put.addColumn(Constants.FAMILYYC,timeColumnBytes,currentTimeBytes);
-		put.addColumn(Constants.FAMILYYX,timeColumnBytes,currentTimeBytes);
-		put.addColumn(Constants.FAMILYYC,snColumnBytes,snBytes);
-		put.addColumn(Constants.FAMILYYX,snColumnBytes,snBytes);
-	}
-	
-	private Map<String,Object> mapTransverter(Map<String,Object> map , Map<String,Object> qualifierMap){
-		map.put((String)qualifierMap.get("desc"), (String)qualifierMap.get("value"));
-		return map;
+	/**
+	 * 写入redis队列
+	 * @param sn
+	 */
+	private void saveEsn2Redis(String sn) {
+		if (snCache.add(sn)) {
+			// 把sn写入redis方便统计哪些sn上传过数据
+			RedisModel redisModel = new RedisModel();
+			redisModel.setKey("tw.snlist".getBytes());
+			redisModel.setOperation(RedisOperation.sadd);
+			redisModel.setValue(sn.getBytes());
+			rs.putMessage(redisModel);
+		}
 	}
 }

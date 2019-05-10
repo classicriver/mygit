@@ -2,6 +2,7 @@ package com.tw.consumer.core;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,5 +29,9 @@ public class ThreadFactoryBean {
 	
 	public static ExecutorService getFixedThreadPool(String name,int count){
 		return Executors.newFixedThreadPool(count,getThreadFactory(name));
+	}
+	
+	public static ScheduledExecutorService getScheduledThreadPool(String name,int count){
+		return Executors.newScheduledThreadPool(count,getThreadFactory(name));
 	}
 }

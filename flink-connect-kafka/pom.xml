@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.tw.dcs</groupId>
+	<groupId>com.tw.connect</groupId>
 	<artifactId>flink-connect-kafka</artifactId>
 	<version>1.0.0</version>
 
@@ -17,17 +17,19 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<flink.version>1.6.1 </flink.version>
+		<log4j2-version>2.8.2</log4j2-version>
+		<org.slf4j-version>1.7.12</org.slf4j-version>
 	</properties>
 
 	<dependencies>
-		
+
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>6.0.6</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
@@ -68,7 +70,6 @@
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-streaming-java_2.11</artifactId>
 			<version>${flink.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.flink/flink-java -->
 		<dependency>
@@ -81,7 +82,6 @@
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-table_2.11</artifactId>
 			<version>${flink.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.flink/flink-streaming-scala -->
 		<dependency>
@@ -105,7 +105,49 @@
 			<artifactId>json</artifactId>
 			<version>20180130</version>
 		</dependency>
-		
+		<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${org.slf4j-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
+			<version>${log4j2-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j2-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j2-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j2-version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-avro-confluent-registry</artifactId>
+			<version>1.6.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -120,7 +162,7 @@
 					<archive>
 						<manifest>
 							<!-- 此处指定main方法入口的class -->
-							<mainClass>com.tw.connect.flink.FlinkTable</mainClass>
+							<mainClass>com.tw.connect.aggregation.CentralizedInverterAggregation</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -178,27 +220,6 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/lib</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-							<includeScope>compile</includeScope>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 

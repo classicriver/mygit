@@ -1,7 +1,10 @@
 package com.tw.consumer.config;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.tw.consumer.resources.PropertyResources;
 
@@ -17,6 +20,10 @@ public class Config extends PropertyResources{
 	 * disruptor handler数
 	 */
 	private final static String MAXHANDLERS = "tw.disruptor.maxHandlers";
+	/**
+	 * disruptor RingBuffer数
+	 */
+	private final static String MAXRINGBUFFER = "tw.disruptor.maxRingBuffer";
 	/**
 	 * 监听端口 
 	 */
@@ -42,10 +49,6 @@ public class Config extends PropertyResources{
 	 */
 	private final static String STORAGEPATH = "tw.storage.path";
 	/**
-	 * mysql批量提交数目
-	 */
-	private final static String BATCHNUMBER = "tw.mysql.batchNumber";
-	/**
 	 * HBASE表名
 	 */
 	private final static String TABLENAME = "tw.hbase.tableName";
@@ -69,19 +72,19 @@ public class Config extends PropertyResources{
 	/**
 	 * redis主机ip
 	 */
-	private final static String REDISHOST = "tw.redis.host";
+	private final static String REDISSENTINELS = "tw.redis.sentinels";
 	
 	/**
-	 * redis主机ip
+	 * redis密码
 	 */
-	private final static String REDISPORT = "tw.redis.port";
+	private final static String REDISPWD = "tw.redis.password";
 	
 	/**
-	 * redis主机ip
+	 * redis空闲的jedis实例
 	 */
 	private final static String REDISIDLE = "tw.reids.maxIdle";
 	/**
-	 * redis主机ip
+	 * redis实例最大数
 	 */
 	private final static String REDISTOTAL = "tw.reids.maxTotal";
 	/**
@@ -89,10 +92,27 @@ public class Config extends PropertyResources{
 	 */
 	private final static String REDISTHREADS = "tw.reids.maxThreads";
 	/**
-	 * redis线程个数
+	 * KAFKA 生产者线程数
 	 */
-	private final static String FLINKTPOIC = "tw.flink.topic";
+	private final static String DEVEICEEXECUTORNUM = "tw.deveiceExecutor.count";
+	/**
+	 * kafka producer批量提交数目
+	 */
+	private final static String BATCHNUMBER = "tw.kafka.batchNumber";
 	
+	private final static String ZKSERVERS = "tw.zk.servers";
+	
+	private final static String PHOENIXURL = "tw.phoenix.url";
+	
+	private final static String PHOENIXDRIVER = "tw.phoenix.driverClass";
+	/**
+	 * phoenix批量提交数目
+	 */
+	private final static String PHOENIXBATCHNUMBER = "tw.phoenix.batchNumber";
+	
+	private final static String REGISTRYURL= "tw.schemaregistry.url";
+	
+	private final static String KYLINURI = "tw.kylin.restURI";
 
 	private final static Map<String, Object> valueCache = new HashMap<>();
 
@@ -161,12 +181,14 @@ public class Config extends PropertyResources{
 		return Integer.parseInt((String) getOrSetDefaultProperty(KAFKACONSUMERS, 5));
 	}
 	
-	public String getRedisHost() {
-		return (String) getOrSetDefaultProperty(REDISHOST, "127.0.0.1");
+	public Set<String> getRedisSentinels() {
+		String ss = (String) getOrSetDefaultProperty(REDISSENTINELS, "");
+		Set<String> sentinels = new HashSet<>(Arrays.asList(ss.split(",")));
+		return sentinels;
 	}
 	
-	public int getRedisPort(){
-		return Integer.parseInt((String) getOrSetDefaultProperty(REDISPORT, 6379));
+	public String getRedisPwd(){
+		return (String) getOrSetDefaultProperty(REDISPWD, "");
 	}
 	
 	public int getRedisIdle(){
@@ -181,8 +203,36 @@ public class Config extends PropertyResources{
 		return Integer.parseInt((String) getOrSetDefaultProperty(REDISTHREADS, 1));
 	}
 	
-	public String getFlinkTopic() {
-		return (String) getOrSetDefaultProperty(FLINKTPOIC, "MQTT_YC_STREAM");
+	public int getDeveiceExecutorNum() {
+		return Integer.parseInt((String) getOrSetDefaultProperty(DEVEICEEXECUTORNUM, 2));
+	}
+	
+	public String getZKServers(){
+		return (String) getOrSetDefaultProperty(ZKSERVERS, "");
+	}
+	
+	public String getPhoenixUrl(){
+		return (String) getOrSetDefaultProperty(PHOENIXURL, "");
+	}
+	
+	public String getPhoenixDriver(){
+		return (String) getOrSetDefaultProperty(PHOENIXDRIVER, "");
+	}
+	
+	public int getPhoenixBatchNumber(){
+		return Integer.parseInt((String) getOrSetDefaultProperty(PHOENIXBATCHNUMBER, 50));
+	}
+	
+	public int getMaxRingBuffer(){
+		return Integer.parseInt((String) getOrSetDefaultProperty(MAXRINGBUFFER, 512));
+	}
+	
+	public String getSchemaRegistryUrl(){
+		return (String) getOrSetDefaultProperty(REGISTRYURL, "http://kafka2:18081");
+	}
+	
+	public String getKylinUri(){
+		return (String) getOrSetDefaultProperty(KYLINURI, "http://server03:7070/kylin/api");
 	}
 	
 	private Object getOrSetDefaultProperty(String key, Object def) {
