@@ -47,9 +47,6 @@ public abstract class Condition<T> {
 		
 		public Builder<T> family(FamilyType family){
 			switch (family){
-			case YC :
-				this.family = "yc";
-				break;
 			case YX :
 				this.family = "yx";
 				break;

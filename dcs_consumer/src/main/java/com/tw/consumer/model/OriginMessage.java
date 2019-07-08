@@ -17,4 +17,10 @@ public class OriginMessage {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return message.toString();
+	}
 }

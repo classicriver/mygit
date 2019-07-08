@@ -73,7 +73,6 @@ public class Server {
 
 	public void close() {
 		disruptor.shutdown();
-		// kylinScheduler.shutdown();
 		SingleBeanFactory.autoShutdown();
 		LogFactory.getLogger().info("server shutdown success.");
 		// 主线程等10秒，让其他线程完成关闭工作.

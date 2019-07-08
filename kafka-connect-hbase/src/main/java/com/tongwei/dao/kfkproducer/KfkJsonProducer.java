@@ -1,37 +1,38 @@
-package com.tw.consumer.kfk.producer;
+package com.tongwei.dao.kfkproducer;
 
+import java.util.Map;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import com.google.gson.Gson;
-import com.tw.consumer.model.GenericDeviceModel;
+import com.tongwei.hbase.config.HBaseSinkConfig;
 
-public class KfkJsonProducer extends AbstactKfkProducer<String,GenericDeviceModel>{
+public class KfkJsonProducer extends AbstactKfkProducer<String>{
 	
 	private final static Gson gson = new Gson();
+	private final HBaseSinkConfig config;
 	
-	public KfkJsonProducer(){
+	public KfkJsonProducer(HBaseSinkConfig config){
+		this.config = config;
+		config.getPropertyValue(HBaseSinkConfig.KFKJOSN_TOPIC);
 		pro.put("key.serializer",
 				"org.apache.kafka.common.serialization.StringSerializer");
 		pro.put("value.serializer",
 				"org.apache.kafka.common.serialization.StringSerializer");
-		pro.put("compression.type", "gzip");
 		producer = new KafkaProducer<>(pro);
 	}
 	
-	@Override
-	public void add(GenericDeviceModel model){
-		String json = gson.toJson(model.getValue());
+	public void add(Map<String,Object> ycData){
+		String json = gson.toJson(ycData);
 		if(null != json){
 			producer.send(new ProducerRecord<String,String>(
 					getTopic(), json));
-			submit();
 		}
 	}
 	
 	public String getTopic(){
-		return "jw_yc_process";
+		return config.getPropertyValue(HBaseSinkConfig.KFKJOSN_TOPIC,"jw_yc_process");
 	}
 
 }

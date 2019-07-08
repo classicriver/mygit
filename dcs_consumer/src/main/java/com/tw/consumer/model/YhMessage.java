@@ -14,7 +14,7 @@ public class YhMessage {
 	/**
 	 * 遥信
 	 */
-	private Map<String,Object> yx;
+	//private Map<String,Object> yx;
 	/**
 	 * 上传时间
 	 */
@@ -32,12 +32,12 @@ public class YhMessage {
 	public void setYc(Map<String,Object> yc) {
 		this.yc = yc;
 	}
-	public Map<String,Object> getYx() {
+	/*public Map<String,Object> getYx() {
 		return yx;
 	}
 	public void setYx(Map<String,Object> yx) {
 		this.yx = yx;
-	}
+	}*/
 	public String getTime() {
 		return time;
 	}

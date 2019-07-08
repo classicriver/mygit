@@ -86,7 +86,7 @@ public class KfkConsumer extends KafkaConfig implements Runnable {
 								ringBuffer.publish(sequence);
 							}
 						}
-						System.out.println(record.value());
+						//System.out.println(record.value());
 					}
 					// 上报位移信息
 					long lastOffset = partitionRecords.get(

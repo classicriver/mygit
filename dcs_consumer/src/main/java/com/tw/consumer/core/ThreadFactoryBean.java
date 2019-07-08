@@ -6,6 +6,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.tw.consumer.exception.MyUncaughtExceptionHandler;
+
 /**
  * 
  * @author xiesc
@@ -22,7 +24,9 @@ public class ThreadFactoryBean {
 			private AtomicInteger atomic = new AtomicInteger();
 			@Override
 			public Thread newThread(Runnable r) {
-				return new Thread(r, name + this.atomic.getAndIncrement());
+				Thread t = new Thread(r, name + this.atomic.getAndIncrement());
+				t.setUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
+				return t;
 			}
 		};
 	}

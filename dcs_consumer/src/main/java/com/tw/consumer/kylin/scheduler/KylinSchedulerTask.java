@@ -29,7 +29,7 @@ public class KylinSchedulerTask implements Runnable {
 	 * @time 2019年4月9日
 	 * @version 1.0
 	 */
-	public enum BuildType {
+	private enum BuildType {
 		/**
 		 * 刷新
 		 */

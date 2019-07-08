@@ -3,6 +3,7 @@ package com.tw.consumer.disruptor;
 import com.lmax.disruptor.ExceptionHandler;
 import com.tw.consumer.log.LogFactory;
 import com.tw.consumer.model.OriginMessage;
+import com.tw.consumer.utils.CommonUtils;
 /**
  * 
  * @author xiesc
@@ -13,7 +14,8 @@ import com.tw.consumer.model.OriginMessage;
 public class EventExceptionHandler implements ExceptionHandler<OriginMessage> {
 
 	public void handleEventException(Throwable ex, long sequence, OriginMessage event) {
-		LogFactory.getLogger().error("handleEventException", ex);
+		LogFactory.getLogger().error(CommonUtils.getTimeNow()+" event: ====>"+event.toString()+"<==== \n "+" exception:", ex);
+		ex.printStackTrace();
 	}
 
 	public void handleOnStartException(Throwable ex) {
@@ -23,6 +25,5 @@ public class EventExceptionHandler implements ExceptionHandler<OriginMessage> {
 	public void handleOnShutdownException(Throwable ex) {
 		LogFactory.getLogger().error("handleOnShutdownException", ex);
 	}
-
 
 }

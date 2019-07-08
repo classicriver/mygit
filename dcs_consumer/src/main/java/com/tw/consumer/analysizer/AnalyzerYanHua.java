@@ -89,7 +89,7 @@ public class AnalyzerYanHua implements Analyzer {
 	 */
 	private void saveData(YhMessage yhMessage) throws ParseException {
 		Map<String, Object> yc = yhMessage.getYc();
-		Map<String, Object> yx = yhMessage.getYx();
+		//Map<String, Object> yx = yhMessage.getYx();
 		String sn = yhMessage.getEsn();
 		String timestamps = yhMessage.getTime();
 		if (timestamps.length() == 10) {
@@ -113,11 +113,11 @@ public class AnalyzerYanHua implements Analyzer {
 			type = DeviceType.ENVIR;
 		}
 		// 遥信
-		if (null != yx) {
+		/*if (null != yx) {
 			yx.put(snColumnBytes, sn);
 			yx.put(timeColumnBytes, timestamps);
 			putsTransverter(yx, Constants.FAMILYYX, put);
-		}
+		}*/
 		yc.remove("piList");
 		putsTransverter(yc, Constants.FAMILYYC, put);
 		saveEsn2Redis(sn);

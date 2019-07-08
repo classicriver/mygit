@@ -28,7 +28,7 @@ public class KfkAvroProducer extends AbstactKfkProducer<GenericRecord,GenericDev
 		pro.put("value.serializer",
 				"io.confluent.kafka.serializers.KafkaAvroSerializer");
 		pro.put("schema.registry.url", Config.getInstance().getSchemaRegistryUrl());
-		pro.put("compression.codec", "gzip");
+		pro.put("compression.type", "gzip");
 		producer = new KafkaProducer<>(pro);
 		schemaFactory = new SchemaFactory();
 	}

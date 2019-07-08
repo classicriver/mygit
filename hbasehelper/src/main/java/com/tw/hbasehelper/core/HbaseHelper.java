@@ -98,19 +98,16 @@ public class HbaseHelper {
 			HbaseHelper queryExecutor = new HbaseHelper();
 			long startTime = System.currentTimeMillis();
 			rangeQuery = queryExecutor
-					.rangeQuery(Arrays.asList("TH-H1-1101001", "TH-H1-1101002", "TH-H1-1101003",
-							"TH-H1-1101004", "TH-H1-1101005", "TH-H1-1101006",
-							"TH-H1-1101007", "TH-H1-1101008", "TH-H1-1101009",
-							"TH-H1-1101010"), new Long("1557244800000"),
-							new Long("1557331200000"),FamilyType.YC,"piSum");
+					.rangeQuery(Arrays.asList("CF-N2-0301001"), new Long("1558022400000"),
+							new Long("1558108800000"),FamilyType.YC);
 			long endTime = System.currentTimeMillis();
 			//System.out.println(endTime - startTime);
 			//System.out.println(rangeQuery.get("TH-H1-1101001"));
-			Map<String, Object> map = rangeQuery.get("TH-H1-1101002").get(400);
+			Map<String, Object> map = rangeQuery.get("CF-N2-0301001").get(400);
 			Iterator<String> iterator = map.keySet().iterator();
 			while(iterator.hasNext()){
 				String key = iterator.next();
-				System.out.println(map.get(key));
+				System.out.println(key+"----->"+map.get(key));
 			}
 			System.exit(0);
 		} catch (Exception e) {

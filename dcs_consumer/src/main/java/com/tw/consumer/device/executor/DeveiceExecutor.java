@@ -19,14 +19,14 @@ public class DeveiceExecutor implements AutoShutdown{
 	private final LinkedBlockingQueue<GenericDeviceModel> queue;
 	private final KfkAvroProducer avroProducer = SingleBeanFactory.getBean(KfkAvroProducer.class);
 	private final KfkJsonProducer jsonProducer = SingleBeanFactory.getBean(KfkJsonProducer.class);
-	private final PhoenixDaoFactory phoenixFactory = SingleBeanFactory.getBean(PhoenixDaoFactory.class);
+	//private final PhoenixDaoFactory phoenixFactory = SingleBeanFactory.getBean(PhoenixDaoFactory.class);
 	
 	public DeveiceExecutor(LinkedBlockingQueue<GenericDeviceModel> queue){
 		this.queue = queue;
 	}
 	public void start(){
 		for(int i=0;i < producerThreadCount;i++){
-			executor.submit(new DeveiceHandler(queue,jsonProducer,avroProducer,phoenixFactory));
+			executor.submit(new DeveiceHandler(queue,jsonProducer,avroProducer));
 		}
 	}
 

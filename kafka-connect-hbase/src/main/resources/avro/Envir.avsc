@@ -1,0 +1,18 @@
+{
+  "type":"record",
+  "name":"Envir",
+  "fields":[
+    {"name":"esn","type":"string"},
+    {"name":"day_string","type":"string"},
+    {"name":"hour_string","type":"string"},
+    {"name":"datetime_string","type":"string"},
+    {"name":"timestamps","type":"long"},
+    {"name":"wind_speed","type":"double"},
+    {"name":"temperature","type":"double"},
+    {"name":"moment_irradiation","type":"double"},
+    {"name":"daily_rainfall","type":"double"},
+    {"name":"humidity","type":"double"},
+    {"name":"day_irradiation","type":"double"},
+    {"name":"total_irradiation","type":"double"}
+  ]
+}

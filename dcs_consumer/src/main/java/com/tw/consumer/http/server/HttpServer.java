@@ -54,8 +54,4 @@ public class HttpServer implements AutoShutdown{
 		parentGroup.shutdownGracefully();
 		childGroup.shutdownGracefully();
 	};
-	
-	public static void main(String[] args) {
-		new HttpServer().start();
-	}
 }
