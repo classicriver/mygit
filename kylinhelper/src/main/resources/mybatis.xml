@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 引用db.properties配置文件 -->
+    <properties resource="kylin.properties" />
+
+    <typeAliases>
+        <typeAlias type="com.tw.kylinhelper.datasource.DruidDataSourceFactory"
+            alias="druid" />
+    </typeAliases>
+
+    <!-- development : 开发模式 work : 工作模式 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC" />
+            <!-- 配置数据库连接信息 -->
+            <dataSource type="druid">
+                <!-- value属性值引用db.properties配置文件中配置的值 -->
+                <property name="driver" value="${kylin.jdbc.driverClassName}" />
+                <property name="url" value="${kylin.jdbc.url}" />
+                <property name="username" value="${kylin.jdbc.username}" />
+                <property name="password" value="${kylin.jdbc.password}" />
+                <property name="maxActive" value="${druid.maxActive}" />
+                <property name="minIdle" value="${druid.minIdle}" />
+                <property name="maxWait" value="${druid.maxWait}" />
+                <property name="initialSize" value="${druid.initialSize}" />
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- mybatis的mapper文件，每个xml配置文件对应一个接口 -->
+    <mappers>
+        <mapper resource="mapper/CombinerdcDisperseMapper.xml" />
+    </mappers>
+</configuration>

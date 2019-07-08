@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tw.kylinhelper.mapper.CombinerdcDisperseMapper">
+	<resultMap id="BaseResultMap" type="com.tw.kylinhelper.model.CombinerdcDisperse">
+		<result column="station" jdbcType="VARCHAR" property="station" />
+		<result column="esn" jdbcType="VARCHAR" property="esn" />
+		<result column="day_string" jdbcType="VARCHAR" property="day_string" />
+		<result column="pv_capacity" jdbcType="DOUBLE" property="pv_capacity" />
+		<result column="pvu_average" jdbcType="DOUBLE" property="pvu_average" />
+		<result column="pi_max" jdbcType="DOUBLE" property="pi_max" />
+		<result column="pi_average" jdbcType="DOUBLE" property="pi_average" />
+		<result column="disperse_average" jdbcType="DOUBLE" property="disperse_average" />
+		<result column="three_percent" jdbcType="DOUBLE" property="three_percent" />
+		<result column="five_percent" jdbcType="DOUBLE" property="five_percent" />
+		<result column="ten_percent" jdbcType="DOUBLE" property="ten_percent" />
+		<result column="twenty_percent" jdbcType="DOUBLE" property="twenty_percent" />
+		<result column="above_twenty_percent" jdbcType="DOUBLE"
+			property="above_twenty_percent" />
+		<result column="invalid_percent" jdbcType="DOUBLE" property="invalid_percent" />
+		<result column="i1_average" jdbcType="DOUBLE" property="i1_average" />
+		<result column="i1_max" jdbcType="DOUBLE" property="i1_max" />
+		<result column="i2_average" jdbcType="DOUBLE" property="i2_average" />
+		<result column="i2_max" jdbcType="DOUBLE" property="i2_max" />
+		<result column="i3_average" jdbcType="DOUBLE" property="i3_average" />
+		<result column="i3_max" jdbcType="DOUBLE" property="i3_max" />
+		<result column="i4_average" jdbcType="DOUBLE" property="i4_average" />
+		<result column="i4_max" jdbcType="DOUBLE" property="i4_max" />
+		<result column="i5_average" jdbcType="DOUBLE" property="i5_average" />
+		<result column="i5_max" jdbcType="DOUBLE" property="i5_max" />
+		<result column="i6_average" jdbcType="DOUBLE" property="i6_average" />
+		<result column="i6_max" jdbcType="DOUBLE" property="i6_max" />
+		<result column="i7_average" jdbcType="DOUBLE" property="i7_average" />
+		<result column="i7_max" jdbcType="DOUBLE" property="i7_max" />
+		<result column="i8_average" jdbcType="DOUBLE" property="i8_average" />
+		<result column="i8_max" jdbcType="DOUBLE" property="i8_max" />
+		<result column="i9_average" jdbcType="DOUBLE" property="i9_average" />
+		<result column="i9_max" jdbcType="DOUBLE" property="i9_max" />
+		<result column="i10_average" jdbcType="DOUBLE" property="i10_average" />
+		<result column="i10_max" jdbcType="DOUBLE" property="i10_max" />
+		<result column="i11_average" jdbcType="DOUBLE" property="i11_average" />
+		<result column="i11_max" jdbcType="DOUBLE" property="i11_max" />
+		<result column="i12_average" jdbcType="DOUBLE" property="i12_average" />
+		<result column="i12_max" jdbcType="DOUBLE" property="i12_max" />
+		<result column="i13_average" jdbcType="DOUBLE" property="i13_average" />
+		<result column="i13_max" jdbcType="DOUBLE" property="i13_max" />
+		<result column="i14_average" jdbcType="DOUBLE" property="i14_average" />
+		<result column="i14_max" jdbcType="DOUBLE" property="i14_max" />
+		<result column="i15_average" jdbcType="DOUBLE" property="i15_average" />
+		<result column="i15_max" jdbcType="DOUBLE" property="i15_max" />
+		<result column="i16_average" jdbcType="DOUBLE" property="i16_average" />
+		<result column="i16_max" jdbcType="DOUBLE" property="i16_max" />
+		<result column="i17_average" jdbcType="DOUBLE" property="i17_average" />
+		<result column="i17_max" jdbcType="DOUBLE" property="i17_max" />
+		<result column="i18_average" jdbcType="DOUBLE" property="i18_average" />
+		<result column="i18_max" jdbcType="DOUBLE" property="i18_max" />
+	</resultMap>
+	<select id="select" resultMap="BaseResultMap"
+		parameterType="com.tw.kylinhelper.condition.StationAndDayCondition">
+		SELECT
+		JW_DIMENSIONS_RELATION.station,
+		jw_combinerdc_disperse.esn,
+		max(jw_combinerdc_disperse.day_string) day_string,
+		max(JW_COMBINERDC_DISPERSE.PVSUM) as pv_capacity,
+		round(sum(JW_COMBINERDC_DISPERSE.PVU)/count(1),6) as pvu_average,
+		max(JW_COMBINERDC_DISPERSE.PISUM) as pi_max,
+		round(sum(JW_COMBINERDC_DISPERSE.PISUM)/count(1),6) as pi_average,
+		round(sum(JW_COMBINERDC_DISPERSE.DISPERSION_RATIO)/count(1),6) as disperse_average,
+		round(sum(jw_combinerdc_disperse.threecount)/count(1)*100,2) as three_percent,
+		round(sum(jw_combinerdc_disperse.fivecount)/count(1)*100,2) as five_percent,
+		round(sum(jw_combinerdc_disperse.tencount)/count(1)*100,2) as ten_percent,
+		round(sum(jw_combinerdc_disperse.twentycount)/count(1)*100,2) as twenty_percent,
+		round(sum(jw_combinerdc_disperse.abovetwentycount)/count(1)*100,2) as above_twenty_percent,
+		round(sum(jw_combinerdc_disperse.invalidcount)/count(1)*100,2) as invalid_percent,
+		round(sum(JW_COMBINERDC_DISPERSE.I1)/count(1),6) as i1_average,
+		max(JW_COMBINERDC_DISPERSE.I1) as i1_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I2)/count(1),6) as i2_average,
+		max(JW_COMBINERDC_DISPERSE.I2) as i2_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I3)/count(1),6) as i3_average,
+		max(JW_COMBINERDC_DISPERSE.I3) as i3_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I4)/count(1),6) as i4_average,
+		max(JW_COMBINERDC_DISPERSE.I4) as i4_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I5)/count(1),6) as i5_average,
+		max(JW_COMBINERDC_DISPERSE.I5) as i5_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I6)/count(1),6) as i6_average,
+		max(JW_COMBINERDC_DISPERSE.I6) as i6_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I7)/count(1),6) as i7_average,
+		max(JW_COMBINERDC_DISPERSE.I7) as i7_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I8)/count(1),6) as i8_average,
+		max(JW_COMBINERDC_DISPERSE.I8) as i8_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I9)/count(1),6) as i9_average,
+		max(JW_COMBINERDC_DISPERSE.I9) as i9_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I10)/count(1),6) as i10_average,
+		max(JW_COMBINERDC_DISPERSE.I10) as i10_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I11)/count(1),6) as i11_average,
+		max(JW_COMBINERDC_DISPERSE.I11) as i11_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I12)/count(1),6) as i12_average,
+		max(JW_COMBINERDC_DISPERSE.I12) as i12_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I13)/count(1),6) as i13_average,
+		max(JW_COMBINERDC_DISPERSE.I13) as i13_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I14)/count(1),6) as i14_average,
+		max(JW_COMBINERDC_DISPERSE.I14) as i14_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I15)/count(1),6) as i15_average,
+		max(JW_COMBINERDC_DISPERSE.I15) as i15_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I16)/count(1),6) as i16_average,
+		max(JW_COMBINERDC_DISPERSE.I16) as i16_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I17)/count(1),6) as i17_average,
+		max(JW_COMBINERDC_DISPERSE.I17) as i17_max,
+		round(sum(JW_COMBINERDC_DISPERSE.I18)/count(1),6) as i18_average,
+		max(JW_COMBINERDC_DISPERSE.I18) as i18_max
+		FROM jw_combinerdc_disperse
+		LEFT JOIN JW_DIMENSIONS_RELATION ON jw_combinerdc_disperse.ESN =
+		JW_DIMENSIONS_RELATION.ESN
+		WHERE jw_combinerdc_disperse.DAY_STRING='${day}'
+		and JW_DIMENSIONS_RELATION.station ='${station}'
+		group by JW_DIMENSIONS_RELATION.station,jw_combinerdc_disperse.esn
+		<if test="limit != 0 and offset != 0 ">limit ${limit} offset ${offset} </if>
+	</select>
+
+</mapper>
