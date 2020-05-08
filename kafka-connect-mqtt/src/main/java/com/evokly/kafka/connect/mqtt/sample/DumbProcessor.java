@@ -2,9 +2,9 @@ package com.evokly.kafka.connect.mqtt.sample;
 
 import com.evokly.kafka.connect.mqtt.MqttMessageProcessor;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.kafka.connect.data.Schema;
-import org.apache.kafka.connect.data.SchemaBuilder;
-import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.slf4j.Logger;
@@ -20,6 +20,7 @@ public class DumbProcessor implements MqttMessageProcessor {
 	private static final Logger log = LoggerFactory
 			.getLogger(DumbProcessor.class);
 	private MqttMessage mMessage;
+	private String mqttTopic;
 	
 	/*private static Schema mqttSchema;
 	static{
@@ -30,9 +31,10 @@ public class DumbProcessor implements MqttMessageProcessor {
 	}*/
 
 	@Override
-	public MqttMessageProcessor process(MqttMessage message) {
+	public MqttMessageProcessor process(String mqttTopic,MqttMessage message) {
 		log.debug("processing data for topic: {}; with message {}", message);
 		this.mMessage = message;
+		this.mqttTopic = mqttTopic;
 		return this;
 	}
 
@@ -40,6 +42,22 @@ public class DumbProcessor implements MqttMessageProcessor {
 	public SourceRecord getRecords(String kafkaTopic) {
 		//Struct messageStruct = new Struct(mqttSchema);
 		//messageStruct.put("message", new String(mMessage.getPayload()));
-		return new SourceRecord(null, null, kafkaTopic,Schema.BYTES_SCHEMA, mMessage.getPayload());
+		String payLoad ="";
+		try {
+			payLoad = new String(mMessage.getPayload(),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String json = "{\"topic\":\""+mqttTopic+"\",\"body\":"+payLoad+"}";
+		byte[] jsonBytes = null;
+		try {
+			jsonBytes = json.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new SourceRecord(null, null, kafkaTopic,Schema.BYTES_SCHEMA, jsonBytes);
 	}
+
 }

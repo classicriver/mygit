@@ -5,23 +5,21 @@
 
 package com.evokly.kafka.connect.mqtt;
 
-import com.evokly.kafka.connect.mqtt.ssl.SslUtils;
 import com.evokly.kafka.connect.mqtt.util.Version;
 
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -31,10 +29,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  * MqttSourceTask is a Kafka Connect SourceTask implementation that reads from
  * MQTT and generates Kafka Connect records.
  */
-public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
+public class MqttSourceTask extends SourceTask{
 	private static final Logger log = LoggerFactory
 			.getLogger(MqttSourceConnector.class);
-
 	MqttClient mClient;
 	String mKafkaTopic;
 	String mMqttClientId;
@@ -45,7 +42,6 @@ public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
 	/**
 	 * Get the version of this task. Usually this should be the same as the
 	 * corresponding {@link MqttSourceConnector} class's version.
-	 *
 	 * @return the version, formatted as a String
 	 */
 	@Override
@@ -55,14 +51,12 @@ public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
 
 	/**
 	 * Start the task.
-	 *
 	 * @param props
 	 *            initial configuration
 	 */
 	@Override
 	public void start(Map<String, String> props) {
 		log.info("Start a MqttSourceTask");
-
 		mConfig = new MqttSourceConnectorConfig(props);
 		mMqttClientId = mConfig.getString(MqttSourceConstant.MQTT_CLIENT_ID) != null ? mConfig
 				.getString(MqttSourceConstant.MQTT_CLIENT_ID) : MqttClient
@@ -72,7 +66,7 @@ public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
 		// Setup MQTT Connect Options
 		connectOptions = new MqttConnectOptions();
 
-		String sslCa = mConfig.getString(MqttSourceConstant.MQTT_SSL_CA_CERT);
+		/*String sslCa = mConfig.getString(MqttSourceConstant.MQTT_SSL_CA_CERT);
 		String sslCert = mConfig.getString(MqttSourceConstant.MQTT_SSL_CERT);
 		String sslPrivateKey = mConfig
 				.getString(MqttSourceConstant.MQTT_SSL_PRIV_KEY);
@@ -86,16 +80,13 @@ public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
 				e.printStackTrace();
 				return;
 			}
-		}
-
-		if (mConfig.getBoolean(MqttSourceConstant.MQTT_CLEAN_SESSION)) {
-			connectOptions.setCleanSession(mConfig
-					.getBoolean(MqttSourceConstant.MQTT_CLEAN_SESSION));
-		}
-		connectOptions.setConnectionTimeout(mConfig
+		}*/
+		connectOptions.setCleanSession(mConfig.getBoolean(MqttSourceConstant.MQTT_CLEAN_SESSION));
+		
+		/*connectOptions.setConnectionTimeout(mConfig
 				.getInt(MqttSourceConstant.MQTT_CONNECTION_TIMEOUT));
 		connectOptions.setKeepAliveInterval(mConfig
-				.getInt(MqttSourceConstant.MQTT_KEEP_ALIVE_INTERVAL));
+				.getInt(MqttSourceConstant.MQTT_KEEP_ALIVE_INTERVAL));*/
 		connectOptions.setServerURIs(mConfig.getString(
 				MqttSourceConstant.MQTT_SERVER_URIS).split(","));
 
@@ -110,14 +101,12 @@ public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
 		}
 		// 自动重连
 		connectOptions.setAutomaticReconnect(true);
-		// Connect to Broker
 		try {
 			// Address of the server to connect to, specified as a URI, is
 			// overridden using
 			// MqttConnectOptions#setServerURIs(String[]) bellow.
 			mClient = new MqttClient("tcp://127.0.0.1:1883", mMqttClientId,
 					new MemoryPersistence());
-			mClient.setCallback(this);
 			mClient.connect(connectOptions);
 			log.info("[{}] Connected to Broker", mMqttClientId);
 		} catch (MqttException e) {
@@ -135,7 +124,6 @@ public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
 		log.info("Stoping the MqttSourceTask");
 		try {
 			mClient.disconnect();
-
 			log.info("[{}] Disconnected from Broker.", mMqttClientId);
 		} catch (MqttException e) {
 			log.error("[{}] Disconnecting from Broker failed!", mMqttClientId,
@@ -159,80 +147,35 @@ public class MqttSourceTask extends SourceTask implements MqttCallbackExtended {
 		MqttMessageProcessor message = mQueue.take();
 		log.debug("[{}] Polling new data from queue for '{}' topic.",
 				mMqttClientId, mKafkaTopic);
-
 		Collections.addAll(records, message.getRecords(mKafkaTopic));
 		return records;
 	}
 
-	/**
-	 * This method is called when the connection to the server is lost.
-	 *
-	 * @param cause
-	 *            the reason behind the loss of connection.
-	 */
-	@Override
-	public void connectionLost(Throwable cause) {
-		log.error("MQTT connection lost!", cause);
-	}
-
-	/**
-	 * Called when delivery for a message has been completed, and all
-	 * acknowledgments have been received.
-	 *
-	 * @param token
-	 *            the delivery token associated with the message.
-	 */
-	@Override
-	public void deliveryComplete(IMqttDeliveryToken token) {
-		// Nothing to implement.
-	}
-
-	/**
-	 * This method is called when a message arrives from the server.
-	 *
-	 * @param topic
-	 *            name of the topic on the message was published to
-	 * @param message
-	 *            the actual message.
-	 *
-	 * @throws Exception
-	 *             if a terminal error has occurred, and the client should be
-	 *             shut down.
-	 */
-	@Override
-	public void messageArrived(String mqttTopic, MqttMessage message)
-			throws Exception {
-		log.debug("[{}] New message on '{}' arrived.", mMqttClientId, mqttTopic);
-		this.mQueue.add(mConfig.getConfiguredInstance(
-				MqttSourceConstant.MESSAGE_PROCESSOR,
-				MqttMessageProcessor.class).process(message));
-	}
-
-	// mqtt重连成功后，要重新订阅topic
-	@Override
-	public void connectComplete(boolean reconnect, String serverURI) {
-		// TODO Auto-generated method stub
-		this.subscribe();
-	}
-
-	private int[] String2Int(String[] arrs) {
-		int[] temp = new int[arrs.length];
-		for (int i = 0; i < arrs.length; i++) {
-			temp[i] = Integer.valueOf(arrs[i]);
+	public void subscribe() {
+		String[] topics = mConfig.getString(MqttSourceConstant.MQTT_TOPIC)
+				.split(",");
+		int defaultQos = mConfig.getInt(MqttSourceConstant.MQTT_QUALITY_OF_SERVICE);
+		Map<String, IMqttMessageListener> listenersCache = new HashMap<>();
+		IMqttMessageListener emqListener = new EmqListener(mQueue,mConfig);
+		//qos默认值
+		int[] qos = new int[topics.length];
+		//Paho topic matcher does not work with shared subscription topic filter of emqttd
+		IMqttMessageListener[] listeners = new IMqttMessageListener[topics.length];
+		for(int i=0;i<=(topics.length-1);i++){
+			String topic = topics[i];
+			if (topic.startsWith("$queue/")) {
+				topic = topic.replaceFirst("\\$queue/", "");
+			} else if (topic.startsWith("$share/")) {
+				topic = topic.replaceFirst("\\$share/", "");
+			}
+			//截取topic第一个/前的内容做key,所有相同开头的topic共用一个listener
+			listenersCache.put(topic.split("/")[0], emqListener);
+			qos[i] = defaultQos;
+			listeners[i] = new EmqListener(mQueue,mConfig);
 		}
-		return temp;
-	}
-
-	private void subscribe() {
-		/*String[] topics = mConfig.getString(MqttSourceConstant.MQTT_TOPIC)
-				.split(",");*/
-		/*int[] qos = String2Int(mConfig.getString(
-				MqttSourceConstant.MQTT_QUALITY_OF_SERVICE).split(","));*/
-		String topics = mConfig.getString(MqttSourceConstant.MQTT_TOPIC);
-		int qos = mConfig.getInt(
-				MqttSourceConstant.MQTT_QUALITY_OF_SERVICE);
+		mClient.setCallback(new SharedSubCallbackRouter(listenersCache,this));
 		try {
-			mClient.subscribe(topics, qos);
+			mClient.subscribe(topics, qos,listeners);
 			log.info("[{}] Subscribe to '{}' with QoS '{}'", mMqttClientId,
 					topics, qos);
 		} catch (MqttException e) {
