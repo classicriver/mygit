@@ -42,7 +42,7 @@ public class DumbProcessor implements MqttMessageProcessor {
 	public SourceRecord getRecords(String kafkaTopic) {
 		//Struct messageStruct = new Struct(mqttSchema);
 		//messageStruct.put("message", new String(mMessage.getPayload()));
-		String payLoad ="";
+		/*String payLoad ="";
 		try {
 			payLoad = new String(mMessage.getPayload(),"UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -56,8 +56,8 @@ public class DumbProcessor implements MqttMessageProcessor {
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return new SourceRecord(null, null, kafkaTopic,Schema.BYTES_SCHEMA, jsonBytes);
+		}*/
+		return new SourceRecord(null, null, kafkaTopic,Schema.BYTES_SCHEMA, mMessage.getPayload());
 	}
 
 }
