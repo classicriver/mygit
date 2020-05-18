@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import com.tongwei.conops.arithmetic.calculate.CalDispersionRatio;
-import com.tongwei.conops.arithmetic.calculate.JudgeSeriesStatus;
 /**
  * 汇流箱数据计算策略
  * @author xiesc
@@ -21,7 +19,7 @@ public class CombinerStrategy extends AbstractStrategy{
 		// TODO Auto-generated method stub
 		String esn = data.get("esn").toString();
 		//离散率
-		CalDispersionRatio.calCombinerdcDispersionRatio(esn, data);
+		//CalDispersionRatio.calCombinerdcDispersionRatio(esn, data);
 		List<BigDecimal> pvListByEsn = getDeviceInfoByEsn(esn,"pvList");
 		int sum = pvListByEsn.stream().mapToInt(BigDecimal::intValue).sum();
 		//pv容量
@@ -34,7 +32,7 @@ public class CombinerStrategy extends AbstractStrategy{
 		}
 		data.put("piSum", piSum);
 		//组串状态
-		mergeData(data,JudgeSeriesStatus.combinerdcSeriesStatus(esn, data));
+		mergeData(data,null);
 	}
 
 }

@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import com.tongwei.conops.arithmetic.calculate.CalDispersionRatio;
-import com.tongwei.conops.arithmetic.calculate.JudgeSeriesStatus;
 /**
  * 组串式逆变器数据计算策略
  * @author xiesc
@@ -20,9 +18,9 @@ public class CascadeStrategy extends AbstractStrategy{
 		// TODO Auto-generated method stub
 		String esn = data.get("esn").toString();
 		//离散率
-		CalDispersionRatio.calCascadeDispersionRatio(esn, data);
+		//CalDispersionRatio.calCascadeDispersionRatio(esn, data);
 		//组串状态
-		mergeData(data,JudgeSeriesStatus.invertrtSeriesStatus(esn, data));
+		//mergeData(data,JudgeSeriesStatus.invertrtSeriesStatus(esn, data));
 		List<BigDecimal> pvListByEsn = getDeviceInfoByEsn(esn,"pvList");
 		int pvSum = pvListByEsn.stream().mapToInt(BigDecimal::intValue).sum();
 		//pv容量

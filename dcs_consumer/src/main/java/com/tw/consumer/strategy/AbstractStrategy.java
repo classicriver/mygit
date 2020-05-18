@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
-import com.tongwei.conops.arithmetic.calculate.CalDispersionRatio;
 
 public abstract class AbstractStrategy implements Strategy {
 
@@ -29,9 +27,10 @@ public abstract class AbstractStrategy implements Strategy {
 	}
 
 	protected List<BigDecimal> getDeviceInfoByEsn(String esn,String key) {
-		return JSON.parseArray(
-				CalDispersionRatio.getDeviceInfoByEsn(esn).get(key)
-						.toString(), BigDecimal.class);
+//		return JSON.parseArray(
+//				CalDispersionRatio.getDeviceInfoByEsn(esn).get(key)
+//						.toString(), BigDecimal.class);
+		return null;
 	}
 
 	protected abstract void policy1(Map<String, Object> data);
