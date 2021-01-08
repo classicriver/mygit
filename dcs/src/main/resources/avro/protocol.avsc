@@ -1,0 +1,8 @@
+{
+  "namespace":"com.tw.model",
+  "type":"record",
+  "name":"Protocol",
+  "fields":[
+    {"name":"message","type":"string"}
+  ]
+}

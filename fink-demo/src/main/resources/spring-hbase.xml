@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:hdp="http://www.springframework.org/schema/hadoop"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+http://www.springframework.org/schema/hadoop
+http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+">
+    <hdp:configuration resources="classpath:hbase-site.xml" />
+    <hdp:hbase-configuration zk-quorum="10.0.0.133"
+                             zk-port="2182" configuration-ref="hadoopConfiguration"  />
+    <bean id="hbaseTemplate" class="org.springframework.data.hadoop.hbase.HbaseTemplate">
+        <!--注意到没有，spring的一贯风格，正如我们在mongodb篇讲到的一样，xxxTemplate封装-->
+        <property name="configuration" ref="hbaseConfiguration">  </property>
+        <property name="encoding" value="UTF-8"></property>
+    </bean>
+
+</beans>

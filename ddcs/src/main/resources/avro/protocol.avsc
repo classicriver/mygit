@@ -1,0 +1,8 @@
+{
+  "namespace":"com.tw.ddcs.model",
+  "type":"record",
+  "name":"MMessage",
+  "fields":[
+    {"name":"message","type":"string"}
+  ]
+}

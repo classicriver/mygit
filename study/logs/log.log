@@ -1,0 +1,61 @@
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.logging.InternalLoggerFactory] Using Log4J as the default logging framework
+2018-05-04 11:09:47 [DEBUG]-[io.netty.channel.MultithreadEventLoopGroup] -Dio.netty.eventLoopThreads: 8
+2018-05-04 11:09:47 [DEBUG]-[io.netty.channel.nio.NioEventLoop] -Dio.netty.noKeySetOptimization: false
+2018-05-04 11:09:47 [DEBUG]-[io.netty.channel.nio.NioEventLoop] -Dio.netty.selectorAutoRebuildThreshold: 512
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent] Platform: Windows
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent] Java version: 8
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent] -Dio.netty.noUnsafe: false
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent0] java.nio.ByteBuffer.cleaner: available
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent0] java.nio.Buffer.address: available
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent0] sun.misc.Unsafe.theUnsafe: available
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent0] sun.misc.Unsafe.copyMemory: available
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent0] java.nio.Bits.unaligned: true
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent] sun.misc.Unsafe: available
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent] -Dio.netty.noJavassist: false
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent] Javassist: unavailable
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent] You don't have Javassist in your class path or you don't have enough permission to load dynamically generated classes.  Please check the configuration for better performance.
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.PlatformDependent] -Dio.netty.noPreferDirect: false
+2018-05-04 11:09:47 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.numHeapArenas: 4
+2018-05-04 11:09:47 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.numDirectArenas: 4
+2018-05-04 11:09:47 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.pageSize: 8192
+2018-05-04 11:09:47 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.maxOrder: 11
+2018-05-04 11:09:47 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.chunkSize: 16777216
+2018-05-04 11:09:47 [DEBUG]-[io.netty.channel.DefaultChannelId] -Dio.netty.machineId: 00:50:56:c0:00:08:00:00 (auto-detected)
+2018-05-04 11:09:47 [DEBUG]-[io.netty.channel.DefaultChannelId] -Dio.netty.processId: 16488 (auto-detected)
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.internal.ThreadLocalRandom] -Dio.netty.initialSeedUniquifier: 0x1587eea747266d6d
+2018-05-04 11:09:47 [DEBUG]-[io.netty.channel.ChannelOutboundBuffer] -Dio.netty.threadLocalDirectBufferSize: 65536
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.NetUtil] Loopback interface: Software Loopback Interface 1
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.NetUtil] Loopback address: /127.0.0.1 (primary)
+2018-05-04 11:09:47 [DEBUG]-[io.netty.util.NetUtil] Loopback address: /0:0:0:0:0:0:0:1
+2018-05-04 11:09:47 [INFO]-[com.tw.server.Server] server started..
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.logging.InternalLoggerFactory] Using Log4J as the default logging framework
+2018-05-04 16:37:38 [DEBUG]-[io.netty.channel.MultithreadEventLoopGroup] -Dio.netty.eventLoopThreads: 8
+2018-05-04 16:37:38 [DEBUG]-[io.netty.channel.nio.NioEventLoop] -Dio.netty.noKeySetOptimization: false
+2018-05-04 16:37:38 [DEBUG]-[io.netty.channel.nio.NioEventLoop] -Dio.netty.selectorAutoRebuildThreshold: 512
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent] Platform: Windows
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent] Java version: 8
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent] -Dio.netty.noUnsafe: false
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent0] java.nio.ByteBuffer.cleaner: available
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent0] java.nio.Buffer.address: available
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent0] sun.misc.Unsafe.theUnsafe: available
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent0] sun.misc.Unsafe.copyMemory: available
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent0] java.nio.Bits.unaligned: true
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent] sun.misc.Unsafe: available
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent] -Dio.netty.noJavassist: false
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent] Javassist: unavailable
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent] You don't have Javassist in your class path or you don't have enough permission to load dynamically generated classes.  Please check the configuration for better performance.
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.PlatformDependent] -Dio.netty.noPreferDirect: false
+2018-05-04 16:37:38 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.numHeapArenas: 4
+2018-05-04 16:37:38 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.numDirectArenas: 4
+2018-05-04 16:37:38 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.pageSize: 8192
+2018-05-04 16:37:38 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.maxOrder: 11
+2018-05-04 16:37:38 [DEBUG]-[io.netty.buffer.PooledByteBufAllocator] -Dio.netty.allocator.chunkSize: 16777216
+2018-05-04 16:37:38 [DEBUG]-[io.netty.channel.DefaultChannelId] -Dio.netty.machineId: 00:50:56:c0:00:08:00:00 (auto-detected)
+2018-05-04 16:37:38 [DEBUG]-[io.netty.channel.DefaultChannelId] -Dio.netty.processId: 12368 (auto-detected)
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.internal.ThreadLocalRandom] -Dio.netty.initialSeedUniquifier: 0x05493eb4c6d74540
+2018-05-04 16:37:38 [DEBUG]-[io.netty.channel.ChannelOutboundBuffer] -Dio.netty.threadLocalDirectBufferSize: 65536
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.NetUtil] Loopback interface: Software Loopback Interface 1
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.NetUtil] Loopback address: /127.0.0.1 (primary)
+2018-05-04 16:37:38 [DEBUG]-[io.netty.util.NetUtil] Loopback address: /0:0:0:0:0:0:0:1
+2018-05-04 16:37:38 [INFO]-[com.tw.server.Server] server started..
+2018-05-04 16:37:41 [INFO]-[com.tw.server.Server] shutdown..

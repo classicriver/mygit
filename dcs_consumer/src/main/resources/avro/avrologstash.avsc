@@ -1,0 +1,9 @@
+{
+  "type":"record",
+  "name":"avrologstash",
+  "fields":[
+    {"name":"systype","type":"string"},
+    {"name":"logtype","type":"string"},
+    {"name":"time","type":"string"}
+  ]
+}

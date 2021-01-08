@@ -1,0 +1,297 @@
+{
+	type: object, 
+	properties: {
+		ESN: {
+			type: string,
+			description: none
+		},
+		TOTAL_OUTPUT_POWER: {
+			type: number,
+			description: max as total_energy_power
+		},
+		OUTPUT_POWER_DAY: {
+			type: number,
+			description: max as day_energy_power
+		},
+		ACTIVE_POWER: {
+			type: number,
+			description: max as max_power
+		},
+		ACTIVE_POWER1: {
+			type: number,
+			description: max as max_exchange_power
+		},
+		DC_INPUT_TOTAL_POWER: {
+			type: number,
+			description: max as max_input_power
+		},
+		DC_INPUT_TOTAL_POWER1: {
+			type: number,
+			description: max as max_direct_power
+		},
+		INVERTER_EFFICIENCY: {
+			type: number,
+			description: max as inverter_efficiency
+		},
+		I1_X: {
+			type: number,
+			description: max as i1_max
+		},
+		I1_S: {
+			type: number,
+			description: min as i1_min
+		},
+		I2_X: {
+			type: number,
+			description: max as i2_max
+		},
+		I2_S: {
+			type: number,
+			description: min as i2_min
+		},
+		I3_X: {
+			type: number,
+			description: max as i3_max
+		},
+		I3_S: {
+			type: number,
+			description: min as i3_min
+		},
+		I4_X: {
+			type: number,
+			description: max as i4_max
+		},
+		I4_S: {
+			type: number,
+			description: min as i4_min
+		},
+		I5_X: {
+			type: number,
+			description: max as i5_max
+		},
+		I5_S: {
+			type: number,
+			description: min as i5_min
+		},
+		I6_X: {
+			type: number,
+			description: max as i6_max
+		},
+		I6_S: {
+			type: number,
+			description: min as i6_min
+		},
+		I7_X: {
+			type: number,
+			description: max as i7_max
+		},
+		I7_S: {
+			type: number,
+			description: min as i7_min
+		},
+		I8_X: {
+			type: number,
+			description: max as i8_max
+		},
+		I8_S: {
+			type: number,
+			description: min as i8_min
+		},
+		I9_X: {
+			type: number,
+			description: max as i9_max
+		},
+		I9_S: {
+			type: number,
+			description: min as i9_min
+		},
+		I10_X: {
+			type: number,
+			description: max as i10_max
+		},
+		I10_S: {
+			type: number,
+			description: min as i10_min
+		},
+		I11_X: {
+			type: number,
+			description: max as i11_max
+		},
+		I11_S: {
+			type: number,
+			description: min as i11_min
+		},
+		I12_X: {
+			type: number,
+			description: max as i12_max
+		},
+		I12_S: {
+			type: number,
+			description: min as i12_min
+		},
+		I13_X: {
+			type: number,
+			description: max as i13_max
+		},
+		I13_S: {
+			type: number,
+			description: min as i13_min
+		},
+		I14_X: {
+			type: number,
+			description: max as i14_max
+		},
+		I14_S: {
+			type: number,
+			description: min as i14_min
+		},
+		I15_X: {
+			type: number,
+			description: max as i15_max
+		},
+		I15_S: {
+			type: number,
+			description: min as i15_min
+		},
+		I16_X: {
+			type: number,
+			description: max as i16_max
+		},
+		I16_S: {
+			type: number,
+			description: min as i16_min
+		},
+		U1_X: {
+			type: number,
+			description: max as u1_max
+		},
+		U1_S: {
+			type: number,
+			description: min as u1_min
+		},
+		U2_X: {
+			type: number,
+			description: max as u2_max
+		},
+		U2_S: {
+			type: number,
+			description: min as u2_min
+		},
+		U3_X: {
+			type: number,
+			description: max as u3_max
+		},
+		U3_S: {
+			type: number,
+			description: min as u3_min
+		},
+		U4_X: {
+			type: number,
+			description: max as u4_max
+		},
+		U4_S: {
+			type: number,
+			description: min as u4_min
+		},
+		U5_X: {
+			type: number,
+			description: max as u5_max
+		},
+		U5_S: {
+			type: number,
+			description: min as u5_min
+		},
+		U6_X: {
+			type: number,
+			description: max as u6_max
+		},
+		U6_S: {
+			type: number,
+			description: min as u6_min
+		},
+		U7_X: {
+			type: number,
+			description: max as u7_max
+		},
+		U7_S: {
+			type: number,
+			description: min as u7_min
+		},
+		U8_X: {
+			type: number,
+			description: max as u8_max
+		},
+		U8_S: {
+			type: number,
+			description: min as u8_min
+		},
+		U9_X: {
+			type: number,
+			description: max as u9_max
+		},
+		U9_S: {
+			type: number,
+			description: min as u9_min
+		},
+		U10_X: {
+			type: number,
+			description: max as u10_max
+		},
+		U10_S: {
+			type: number,
+			description: min as u10_min
+		},
+		U11_X: {
+			type: number,
+			description: max as u11_max
+		},
+		U11_S: {
+			type: number,
+			description: min as u11_min
+		},
+		U12_X: {
+			type: number,
+			description: max as u12_max
+		},
+		U12_S: {
+			type: number,
+			description: min as u12_min
+		},
+		U13_X: {
+			type: number,
+			description: max as u13_max
+		},
+		U13_S: {
+			type: number,
+			description: min as u13_min
+		},
+		U14_X: {
+			type: number,
+			description: max as u14_max
+		},
+		U14_S: {
+			type: number,
+			description: min as u14_min
+		},
+		U15_X: {
+			type: number,
+			description: max as u15_max
+		},
+		U15_S: {
+			type: number,
+			description: min as u15_min
+		},
+		U16_X: {
+			type: number,
+			description: max as u16_max
+		},
+		U16_S: {
+			type: number,
+			description: min as u16_min
+		},
+		TIMESTAMPS: {
+			type: number,
+			description: none as statistics_date
+		}
+	}
+}
