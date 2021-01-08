@@ -1,0 +1,197 @@
+{
+	"type": "record",
+	"name": "com.justbon.lps.avro.beans.BehalogES",
+	"fields": [{
+		"name": "rowkey",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "deviceId",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "deviceOS",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "deviceVersion",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "deviceBrand",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "deviceModel",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "deviceLongitude",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "deviceLatitude",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "deviceNetworkType",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "appType",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "appVersion",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "userId",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "userName",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "userMobile",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "userSex",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "userAge",
+		"type": ["int", "null"],"default":0
+	}, {
+		"name": "userProjectId",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "userProjectName",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "userRegisterTime",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "userBindingTime",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "action",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "fromFunctionCode",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "toFunctionCode",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "startTime",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "endTime",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "lengthOfTime",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "data",
+		"type": {
+				"type": "array",
+				"items": {
+					"type": "record",
+					"name": "com.justbon.lps.avro.beans.ExtendData",
+					"fields": [{
+						"name": "url",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "method",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "requestHead",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "requestBody",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "responseStatus",
+						"type": ["int", "null"],"default":0
+					}, {
+						"name": "responseHead",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "responseBody",
+						"type": ["string", "null"],"default":""
+					}]
+				}
+			}
+	}, {
+		"name": "resolution",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "timestamp",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "toFunctionCodeFullPath",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "untilNowlengthOfTime",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "toFunctionCodeLevel",
+		"type": ["int", "null"],"default":0
+	}, {
+		"name": "userOrgIdHeadFunctional",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string",
+                    "default":[]
+                }
+            ],
+            "default":null
+	}, {
+		"name": "userOrgIdAreaFunctional",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string",
+                    "default":[]
+                }
+            ],
+            "default":null
+	}, {
+		"name": "userOrgIdArea",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string",
+                    "default":[]
+                }
+            ],
+            "default":null
+	}, {
+		"name": "userOrgIdCompany",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string",
+                    "default":[]
+                }
+            ],
+            "default":null
+	}, {
+		"name": "userOrgIdProject",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string",
+                    "default":[]
+                }
+            ],
+            "default":null
+	}, {
+		"name": "userIsInternal",
+		"type": ["int", "null"],"default":0
+	}, {
+		"name": "receivingTime",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "sysName",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "logType",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "timestamps",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "metaCode",
+		"type": ["string", "null"],"default":""
+	}]
+}

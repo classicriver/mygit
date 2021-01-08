@@ -1,0 +1,225 @@
+{
+	"type": "record",
+	"name": "com.justbon.lps.avro.BehalogHbase",
+	"fields": [{
+		"name": "rowkey",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "device_id",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "device_OS",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "device_version",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "device_brand",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "device_model",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "device_longitude",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "device_latitude",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "device_network_type",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "app_type",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "app_version",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_id",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_name",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_mobile",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_sex",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_age",
+		"type": ["int", "null"],"default":0
+	}, {
+		"name": "user_project_id",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_project_name",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_register_time",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "user_binding_time",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "action",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "from_function_code",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "to_function_code",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "start_time",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "end_time",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "length_of_time",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "data",
+		"type": {
+				"type": "array",
+				"items": {
+					"type": "record",
+					"name": "com.justbon.lps.avro.ExtendData",
+					"fields": [{
+						"name": "url",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "method",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "requestHead",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "requestBody",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "responseStatus",
+						"type": ["int", "null"],"default":0
+					}, {
+						"name": "responseHead",
+						"type": ["string", "null"],"default":""
+					}, {
+						"name": "responseBody",
+						"type": ["string", "null"],"default":""
+					}]
+				}
+			}
+	}, {
+		"name": "resolution",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "timestamp",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "to_function_code_full_path",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "until_now_length_of_time",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "to_function_code_level",
+		"type": ["int", "null"],"default":0
+	}, {
+		"name": "user_orgid_head_functional",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string"
+                }
+            ],
+            "default":null
+	}, {
+		"name": "user_orgid_area_functional",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string"
+                }
+            ],
+            "default":null
+	}, {
+		"name": "user_orgid_area",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string"
+                }
+            ],
+            "default":null
+	}, {
+		"name": "user_orgid_company",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string"
+                }
+            ],
+            "default":null
+	}, {
+		"name": "user_orgid_project",
+		"type":["null",
+                {
+                    "type":"array",
+                    "items":"string"
+                }
+            ],
+            "default":null
+	}, {
+		"name": "user_is_internal",
+		"type": ["int", "null"],"default":0
+	}, {
+		"name": "receiving_time",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "sysName",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "logType",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "timestamps",
+		"type": ["long", "null"],"default":0
+	}, {
+		"name": "metaCode",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_age_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_register_time_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_binding_time_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "start_time_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "end_time_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "length_of_time_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "timestamp_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "until_now_length_of_time_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "to_function_code_level_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "user_is_internal_str",
+		"type": ["string", "null"],"default":""
+	}, {
+		"name": "receiving_time_str",
+		"type": ["string", "null"],"default":""
+	}]
+}

@@ -1,0 +1,100 @@
+{
+	"type": "record",
+	"name": "com.justbon.lps.avro.Operlog",
+	"fields": [{
+		"name": "timestamps",
+		"type": "long"
+	}, {
+		"name": "userInfo",
+		"type": {
+			"type": "record",
+			"name": "com.justbon.lps.avro.UserInfo",
+			"fields": [{
+				"name": "userName",
+				"type": "string"
+			}, {
+				"name": "userId",
+				"type": "string"
+			}]
+		}
+	}, {
+		"name": "sysName",
+		"type": "string"
+	}, {
+		"name": "accessInfo",
+		"type": {
+			"type": "record",
+			"name": "com.justbon.lps.avro.AccessInfo",
+			"fields": [{
+				"name": "lengthOfresponse",
+				"type": "int"
+			}, {
+				"name": "responseResult",
+				"type": "string"
+			}, {
+				"name": "requestArgs",
+				"type": "string"
+			}, {
+				"name": "responseTime",
+				"type": "long"
+			}, {
+				"name": "remoteAddr",
+				"type": "string"
+			}, {
+				"name": "userAgent",
+				"type": "string"
+			}, {
+				"name": "upstreamAddr",
+				"type": "string"
+			}, {
+				"name": "accessUrl",
+				"type": "string"
+			}, {
+				"name": "requestMethod",
+				"type": "string"
+			}]
+		}
+	}, {
+		"name": "metaCode",
+		"type": ["string","null"],
+		"default":""
+	}, {
+		"name": "funName",
+		"type": "string",
+		"default":""
+	}, {
+		"name": "logType",
+		"type": "string",
+		"default":""
+	}, {
+		"name": "fun",
+		"type": "string",
+		"default":""
+	}, {
+		"name": "receivingTime",
+		"type": ["long","null"],
+		"default":0
+	}, {
+		"name": "browserName",
+		"type": ["string","null"],
+		"default":""
+	}, {
+		"name": "browserVersion",
+		"type": ["string","null"],
+		"default":""
+	}, {
+		"name": "operatingSystemName",
+		"type": ["string","null"],
+		"default":""
+	}, {
+		"name": "operatingSystemVersion",
+		"type": ["string","null"],
+		"default":""
+	},{
+		"name": "metaData",
+		"type": ["null",{"type":"map", "values":"string"}]
+	},{
+		"name": "customdata",
+		"type": ["null",{"type":"map", "values":"string"}]
+	}]
+}

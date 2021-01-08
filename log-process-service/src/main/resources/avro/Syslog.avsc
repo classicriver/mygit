@@ -1,0 +1,14 @@
+{
+  "type":"record",
+  "name":"com.justbon.lps.avro.Syslog",
+  "fields":[
+    {"name":"sysName","type":"string"},
+    {"name":"logType","type":"string"},
+    {"name":"level","type":["string","null"],"default":""},
+    {"name":"thread","type":["string","null"],"default":""},
+    {"name":"klass","type":["string","null"],"default":""},
+    {"name":"message","type":["string","null"],"default":""},
+    {"name":"stackTrace","type":["string","null"],"default":""},
+    {"name":"timestamps","type":"long"}
+  ]
+}
